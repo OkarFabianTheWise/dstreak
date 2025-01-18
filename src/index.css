@@ -10,14 +10,18 @@
     --heading: #68FF9A;
     --text: #CAFFDC;
     font-family: "Inter", sans-serif;
+
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
   }
 }
 @layer base {
   * {
-    color: var(--text);
-    background-color: var(--background);
+    @apply border-border
+
   }
   body {
-   
+    color: var(--text);
   }
 }
