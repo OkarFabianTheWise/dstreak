@@ -1,0 +1,7 @@
+export { default as bolt } from "./dfd.png"
+export { default as logo } from "./logo.png"
+export { default as splash } from "./splash.png"
+export { default as workshop } from "./workshop.png"
+export { default as s1 } from "./s1.png"
+export { default as s2 } from "./s2.png"
+export { default as s3 } from "./s3.png"
