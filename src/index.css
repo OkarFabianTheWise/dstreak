@@ -1,6 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
 @layer base {
   :root {
     --background: #000;
@@ -14,6 +16,8 @@
     box-sizing: border-box;
     padding: 0;
     margin: 0;
+
+    overflow: auto
   }
 }
 @layer base {
@@ -23,5 +27,70 @@
   }
   body {
     color: var(--text);
+    background-color: var(--background);
   }
+}
+
+@layer utilities {
+  .font-press-start {
+    font-family: 'Press Start 2P', cursive;
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0);
+    opacity: 0;
+  }
+  5% {
+    opacity: var(--max-opacity);
+    transform: translateY(-20px) translateX(calc(-10px * var(--drift)));
+  }
+  20% {
+    opacity: var(--max-opacity);
+    transform: translateY(-80px) translateX(calc(-5px + 10px * var(--drift)));
+  }
+  100% {
+    transform: translateY(calc(-400px * var(--speed))) translateX(calc(-20px + 40px * var(--drift)));
+    opacity: 0;
+  }
+}
+
+.animate-float {
+  animation: float forwards cubic-bezier(0.25, 0.1, 0.25, 1);
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(15px);
+  }
+}
+
+.bounce-animation {
+  animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes surge-glow {
+  0% {
+    box-shadow: 0 0 5px var(--primary),
+                0 0 10px var(--primary),
+                0 0 15px var(--primary);
+  }
+  50% {
+    box-shadow: 0 0 10px var(--primary),
+                0 0 20px var(--primary),
+                0 0 30px var(--primary);
+  }
+  100% {
+    box-shadow: 0 0 5px var(--primary),
+                0 0 10px var(--primary),
+                0 0 15px var(--primary);
+  }
+}
+
+.surge-glow {
+  animation: surge-glow 2s ease-in-out infinite;
 }

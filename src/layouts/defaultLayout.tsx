@@ -1,22 +1,20 @@
+import { s1 } from '@/assets/image';
 import Navbar from '@/components/Navbar';
-import { ThemeState, useThemeStore } from '@/store/themeStore';
-import React from 'react';
+import BottomNav from '@/components/BottomNav';
 import { useAuthStore } from '@/store/authStore';
 
 const DefaultLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const isDarkTheme = useThemeStore((state: ThemeState) => state.isDarkTheme);
     const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
     return (
-        <div className={`relative`}> 
-            <div className='min-h-screen mx-auto relative'>
+        <div className={`bg-background min-h-screen relative`}> 
             <Navbar />
-
-            <main className={`px-4 overflow-auto flex justify-center`}>
+            <main className={``}>
                 {children}
             </main>
-            <footer className=''>
+            <footer className='pt-20'>
+                <BottomNav />
             </footer>
-            </div>
+            <img src={s1} className='scale-[-1] w-full pointer-events-none absolute bottom-[-400px]' alt="" />
         </div>
     );
 };

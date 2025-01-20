@@ -10,10 +10,6 @@ import Task from './pages/Task';
 import DefaultLayout from './layouts/defaultLayout';
 import { useAuthStore } from './store/authStore';
 
-interface ProtectedRouteProps {
-  element: JSX.Element;
-  isAuthenticated: boolean;
-}
 
 const App: React.FC = () => {
     const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
@@ -23,8 +19,7 @@ const App: React.FC = () => {
         {/* public routes */}
         <DefaultLayout>
           <Routes>
-              <Route path='/' element={<Navigate to="/leaderboard" />} />
-              <Route path='/leaderboard' element={<Home />} />
+              <Route path='/' element={<Home />} />
               <Route path="/login" element={
                 isAuthenticated ? <Navigate to="/" /> : <Login />
               } />
@@ -60,12 +55,6 @@ const App: React.FC = () => {
             } />
         </Routes>
       </Router>
-    );
-};
-
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ isAuthenticated, element }) => {
-    return (
-        isAuthenticated ? element : <Navigate to='/login' />
     );
 };
 

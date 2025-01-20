@@ -11,10 +11,8 @@ export default {
   			background: 'var(--background)',
   			primary: 'var(--primary)',
   			secondary: 'var(--secondary)',
-			heading: 'var(--heading)',
-  			accent: {
-  				DEFAULT: 'var(--accent)',
-  			},
+			  heading: 'var(--heading)',
+  			accent: 'var(--accent)',
   			border: 'var(--primary)',
   			input: 'var(--input)',
   		}
