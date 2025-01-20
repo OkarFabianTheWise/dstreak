@@ -99,11 +99,12 @@ Menu-Community List Dropdown
    ```
 
 ## Milestones
-[✅] Home Page
-[] Login Page
-[] SignUp Page
-[] Onboarding Page
-[] Menu-Comm. List
+- [x] Home Page
+- [ ] Login Page
+- [ ] SignUp Page
+- [ ] Onboarding Page
+- [ ] Menu-Comm. List
+
 
 ## 🧩 Contributing
 
