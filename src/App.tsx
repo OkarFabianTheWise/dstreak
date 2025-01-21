@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import SignupSuccess from './pages/SignupSuccess';
 import UsersPage from './pages/UsersPage';
 import SuperAdmin from './pages/SuperAdmin';
 import Admin from './pages/Admin';
@@ -26,6 +27,7 @@ const App: React.FC = () => {
               <Route path="/signup" element={
                 isAuthenticated ? <Navigate to="/" /> : <Signup />
               } />
+              <Route path="/signup-success" element={<SignupSuccess />} />
               <Route path="/super-admin" element={<SuperAdmin />} />
               <Route path="/tasks" element={
                 isAuthenticated ? <Task /> : <Navigate to="/login" />
