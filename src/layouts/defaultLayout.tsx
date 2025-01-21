@@ -11,7 +11,7 @@ const DefaultLayout: React.FC<{ children: React.ReactNode }> = ({ children }) =>
             <main className={``}>
                 {children}
             </main>
-            <footer className='pt-20'>
+            <footer className='pt-10'>
                 <BottomNav />
             </footer>
             <img src={s1} className='scale-[-1] w-full pointer-events-none absolute bottom-[-400px]' alt="" />
