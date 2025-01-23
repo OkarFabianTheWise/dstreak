@@ -20,11 +20,11 @@ const Navbar = () => {
     const navigate = useNavigate();
 
     return (
-        <nav className="px-10 flex justify-between items-center sticky z-50 top-0 p-4 bg-secondary"> 
+        <nav className="px-2 md:px-10 flex justify-between items-center sticky z-50 top-0 p-4 bg-secondary"> 
             <img src={logo} alt="devstreak"  className="h-8 bg-transparent"/>
 
             {/* Desktop menu */}
-            <ul className='menu font-semibold text-primary hidden md:flex gap-6'>
+            <ul className='menu font-semibold text-sm text-primary hidden md:flex gap-6'>
                 <li className='text-primary'>Home</li>
                 <DropdownMenu>
                     <DropdownMenuTrigger className='flex gap-1 items-center'>
@@ -40,7 +40,7 @@ const Navbar = () => {
             </ul>
             <button 
                 onClick={() => navigate('/login')}
-                className="hidden md:block rounded-md px-4 py-2 bg-primary uppercase text-secondary font-bold hover:bg-secondary hover:border hover:text-primary transition-all duration-300">
+                className="hidden md:block text-sm rounded-md px-4 py-2 bg-primary uppercase text-secondary font-bold hover:bg-secondary hover:border hover:text-primary transition-all duration-300">
                 join
             </button>    
 

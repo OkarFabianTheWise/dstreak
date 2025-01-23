@@ -6,7 +6,7 @@ import { useAuthStore } from '@/store/authStore';
 const DefaultLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
     return (
-        <div className={`bg-background min-h-screen relative`}> 
+        <div className={`font-press-start bg-background min-h-screen relative`}> 
             <Navbar />
             <main className={``}>
                 {children}

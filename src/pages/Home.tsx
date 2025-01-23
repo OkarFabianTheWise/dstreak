@@ -12,10 +12,10 @@ const Home = () => {
       <div className={`w-full min-h-screen ${!isDarkTheme ? 'text-white' : 'text-black'}`}> 
         <div className="bg-[url('./src/assets/image/splash_mobile.png')] md:bg-[url('./src/assets/image/splash.png')] md:bg-right bg-no-repeat min-h-[44vh] md:min-h-[80vh] flex flex-col justify-center border-b-8 border-primary">
               <div className='w-3/5 flex flex-col  ml-5 md:ml-20 md:mt-24'>
-                <div className='md:text-2xl text-xl font-bold  my-2 text-heading'>Welcome to Devstreak</div>
-                <div className='md:text-5xl text-3xl font-bold text-secondary'>Empowering your development experience</div>
+                <div className='md:text-2xl  font-bold  my-2 text-heading'>Welcome to Devstreak</div>
+                <div className='md:text-3xl text-lg font-bold text-secondary'>Empowering your development experience</div>
                 <div>
-                  <Button className='bg-white text-primary rounded-3xl mt-8 font-bold text-lg md:px-8 md:py-2 shadow-md shadow-primary'>
+                  <Button className='bg-white text-primary rounded-3xl mt-8 font-bold md:text-lg md:px-8 md:py-2 shadow-md shadow-primary'>
                     Start Now
                   </Button>
                 </div>
@@ -51,24 +51,23 @@ const Home = () => {
 
               {/* Recent Updates */}
               <div className='flex flex-col md:flex-row md:gap-8 md:mx-10 mt-10 md:p-8 items-center md:border-2 border-primary rounded-3xl'>
-                <div className='flex flex-col gap-6 justify-center items-center md:w-3/5'>
-                  <span className='font-bold md:text-2xl text-primary'><i>&lt;RECENT UPDATES/&gt;</i></span>
+                <div className='flex flex-col gap-6 justify-center items-center md:w-2/5'>
+                  <span className='font-bold md:text-xl text-primary'><i>&lt;RECENT UPDATES/&gt;</i></span>
                   <div className='border p-4 border-primary  rounded-3xl'>
                     <img src={workshop} width={320} height={220}/>
                   </div>
                 </div>
-                <div className='md:h-64 flex gap-10 flex-col justify-between'>
-                  <div className='text-xl flex mt-8 flex-col gap-4 text-secondary'>
-                    <p className='w-4/5 mx-auto md:mx-0 text-center md:text-left line-clamp-4'>
+                <div className='md:h-64 flex mt-4 gap-3 md:gap-0 lg:gap-10 w-3/5 flex-col justify-between'>
+                  <div className='lg:text-lg flex flex-col gap-4 text-secondary'>
+                    <p className='mx-auto md:mx-0 text-center md:text-left line-clamp-6'>
                       Lorem ipsum, dolor sit amet consectetur adipisicing elit. Pariatur eligendi error quae nam voluptatibus in accusamus ab obcaecati, tenetur nobis, aliquid quidem labore magni impedit eveniet minima incidunt odio et.
-                    </p>
-                    <p className='hidden md:block'>
+                    
                       Lorem ipsum dolor sit amet consectetur adipisicing elit. Quisquam accusamus itaque omnis eius qui nihil labore animi, laborum dolore modi architecto rem, et, autem illo! Tenetur quaerat at temporibus corrupti.
                     </p>
                   </div>
                   <div className='flex flex-col md:flex-row items-center gap-5 md:justify-between'>
                     <div>
-                      <button className='bg-inherit border-2 px-3 py-1 text-heading rounded-3xl border-primary hover:opacity-50'>Read More </button>
+                      <button className='bg-inherit text-sm border-2 px-3 py-1 text-heading rounded-3xl border-primary hover:opacity-50'>Read More </button>
                     </div>
                     <div className='flex gap-3'>
                       <button className='text-gray-400 hover:opacity-50'><IoArrowBackCircleSharp size={40} /></button>
