@@ -1,6 +1,6 @@
-import { FaDiscord, FaTelegram, FaTelegramPlane } from 'react-icons/fa';
+import { FaDiscord, FaTelegramPlane } from 'react-icons/fa';
 import { FaXTwitter } from 'react-icons/fa6';
-import { logoDark, nigeria, superteam } from '@/assets/image';
+import { logoDark, superteam } from '@/assets/image';
 
 const BottomNav = () => {
     return (
@@ -8,8 +8,6 @@ const BottomNav = () => {
             <div className="flex items-center gap-2">
                 <img src={superteam} alt="" className="w-[40px] md:w-auto" />
                 <div className="flex flex-col text-[16px] md:text-[20px]">
-                    <span className='flex items-center gap-1'>Superteam <img src={nigeria} alt="" className="w-[20px] md:w-auto" /></span>
-                    <span>Nigeria</span>
                 </div>
             </div>
             <div><img src={logoDark} alt="" className="w-[120px] md:w-auto" /></div>
