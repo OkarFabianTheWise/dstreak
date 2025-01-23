@@ -16,7 +16,14 @@ export default {
   			border: 'var(--primary)',
   			input: 'var(--input)',
   		}
-  	}
+  	},
+    backgroundSize: {
+      'auto': 'auto',
+      'cover': 'cover',
+      'contain': 'contain',
+      '50%': '120%',
+      '16': '4rem',
+    }
   },
   plugins: [
     require('tailwind-scrollbar')({ nocompatible: true }),

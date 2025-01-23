@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { FiMail, FiLock, FiUser, FiMapPin, FiChevronDown } from "react-icons/fi";
-import { FcGoogle } from "react-icons/fc";
-import { FaDiscord, FaTelegram, FaGithub, FaTwitter } from "react-icons/fa";
 import { bolt, s2 } from "@/assets/image";
 import { nigerianStates } from "@/constants/states";
+import { FiChevronDown } from "react-icons/fi";
 
 // Mock signup function
 const mockSignupUser = async (

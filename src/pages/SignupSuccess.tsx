@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { FiCheckCircle } from "react-icons/fi";
 import { bolt, s2 } from "@/assets/image";
 
 const SignupSuccess: React.FC = () => {
