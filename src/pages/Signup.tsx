@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { FiMail, FiLock, FiUser, FiMapPin, FiChevronDown } from "react-icons/fi";
-import { FcGoogle } from "react-icons/fc";
-import { FaDiscord, FaTelegram, FaGithub, FaTwitter } from "react-icons/fa";
+import { FiChevronDown } from "react-icons/fi";
+// import { FcGoogle } from "react-icons/fc";
+// import { FaDiscord, FaTelegram, FaGithub, FaTwitter } from "react-icons/fa";
 import { bolt, s2 } from "@/assets/image";
 import { nigerianStates } from "@/constants/states";
 
@@ -132,14 +132,16 @@ const Signup: React.FC = () => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const skills = [
-    "JavaScript",
+    "Rust",
+    "Go",
     "React",
     "Python",
-    "MongoDB",
     "NestJS",
     "NextJS",
     "MySQL",
-    "NodeJS"
+    "NodeJS",
+    "JavaScript",
+    "MongoDB",
   ];
 
   const toggleSkill = (skill: string) => {
@@ -281,7 +283,7 @@ const Signup: React.FC = () => {
             </div>
           </motion.div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-3">
             {skills.map((skill) => (
               <button
                 key={skill}
@@ -291,9 +293,10 @@ const Signup: React.FC = () => {
                   selectedSkills.includes(skill)
                     ? 'bg-green-500 border-green-500 text-white'
                     : 'bg-transparent  text-gray-300 hover:border-green-500'
-                }`}
+                } ${skill === 'JavaScript' ? 'col-span-2' : ''} ${skill === 'MongoDB' ? 'col-span-2' : ''}`}
+                title={skill}
               >
-                {skill}
+                {skill.length > 10 ? `${skill.slice(0, 7)}...` : skill}
               </button>
             ))}
           </div>
