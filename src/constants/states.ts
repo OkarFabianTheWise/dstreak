@@ -5,7 +5,6 @@ export const nigerianStates = [
   'Anambra',
   'Bauchi',
   'Bayelsa',
-  'Benue',
   'Borno',
   'Cross River',
   'Delta',

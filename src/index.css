@@ -26,9 +26,11 @@
     @apply border-border
 
   }
+
   body {
     color: var(--text);
     background-color: var(--background);
+    font-family: 'Press Start 2P', cursive;
   }
 }
 
@@ -95,3 +97,5 @@
 .surge-glow {
   animation: surge-glow 2s ease-in-out infinite;
 }
+
+
