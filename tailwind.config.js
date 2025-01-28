@@ -13,8 +13,9 @@ export default {
   			secondary: 'var(--secondary)',
 			  heading: 'var(--heading)',
   			accent: 'var(--accent)',
-  			border: 'var(--primary)',
-  			input: 'var(--input)',
+        border: 'var(--primary)',
+        input: 'var(--input)',
+        greytext: 'var(--greytext)',
   		}
   	},
     backgroundSize: {

@@ -10,6 +10,10 @@ import Admin from './pages/Admin';
 import Task from './pages/Task';
 import DefaultLayout from './layouts/defaultLayout';
 import { useAuthStore } from './store/authStore';
+import ProfilePage from './pages/ProfilePage';
+import TasksPage from './pages/TasksPage';
+import TasksDetailsPage from './pages/TaskDetailsPage';
+import ProfileSettingsPage from './pages/ProfileSettingsPage';
 
 
 const App: React.FC = () => {
@@ -33,6 +37,19 @@ const App: React.FC = () => {
                 isAuthenticated ? <Task /> : <Navigate to="/login" />
               } />
               <Route path='*' element={<Navigate to='/' />} />
+
+              <Route path="/profile" element={
+                <ProfilePage />//isAuthenticated ?  : <Navigate to="/login" />
+              } />
+              <Route path="/tasks-screen" element={
+                <TasksPage />//isAuthenticated ?  : <Navigate to="/login" />
+              } />
+              <Route path="/tasks-details" element={
+                <TasksDetailsPage />//isAuthenticated ?  : <Navigate to="/login" />
+              } />
+              <Route path="/account-settings" element={
+                <ProfileSettingsPage />//isAuthenticated ?  : <Navigate to="/login" />
+              } />
           </Routes>
         </DefaultLayout>
 
