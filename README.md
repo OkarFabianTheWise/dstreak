@@ -8,7 +8,23 @@
 
 > webpack.config.js: holds the polyfills
 
-> NOTE: This components are templates, and awaits design.
+> COLOUR SCHEMES: Defined in the tailwindcss.config.json. Please request if you need a colour scheme and it's not there.
+
+
+```plaintext
+TASKS:
+
+OrkarFabianTheWise: 
+Google login/SignUp screen
+Registration Form Screen
+Successful Joined Screen
+.
+.
+@antonineutron 
+Onboarding Screen
+Menu-Community List Dropdown
+.
+```
 
 ## 🚀 Features
 
@@ -25,12 +41,38 @@
 ## 📂 Project Structure
 
 ```plaintext
-src/
-├── assets/         # Static assets
-├── components/     # Reusable UI 
 .
-.
-.
+├── README.md
+├── babel.config.json
+├── components.json
+├── eslint.config.js
+├── index.html
+├── package-lock.json
+├── package.json
+├── postcss.config.cjs
+├── public
+│   └── icon.png
+├── src
+│   ├── App.css
+│   ├── App.tsx
+│   ├── assets # images to be used, design perks like dark bg dotlike stars 
+│   ├── components
+│   ├── data # dummy data
+│   ├── index.css
+│   ├── layouts # admin, superadmin, user interfaces
+│   ├── lib
+│   ├── main.tsx
+│   ├── pages
+│   ├── store
+│   ├── styles
+│   ├── utils
+│   └── vite-env.d.ts
+├── tailwind.config.js # contains colour settings
+├── tsconfig.app.json
+├── tsconfig.json
+├── tsconfig.node.json
+├── vite.config.ts
+└── webpack.config.js
 ```
 
 ## 🔧 Setup and Development
@@ -55,6 +97,14 @@ src/
    ```bash
    npm run build
    ```
+
+## Milestones
+- [x] Home Page
+- [ ] Login Page
+- [ ] SignUp Page
+- [ ] Onboarding Page
+- [ ] Menu-Comm. List
+
 
 ## 🧩 Contributing
 

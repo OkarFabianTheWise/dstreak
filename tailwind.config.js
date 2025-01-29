@@ -15,7 +15,8 @@ export default {
   			accent: 'var(--accent)',
   			border: 'var(--primary)',
   			input: 'var(--input)',
-  		}
+        customGreen: '#68FF9A',
+  		},
   	}
   },
   plugins: [
