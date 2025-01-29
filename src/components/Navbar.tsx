@@ -59,7 +59,9 @@ const Navbar = () => {
                                 <ul className='flex flex-col items-start text-lg gap-4 mt-6'>
                                     <li className='text-primary'>Home</li>
                                     <CommunityDropdown />
-                                    <li className='text-primary'>Join</li>
+                                    <li 
+                                    onClick={() => navigate('/login')}
+                                    className='text-primary'>Join</li>
                                     <img src={bolt} className='my-8 opacity-30' />
                                 </ul>
                             </SheetDescription>

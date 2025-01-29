@@ -37,7 +37,7 @@ const LinkedAccounts = () => {
                   <FaDiscord className="text-xl" />
                   <Input 
                     type="text"
-                    placeholder="Enter your Discord username"
+                    placeholder="Discord username"
                     className="border-none bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 px-0"
                   />
                 </div>
@@ -51,7 +51,7 @@ const LinkedAccounts = () => {
                   <FaXTwitter className="text-xl" />
                   <Input 
                     type="text"
-                    placeholder="Enter your X profile URL"
+                    placeholder="X profile URL"
                     className="border-none bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 px-0"
                   />
                 </div>
@@ -65,7 +65,7 @@ const LinkedAccounts = () => {
                   <FaTelegram className="text-xl" />
                   <Input 
                     type="text"
-                    placeholder="Enter your Telegram username"
+                    placeholder="Telegram username"
                     className="border-none bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 px-0"
                   />
                 </div>
@@ -79,7 +79,7 @@ const LinkedAccounts = () => {
                   <FaGithub className="text-xl" />
                   <Input 
                     type="text"
-                    placeholder="Enter your GitHub username"
+                    placeholder="GitHub username"
                     className="border-none bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 px-0"
                   />
                 </div>
