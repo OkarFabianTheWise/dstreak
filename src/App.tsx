@@ -10,7 +10,8 @@ import Admin from './pages/Admin';
 import Task from './pages/Task';
 import DefaultLayout from './layouts/defaultLayout';
 import { useAuthStore } from './store/authStore';
-
+import EditProfile from './pages/accounts-settings/EditProfile';
+import LinkedAccounts from './pages/accounts-settings/LinkedAccounts';
 
 const App: React.FC = () => {
     const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
@@ -32,6 +33,12 @@ const App: React.FC = () => {
               <Route path="/tasks" element={
                 isAuthenticated ? <Task /> : <Navigate to="/login" />
               } />
+              <Route path="/settings/profile" element={
+                isAuthenticated ? <EditProfile /> : <Navigate to="/login" />
+              } />
+              <Route path="/settings/linked-accounts" element={
+                isAuthenticated ? <LinkedAccounts /> : <Navigate to="/login" />
+              } />
               <Route path='*' element={<Navigate to='/' />} />
           </Routes>
         </DefaultLayout>
@@ -47,13 +54,6 @@ const App: React.FC = () => {
         <Routes>
             <Route path="/admin" element={
               isAuthenticated ? <Admin /> : <Navigate to="/login" />
-            } />
-        </Routes>
-
-        {/* super admin routes */}
-        <Routes>
-            <Route path="/super-admin" element={
-              isAuthenticated ? <SuperAdmin /> : <Navigate to="/login" />
             } />
         </Routes>
       </Router>
