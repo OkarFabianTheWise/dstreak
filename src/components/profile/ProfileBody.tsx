@@ -1,5 +1,5 @@
 import { demoProfilePics } from "@/assets/image"
-import { IoIosArrowBack, IoIosArrowDroprightCircle, IoIosArrowForward, IoMdShareAlt } from "react-icons/io"
+import { IoIosArrowBack, IoMdShareAlt } from "react-icons/io"
 import { FaGithub, FaRegEdit } from "react-icons/fa"
 import SkillsItem from "./SkillsItem"
 import { FaTelegram, FaXTwitter } from "react-icons/fa6"

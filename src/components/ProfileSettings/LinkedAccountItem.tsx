@@ -6,7 +6,7 @@ interface LinkedAccountItemProps {
     onClick?: ()=>void,
 }
 
-const LinkedAccountItem = ({ icon, title, onClick }:LinkedAccountItemProps) => {
+const LinkedAccountItem = ({ icon, title }:LinkedAccountItemProps) => {
     return (
         <div className="mt-8">
             <hr className="border-white" />

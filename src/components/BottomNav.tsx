@@ -1,6 +1,6 @@
 import { FaDiscord, FaTelegramPlane } from 'react-icons/fa';
 import { FaXTwitter } from 'react-icons/fa6';
-import { logo, superteam, superteamng } from '@/assets/image';
+import { logo, superteam } from '@/assets/image';
 
 const BottomNav = () => {
     return (

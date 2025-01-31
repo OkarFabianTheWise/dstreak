@@ -1,8 +1,6 @@
-import { useAuthStore } from '../store/authStore';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { bolt, logo } from '../assets/image';
 import { IoMenu } from "react-icons/io5";
-import { IoIosArrowDown } from "react-icons/io";
 import { AiOutlineDiscord } from "react-icons/ai";
 import { BsTwitterX } from "react-icons/bs";
 import { RiTelegram2Fill } from "react-icons/ri";
