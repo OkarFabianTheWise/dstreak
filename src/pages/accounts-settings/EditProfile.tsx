@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import AccountSidebar from '@/components/AccountSidebar';
 import { IoIosArrowForward } from 'react-icons/io';
 
 const EditProfile = () => {
-  const [avatar, setAvatar] = useState<string | null>(null);
+  const [avatar] = useState<string | null>(null);
 
   return (
     <div className="flex min-h-screen m-4 mt-8 gap-5 relative">

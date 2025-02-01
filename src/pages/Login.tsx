@@ -4,17 +4,31 @@ import { motion } from "framer-motion";
 import { FiMail, FiLock } from "react-icons/fi";
 import { FcGoogle } from "react-icons/fc";
 import { bolt, s2 } from "@/assets/image";
+import GoogleCallback from "@/components/GoogleCallback";
 
-// Mock authentication function
-const mockLoginUser = async (email: string, password: string) => {
-  await new Promise(resolve => setTimeout(resolve, 1000));
-  
-  if (!email || !password) {
-    return { success: false, message: "Please fill in all fields" };
+declare global {
+  interface Window {
+    google?: {
+      accounts: {
+        id: {
+          initialize: (config: any) => void;
+          renderButton: (element: HTMLElement, config: any) => void;
+          prompt: () => void;
+        };
+      };
+    };
   }
-  
-  return { success: true };
-};
+}
+
+// const GOOGLE_CLIENT_ID = "718296756098-99.apps.googleusercontent.com"; // Get this from Google Cloud Console
+
+// Types for auth response
+interface AuthResponse {
+  success: boolean;
+  message?: string;
+  user?: any;
+  accessToken?: string;
+}
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
@@ -22,8 +36,8 @@ const Login: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isClickable, setIsClickable] = useState(false);
   const navigate = useNavigate();
+  // const [error, setError] = useState<string | null>(null);
 
-  // Validate form inputs and update isClickable
   const validateForm = (email: string, password: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const isValidEmail = emailRegex.test(email);
@@ -36,12 +50,25 @@ const Login: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const result = await mockLoginUser(email, password);
-      if (!result.success) {
-        throw new Error(result.message);
+      const response = await fetch('YOUR_BACKEND_LOGIN_ENDPOINT', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data: AuthResponse = await response.json();
+
+      if (!data.success) {
+        throw new Error(data.message || 'Login failed');
       }
 
-      localStorage.setItem("email", email);
+      // Store auth token
+      if (data.accessToken) {
+        localStorage.setItem('accessToken', data.accessToken);
+      }
+      
       navigate("/leaderboard");
     } catch (error: any) {
       alert(error.message || "An error occurred. Please try again.");
@@ -50,6 +77,7 @@ const Login: React.FC = () => {
     }
   };
 
+  // Animation variants remain the same as your original code
   const containerVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { 
@@ -82,10 +110,8 @@ const Login: React.FC = () => {
         initial="hidden"
         animate="visible"
       >
-        {/* <h2 className="text-3xl font-bold mb-6 text-center">Login</h2> */}
         <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
           <motion.div variants={inputVariants} className="space-y-2">
-            {/* <label className="block text-sm font-medium">Email</label> */}
             <div className="relative bg-transparent">
               <FiMail color="#8B5CF6" className="absolute left-3 top-1/2 transform -translate-y-1/2" />
               <input
@@ -103,7 +129,6 @@ const Login: React.FC = () => {
           </motion.div>
 
           <motion.div variants={inputVariants} className="space-y-2">
-            {/* <label className="block text-sm font-medium">Password</label> */}
             <div className="relative">
               <FiLock color="#8B5CF6" className="absolute left-3 top-1/2 transform -translate-y-1/2" />
               <input
@@ -138,16 +163,16 @@ const Login: React.FC = () => {
           </Link>
         </p>
 
-      <p className="mt-4 text-center text-primary font-press-start text-sm sm:text-base">OR</p>
-      <motion.button
-        onClick={() => {/* TODO: Implement Google sign in */}}
-        className="w-full mt-4 py-2.5 sm:py-3 px-3 sm:px-4 bg-white text-gray-700 rounded-lg font-medium hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 flex items-center justify-center gap-2 transition-colors text-sm sm:text-base"
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
-      >
-        <FcGoogle className="text-xl" />
-        Sign in with Google
-      </motion.button>
+        <p className="mt-4 text-center text-primary font-press-start text-sm sm:text-base">OR</p>
+        <motion.button
+          onClick={GoogleCallback}
+          className="w-full mt-4 py-2.5 sm:py-3 px-3 sm:px-4 bg-white text-gray-700 rounded-lg font-medium hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 flex items-center justify-center gap-2 transition-colors text-sm sm:text-base"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          <FcGoogle className="text-xl" />
+          Sign in with Google
+        </motion.button>
       </motion.div>
     </div>
   );

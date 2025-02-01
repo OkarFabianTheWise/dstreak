@@ -23,6 +23,7 @@ import ProfilePage from "./pages/ProfilePage";
 import TasksPage from "./pages/TasksPage";
 import TasksDetailsPage from "./pages/TaskDetailsPage";
 import ProfileSettingsPage from "./pages/ProfileSettingsPage";
+import GoogleCallback from "./components/GoogleCallback";
 
 const App: React.FC = () => {
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
@@ -32,6 +33,7 @@ const App: React.FC = () => {
       {/* public routes */}
       <DefaultLayout>
         <Routes>
+          <Route path="/auth/callback/google" element={<GoogleCallback />} />
           <Route path="/" element={<Home />} />
           <Route
             path="/login"

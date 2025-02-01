@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FiChevronDown } from "react-icons/fi";
-// import { FcGoogle } from "react-icons/fc";
+import { FcGoogle } from "react-icons/fc";
 // import { FaDiscord, FaTelegram, FaGithub, FaTwitter } from "react-icons/fa";
 import { bolt, s2 } from "@/assets/image";
 import { nigerianStates } from "@/constants/states";
@@ -26,6 +26,10 @@ const mockSignupUser = async (
   
   if (!email || !password || !username || !walletAddress) {
     throw new Error("Please fill in all required fields");
+  }
+
+  if (!state || !skills.length || !socials){
+    console.log("whatebver");
   }
   
   return { success: true };
@@ -314,6 +318,19 @@ const Signup: React.FC = () => {
               {isLoading ? "Signing Up..." : "Sign Up"}
             </button>
           </motion.div>
+
+          <p className="mt-4 text-center text-primary font-press-start text-sm sm:text-base">OR</p>
+          <motion.button
+            onClick={() => {
+              window.location.href = import.meta.env.VITE_OAUTH;
+            }}
+            className="w-full mt-4 py-2.5 sm:py-4 px-3 sm:px-4 bg-white text-gray-700 rounded-full font-medium hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 flex items-center justify-center gap-2 transition-colors text-sm sm:text-base"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <FcGoogle className="text-xl" />
+            Sign up with Google
+          </motion.button>
 
           <div className="mt-4">
             <p className="text-sm text-center">

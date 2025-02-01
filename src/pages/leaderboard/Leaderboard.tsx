@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
-import { weeklyRanking, monthlyRanking, type RankingUser } from "../../data";
+import { weeklyRanking, monthlyRanking } from "../../data";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
