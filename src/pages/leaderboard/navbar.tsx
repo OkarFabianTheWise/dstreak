@@ -1,8 +1,10 @@
 "use client"
 
+import type React from "react"
+import { useState, useEffect } from "react"
 import { PersonStanding } from "lucide-react"
 import { IoNotifications } from "react-icons/io5"
-import { useNavigate } from "react-router-dom"
+import { useNavigate, useLocation } from "react-router-dom"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,14 +14,48 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 
-const BoardNavbar = () => {
+const BoardNavbar: React.FC = () => {
   const navigate = useNavigate()
+  const location = useLocation()
+  const [currentView, setCurrentView] = useState<"leaderboard" | "tasks-screen">("leaderboard")
+
+  // Sync the currentView state with the actual route
+  useEffect(() => {
+    if (location.pathname === "/tasks-screen") {
+      setCurrentView("tasks-screen")
+    } else if (location.pathname === "/leaderboard") {
+      setCurrentView("leaderboard")
+    }
+  }, [location.pathname])
+
+  const handleNavigation = (view: "leaderboard" | "tasks-screen") => {
+    setCurrentView(view)
+    navigate(view === "leaderboard" ? "/leaderboard" : "/tasks-screen")
+  }
 
   return (
     <div className="w-full flex flex-row justify-end items-center p-4 text-white">
       <ul className="flex flex-row space-x-6 mr-[35%]">
-        <li className="text-primary cursor-pointer hover:underline">Leaderboard</li>
-        <li className="text-primary cursor-pointer hover:underline">Tasks</li>
+        <li>
+          <button
+            onClick={() => handleNavigation("leaderboard")}
+            className={`text-primary cursor-pointer hover:underline ${
+              currentView === "leaderboard" ? "underline font-medium" : ""
+            }`}
+          >
+            Leaderboard
+          </button>
+        </li>
+        <li>
+          <button
+            onClick={() => handleNavigation("tasks-screen")}
+            className={`text-primary cursor-pointer hover:underline ${
+              currentView === "tasks-screen" ? "underline font-medium" : ""
+            }`}
+          >
+            Tasks
+          </button>
+        </li>
       </ul>
       <ul className="flex flex-row space-x-4 items-center">
         <li>
@@ -37,7 +73,10 @@ const BoardNavbar = () => {
                 <PersonStanding className="mr-2 h-4 w-4" />
                 <span>Profile</span>
               </DropdownMenuItem>
-              <DropdownMenuItem className="cursor-pointer flex items-center" onClick={() => navigate("/settings/profile")}>
+              <DropdownMenuItem
+                className="cursor-pointer flex items-center"
+                onClick={() => navigate("/settings/profile")}
+              >
                 <svg
                   className="mr-2 h-4 w-4"
                   xmlns="http://www.w3.org/2000/svg"
