@@ -42,7 +42,7 @@ const Login: React.FC = () => {
       }
 
       localStorage.setItem("email", email);
-      navigate("/dashboard");
+      navigate("/leaderboard");
     } catch (error: any) {
       alert(error.message || "An error occurred. Please try again.");
     } finally {
