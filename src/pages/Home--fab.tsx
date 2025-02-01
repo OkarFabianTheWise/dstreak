@@ -1,4 +1,4 @@
-import { bolt, buttonrow, downwardArrow, s1, s2, s3, splash, streak, workshop } from '@/assets/image';
+import { bolt, buttonrow, downwardArrow, s1, s2, splash, streak, workshop } from '@/assets/image';
 import '../styles/theme.css';
 import HeroParticles from '@/components/HeroParticles';
 

@@ -1,10 +1,9 @@
 import { s1 } from '@/assets/image';
 import Navbar from '@/components/Navbar';
 import BottomNav from '@/components/BottomNav';
-import { useAuthStore } from '@/store/authStore';
 
 const DefaultLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+    // const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
     return (
         <div className={`font-press-start bg-background min-h-screen relative`}> 
             <Navbar />

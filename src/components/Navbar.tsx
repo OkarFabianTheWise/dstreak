@@ -1,5 +1,5 @@
-import { useAuthStore } from '../store/authStore';
-import { useLocation, useNavigate } from 'react-router-dom';
+// import { useAuthStore } from '../store/authStore';
+import { useNavigate } from 'react-router-dom';
 import { bolt, logo } from '../assets/image';
 import { IoMenu } from "react-icons/io5";
 import { IoIosArrowDown } from "react-icons/io";
@@ -25,7 +25,7 @@ const Navbar = () => {
 
             {/* Desktop menu */}
             <ul className='menu font-semibold text-sm text-primary hidden md:flex gap-6'>
-                <li className='text-primary'>Home</li>
+                <a href='/'  className='text-primary'>Home</a>
                 <DropdownMenu>
                     <DropdownMenuTrigger className='flex gap-1 items-center'>
                         Community
