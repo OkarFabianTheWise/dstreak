@@ -29,7 +29,7 @@ const App: React.FC = () => {
           <Route path="/" element={<Home />} />
           <Route
             path="/login"
-            element={isAuthenticated ? <Navigate to="/" /> : <Login />}
+            element={isAuthenticated ? <Navigate to="/login" /> : <Login />}
           />
           <Route
             path="/signup"
