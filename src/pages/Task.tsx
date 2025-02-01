@@ -41,7 +41,9 @@ const Task: React.FC = () => {
             <div className="flex items-start justify-between">
               <div className="flex-1">
                 <h3 className="text-lg font-medium text-white flex items-center gap-2">
-                  <Icon className={`${TaskTypeColors[task.type]} p-1 rounded`} />
+                  <div className={`${TaskTypeColors[task.type]} p-1 rounded`}>
+                    <Icon />
+                  </div>
                   {task.title}
                 </h3>
                 <p className="text-gray-400 mt-1">{task.description}</p>

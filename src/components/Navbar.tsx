@@ -1,47 +1,73 @@
-import { useAuthStore } from '../store/authStore';
-import { useLocation, useNavigate } from 'react-router-dom';
+// import { useAuthStore } from '../store/authStore';
+import { useNavigate } from 'react-router-dom';
 import { bolt, logo } from '../assets/image';
-import { FaDiscord, FaTelegram } from 'react-icons/fa';
-import { FaXTwitter, FaChevronDown } from 'react-icons/fa6';
+import { IoMenu } from "react-icons/io5";
+import { AiOutlineDiscord } from "react-icons/ai";
+import { BsTwitterX } from "react-icons/bs";
+import { RiTelegram2Fill } from "react-icons/ri";
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from './ui/sheet';
+import CommunityDropdown from './CommunityDropdown';
+import { FaChevronDown } from 'react-icons/fa6';
 
 const Navbar = () => {
     const navigate = useNavigate();
 
     return (
-        <nav className="px-4 flex justify-between items-center w-full sticky z-50 top-0 px-10 py-4 bg-secondary"> 
+        <nav className="px-2 md:px-10 flex justify-between items-center sticky z-50 top-0 p-4 bg-secondary"> 
             <img src={logo} alt="devstreak"  className="h-8 bg-transparent"/>
-            <ul className='menu font-semibold text-primary flex gap-4'>
-                <li className='hover:text-primary/80 transition-colors cursor-pointer'>Home</li>
-                <li className='relative group'>
-                    <div className='flex items-center gap-1 hover:text-primary/80 transition-colors cursor-pointer'>
+
+            {/* Desktop menu */}
+            <ul className='menu font-semibold text-sm text-primary hidden md:flex gap-6'>
+                <a href='/'  className='text-primary'>Home</a>
+                <DropdownMenu>
+                    <DropdownMenuTrigger className='flex gap-1 items-center'>
                         Community
-                        <FaChevronDown className='transition-transform duration-200 group-hover:rotate-180' />
-                    </div>
-                    <div className='absolute invisible group-hover:visible font-normal text-[#aaa] opacity-0 group-hover:opacity-100 top-full mt-2 bg-background rounded-md shadow-lg py-2 min-w-[200px] transition-all duration-200'>
-                        <a href="https://discord.gg" target="_blank" rel="noopener noreferrer" 
-                           className='flex items-center gap-2 px-4 py-2 hover:bg-primary/10 hover:scale-105 hover:text-primary transition-all duration-200'>
-                            <FaDiscord className="text-[#aaa] group-hover:text-primary transition-colors" />
-                            Discord
-                        </a>
-                        <a href="https://x.com" target="_blank" rel="noopener noreferrer"
-                           className='flex items-center gap-2 px-4 py-2 hover:bg-primary/10 hover:scale-105 hover:text-primary transition-all duration-200'>
-                            <FaXTwitter className="text-[#aaa] group-hover:text-primary transition-colors" />
-                            X (Twitter)
-                        </a>
-                        <a href="https://telegram.org" target="_blank" rel="noopener noreferrer"
-                           className='flex items-center gap-2 px-4 py-2 hover:bg-primary/10 hover:scale-105 hover:text-primary transition-all duration-200'>
-                            <FaTelegram className="text-[#aaa] group-hover:text-primary transition-colors" />
-                            Telegram
-                        </a>
-                    </div>
-                </li>
+                        <FaChevronDown className='transition-transform duration-200' />
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className='bg-black text-secondary font-bold'>
+                        <DropdownMenuItem><AiOutlineDiscord />Discord</DropdownMenuItem>
+                        <DropdownMenuItem><BsTwitterX />(Formerly twitter)</DropdownMenuItem>
+                        <DropdownMenuItem><RiTelegram2Fill />Telegram</DropdownMenuItem>
+                    </DropdownMenuContent>
+                </DropdownMenu>
             </ul>
             <button 
                 onClick={() => navigate('/login')}
-                className="rounded-md px-4 py-2 bg-primary uppercase text-secondary font-bold hover:bg-secondary hover:border hover:text-primary transition-all duration-300"
-            >
+                className="hidden md:block text-sm rounded-md px-4 py-2 bg-primary uppercase text-secondary font-bold hover:bg-secondary hover:border hover:text-primary transition-all duration-300">
                 join
             </button>    
+
+            {/*  Mobile menu*/}
+            <div className='md:hidden'>
+                <Sheet>
+                    <SheetTrigger>
+                        <IoMenu className='text-primary text-4xl md:hidden' />
+                    </SheetTrigger>
+                    <SheetContent className='bg-black text-secondary font-bold'>
+                        <SheetHeader>
+                            <SheetTitle className=''>
+                                <IoMenu className='text-primary text-4xl md:hidden right-0' />
+                            </SheetTitle>
+                            <SheetDescription className=''>
+                                <ul className='flex flex-col items-start text-lg gap-4 mt-6'>
+                                    <li className='text-primary'>Home</li>
+                                    <CommunityDropdown />
+                                    <li className='text-primary'>Join</li>
+                                    <img src={bolt} className='my-8 opacity-30' />
+                                </ul>
+                            </SheetDescription>
+                        </SheetHeader>
+                    </SheetContent>
+                </Sheet>
+            </div>
+            
+            
         </nav>
     );
 };
