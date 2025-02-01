@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FiMail, FiLock } from "react-icons/fi";
-import { FcGoogle } from "react-icons/fc";
+// import { FcGoogle } from "react-icons/fc";
 import { bolt, s2 } from "@/assets/image";
-import GoogleCallback from "@/components/GoogleCallback";
+// import GoogleCallback from "@/components/GoogleCallback";
 
 declare global {
   interface Window {
@@ -163,7 +163,7 @@ const Login: React.FC = () => {
           </Link>
         </p>
 
-        <p className="mt-4 text-center text-primary font-press-start text-sm sm:text-base">OR</p>
+        {/* <p className="mt-4 text-center text-primary font-press-start text-sm sm:text-base">OR</p>
         <motion.button
           onClick={GoogleCallback}
           className="w-full mt-4 py-2.5 sm:py-3 px-3 sm:px-4 bg-white text-gray-700 rounded-lg font-medium hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 flex items-center justify-center gap-2 transition-colors text-sm sm:text-base"
@@ -172,7 +172,7 @@ const Login: React.FC = () => {
         >
           <FcGoogle className="text-xl" />
           Sign in with Google
-        </motion.button>
+        </motion.button> */}
       </motion.div>
     </div>
   );

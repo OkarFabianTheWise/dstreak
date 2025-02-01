@@ -36,7 +36,7 @@ const SignupSuccess: React.FC = () => {
             to="/"
             className="block w-full py-3 px-4 border border-green-500 text-green-500 rounded-full hover:bg-green-500/10 transition-colors duration-200"
           >
-            Go to Home
+            Go to Leaderboard
           </Link>
         </div>
       </motion.div>

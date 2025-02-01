@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { FiChevronDown } from "react-icons/fi";
+// import { FiChevronDown } from "react-icons/fi";
 import { FcGoogle } from "react-icons/fc";
 // import { FaDiscord, FaTelegram, FaGithub, FaTwitter } from "react-icons/fa";
 import { bolt, s2 } from "@/assets/image";
-import { nigerianStates } from "@/constants/states";
+// import { nigerianStates } from "@/constants/states";
+import { StateSelect } from "../utils/stateSelector";
 
 // Mock signup function
 const mockSignupUser = async (
-  email: string, 
-  password: string, 
+  email: string,
+  password: string,
   username: string,
   walletAddress: string,
   state: string,
@@ -22,16 +23,16 @@ const mockSignupUser = async (
   },
   skills: string[]
 ) => {
-  await new Promise(resolve => setTimeout(resolve, 1000));
-  
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+
   if (!email || !password || !username || !walletAddress) {
     throw new Error("Please fill in all required fields");
   }
 
-  if (!state || !skills.length || !socials){
+  if (!state || !skills.length || !socials) {
     console.log("whatebver");
   }
-  
+
   return { success: true };
 };
 
@@ -64,13 +65,13 @@ const Signup: React.FC = () => {
     const isValidUsername = username.length >= 3;
     const isValidWallet = walletAddress.trim().length > 0;
     const isValidState = state.trim().length > 0;
-    
+
     setIsClickable(
-      isValidEmail && 
-      isValidPassword && 
-      isValidUsername && 
-      isValidWallet && 
-      isValidState
+      isValidEmail &&
+        isValidPassword &&
+        isValidUsername &&
+        isValidWallet &&
+        isValidState
     );
   };
 
@@ -108,32 +109,32 @@ const Signup: React.FC = () => {
 
   const containerVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       y: 0,
-      transition: { 
-        duration: 0.6, 
+      transition: {
+        duration: 0.6,
         ease: "easeOut",
-        staggerChildren: 0.1
-      }
-    }
+        staggerChildren: 0.1,
+      },
+    },
   };
 
   const inputVariants = {
     hidden: { opacity: 0, x: -20 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       x: 0,
-      transition: { duration: 0.3 }
-    }
+      transition: { duration: 0.3 },
+    },
   };
 
-  const arrowVariants = {
-    initial: { rotate: 0 },
-    animate: { rotate: 180 },
-  };
+  // const arrowVariants = {
+  //   initial: { rotate: 0 },
+  //   animate: { rotate: 180 },
+  // };
 
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  // const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const skills = [
     "Rust",
@@ -149,16 +150,19 @@ const Signup: React.FC = () => {
   ];
 
   const toggleSkill = (skill: string) => {
-    setSelectedSkills(prev => 
-      prev.includes(skill) 
-        ? prev.filter(s => s !== skill)
-        : [...prev, skill]
+    setSelectedSkills((prev) =>
+      prev.includes(skill) ? prev.filter((s) => s !== skill) : [...prev, skill]
     );
   };
 
   return (
-    <div className={`min-h-[65vh] relative text-white flex items-center justify-center mt-20 relative px-4 sm:px-0`}>
-      <img src={bolt} className="absolute bottom-20 left-24 w-[100px] opacity-40 hidden sm:block"/>
+    <div
+      className={`min-h-[65vh] relative text-white flex items-center justify-center mt-20 relative px-4 sm:px-0`}
+    >
+      <img
+        src={bolt}
+        className="absolute bottom-20 left-24 w-[100px] opacity-40 hidden sm:block"
+      />
       <img src={s2} className="absolute z-[0]" alt="" />
       <motion.div
         className="w-full z-[1] max-w-md rounded-xl shadow-lg bg-transparent"
@@ -219,24 +223,28 @@ const Signup: React.FC = () => {
             </div>
           </motion.div>
 
-          <motion.div variants={inputVariants} className="space-y-2">
+          {/* <motion.div variants={inputVariants} className="space-y-2">
             <div className="relative bg-transparent">
               <select
                 value={state}
                 onChange={(e) => setState(e.target.value)}
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 onBlur={() => setIsDropdownOpen(false)}
-                className="w-full pl-4 pr-4 py-4 rounded-full border bg-black/80 focus:outline-none focus:ring-2 focus:ring-primary appearance-none text-center"
+                className="w-full pl-4 pr-4 py-4 rounded-full border border-green-500 bg-black/80 focus:outline-none focus:ring-2 focus:ring-primary appearance-none text-center"
                 required
               >
                 <option value="">Select your state</option>
                 {nigerianStates.map((state) => (
-                  <option key={state} value={state}>
+                  <option
+                    key={state}
+                    value={state}
+                    className="hover:bg-[#000000] focus:bg-green-300"
+                  >
                     {state}
                   </option>
                 ))}
               </select>
-              <motion.div 
+              <motion.div
                 className="absolute right-4 top-[40%] transform -translate-y-1/2 pointer-events-none"
                 initial="initial"
                 animate={isDropdownOpen ? "animate" : "initial"}
@@ -246,9 +254,15 @@ const Signup: React.FC = () => {
                 <FiChevronDown color="green" size={20} />
               </motion.div>
             </div>
-          </motion.div>
+          </motion.div> */}
+          <div className="w-full max-w-md">
+            <StateSelect value={state} onChange={setState} required />
+          </div>
 
-          <motion.div variants={inputVariants} className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+          <motion.div
+            variants={inputVariants}
+            className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4"
+          >
             <div className="relative bg-transparent">
               <input
                 type="text"
@@ -295,9 +309,11 @@ const Signup: React.FC = () => {
                 onClick={() => toggleSkill(skill)}
                 className={`py-2 px-4 text-sm rounded-full border transition-colors duration-200 ${
                   selectedSkills.includes(skill)
-                    ? 'bg-green-500 border-green-500 text-white'
-                    : 'bg-transparent  text-gray-300 hover:border-green-500'
-                } ${skill === 'JavaScript' ? 'col-span-2' : ''} ${skill === 'MongoDB' ? 'col-span-2' : ''}`}
+                    ? "bg-green-500 border-green-500 text-white"
+                    : "bg-transparent  text-gray-300 hover:border-green-500"
+                } ${skill === "JavaScript" ? "col-span-2" : ""} ${
+                  skill === "MongoDB" ? "col-span-2" : ""
+                }`}
                 title={skill}
               >
                 {skill.length > 10 ? `${skill.slice(0, 7)}...` : skill}
@@ -319,7 +335,9 @@ const Signup: React.FC = () => {
             </button>
           </motion.div>
 
-          <p className="mt-4 text-center text-primary font-press-start text-sm sm:text-base">OR</p>
+          <p className="mt-4 text-center text-primary font-press-start text-sm sm:text-base">
+            OR
+          </p>
           <motion.button
             onClick={() => {
               window.location.href = import.meta.env.VITE_OAUTH;
