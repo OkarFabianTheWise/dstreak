@@ -4,20 +4,49 @@ import { AiOutlineDiscord } from "react-icons/ai";
 import { BsTwitterX } from "react-icons/bs";
 import { RiTelegram2Fill } from "react-icons/ri";
 
-export default function CommunityDropdown(){
-    const [open, setOpen] = useState(false)
+export default function CommunityDropdown() {
+    const [open, setOpen] = useState(false);
 
     return (
-        <div className ='md:hidden ' onClick={()=>setOpen(!open)}>
-            <li className='text-primary flex items-center gap-2'>
+        <div className="md:hidden" onClick={() => setOpen(!open)}>
+            <li className="text-primary flex items-center gap-2 cursor-pointer">
                 Community
-                <FaChevronDown className={`transition-transform duration-200 ${open && 'rotate-180'}`} />
+                <FaChevronDown className={`transition-transform duration-200 ${open && "rotate-180"}`} />
             </li>
-            <div className="ml-4 flex flex-col gap-3 mt-2">
-                <div className="flex gap-2 items-center text-heading font-semibold text-sm"><AiOutlineDiscord />Discord</div>
-                <div className="flex gap-2 items-center text-heading font-semibold text-sm"><BsTwitterX />(Formerly twitter)</div>
-                <div className="flex gap-2 items-center text-heading font-semibold text-sm"><RiTelegram2Fill />Telegram</div>
-            </div>
-        </div >
-    )
+            {open && (
+                <div className="ml-4 flex flex-col gap-3 mt-2">
+                    <div className="flex gap-2 items-center text-heading font-semibold text-sm">
+                        <AiOutlineDiscord />
+                        <a
+                            href="https://discord.gg/YOUR_INVITE_LINK"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            Discord
+                        </a>
+                    </div>
+                    <div className="flex gap-2 items-center text-heading font-semibold text-sm">
+                        <BsTwitterX />
+                        <a
+                            href="https://twitter.com/YOUR_PROFILE"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            (Formerly Twitter)
+                        </a>
+                    </div>
+                    <div className="flex gap-2 items-center text-heading font-semibold text-sm">
+                        <RiTelegram2Fill />
+                        <a
+                            href="https://t.me/YOUR_TELEGRAM"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
+                            Telegram
+                        </a>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
 }

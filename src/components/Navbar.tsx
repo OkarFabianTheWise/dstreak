@@ -31,9 +31,23 @@ const Navbar = () => {
                         <FaChevronDown className='transition-transform duration-200' />
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className='bg-black text-secondary font-bold'>
-                        <DropdownMenuItem><AiOutlineDiscord />Discord</DropdownMenuItem>
-                        <DropdownMenuItem><BsTwitterX />(Formerly twitter)</DropdownMenuItem>
-                        <DropdownMenuItem><RiTelegram2Fill />Telegram</DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                            <a href="https://discord.gg/YOUR_INVITE_LINK" target="_blank" rel="noopener noreferrer">
+                                <AiOutlineDiscord />Discord
+                            </a>
+                        </DropdownMenuItem>
+
+                        <DropdownMenuItem asChild>
+                            <a href="https://x.com/SuperteamNG" target="_blank" rel="noopener noreferrer">
+                                <BsTwitterX />(Formerly Twitter)
+                            </a>
+                        </DropdownMenuItem>
+
+                        <DropdownMenuItem asChild>
+                            <a href="https://t.me/" target="_blank" rel="noopener noreferrer">
+                                <RiTelegram2Fill />Telegram
+                            </a>
+                        </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             </ul>
