@@ -34,7 +34,16 @@ const App: React.FC = () => {
       <DefaultLayout>
         <Routes>
           <Route path="/auth/callback/google" element={<GoogleCallback />} />
-          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
+          <Route 
+            path="/" 
+            element={
+              <LeaderboardLayout>
+                <Leaderboard />
+              </LeaderboardLayout>
+            } 
+          />
+          
           <Route
             path="/login"
             element={!isAuthenticated ? <Navigate to="/" /> : <Login />}

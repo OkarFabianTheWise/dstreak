@@ -24,7 +24,7 @@ const Navbar = () => {
 
             {/* Desktop menu */}
             <ul className='menu font-semibold text-sm text-primary hidden md:flex gap-6'>
-                <a href='/'  className='text-primary'>Home</a>
+                <a href='/home'  className='text-primary'>Home</a>
                 <DropdownMenu>
                     <DropdownMenuTrigger className='flex gap-1 items-center'>
                         Community
@@ -32,19 +32,19 @@ const Navbar = () => {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className='bg-black text-secondary font-bold'>
                         <DropdownMenuItem asChild>
-                            <a href="https://discord.gg/YOUR_INVITE_LINK" target="_blank" rel="noopener noreferrer">
+                            <a href="https://discord.gg/C6EgkeEAed" target="_blank" rel="noopener noreferrer">
                                 <AiOutlineDiscord />Discord
                             </a>
                         </DropdownMenuItem>
 
                         <DropdownMenuItem asChild>
                             <a href="https://x.com/SuperteamNG" target="_blank" rel="noopener noreferrer">
-                                <BsTwitterX />(Formerly Twitter)
+                                <BsTwitterX />X
                             </a>
                         </DropdownMenuItem>
 
                         <DropdownMenuItem asChild>
-                            <a href="https://t.me/" target="_blank" rel="noopener noreferrer">
+                            <a href="https://t.me/+9nrEI-PFxKg0MjY0" target="_blank" rel="noopener noreferrer">
                                 <RiTelegram2Fill />Telegram
                             </a>
                         </DropdownMenuItem>

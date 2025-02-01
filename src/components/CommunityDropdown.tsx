@@ -18,7 +18,7 @@ export default function CommunityDropdown() {
                     <div className="flex gap-2 items-center text-heading font-semibold text-sm">
                         <AiOutlineDiscord />
                         <a
-                            href="https://discord.gg/YOUR_INVITE_LINK"
+                            href="https://discord.gg/C6EgkeEAed"
                             target="_blank"
                             rel="noopener noreferrer"
                         >
@@ -28,17 +28,17 @@ export default function CommunityDropdown() {
                     <div className="flex gap-2 items-center text-heading font-semibold text-sm">
                         <BsTwitterX />
                         <a
-                            href="https://twitter.com/YOUR_PROFILE"
+                            href="https://x.com/SuperteamNG"
                             target="_blank"
                             rel="noopener noreferrer"
                         >
-                            (Formerly Twitter)
+                            X
                         </a>
                     </div>
                     <div className="flex gap-2 items-center text-heading font-semibold text-sm">
                         <RiTelegram2Fill />
                         <a
-                            href="https://t.me/YOUR_TELEGRAM"
+                            href="https://t.me/+9nrEI-PFxKg0MjY0"
                             target="_blank"
                             rel="noopener noreferrer"
                         >
