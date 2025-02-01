@@ -9,12 +9,14 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import SignupSuccess from "./pages/SignupSuccess";
-// import UsersPage from "./pages/UsersPage";
+import UsersPage from "./pages/UsersPage";
 import SuperAdmin from "./pages/SuperAdmin";
 import Admin from "./pages/Admin";
 import Task from "./pages/Task";
 import DefaultLayout from "./layouts/defaultLayout";
 import { useAuthStore } from "./store/authStore";
+import EditProfile from "./pages/accounts-settings/EditProfile";
+import LinkedAccounts from "./pages/accounts-settings/LinkedAccounts";
 import LeaderboardLayout from "./pages/leaderboard/layouts";
 import { Leaderboard } from "./pages/leaderboard/Leaderboard";
 
@@ -29,14 +31,13 @@ const App: React.FC = () => {
           <Route path="/" element={<Home />} />
           <Route
             path="/login"
-            element={isAuthenticated ? <Navigate to="/login" /> : <Login />}
+            element={!isAuthenticated ? <Navigate to="/" /> : <Login />}
           />
           <Route
             path="/signup"
-            element={isAuthenticated ? <Navigate to="/" /> : <Signup />}
+            element={!isAuthenticated ? <Navigate to="/" /> : <Signup />}
           />
           <Route path="/signup-success" element={<SignupSuccess />} />
-
           <Route
             path="/leaderboard"
             element={
@@ -48,17 +49,29 @@ const App: React.FC = () => {
           <Route path="/super-admin" element={<SuperAdmin />} />
           <Route
             path="/tasks"
-            element={isAuthenticated ? <Task /> : <Navigate to="/login" />}
+            element={!isAuthenticated ? <Task /> : <Navigate to="/login" />}
           />
-          {/* <Route path="*" element={<Navigate to="/" />} /> */}
+          <Route
+            path="/settings/profile"
+            element={
+              isAuthenticated ? <EditProfile /> : <Navigate to="/settings/profile" />
+            }
+          />
+          <Route
+            path="/settings/linked-accounts"
+            element={
+              isAuthenticated ? <LinkedAccounts /> : <Navigate to="/settings/linked-accounts" />
+            }
+          />
+          <Route path="*" element={<Navigate to="/" />} />
         </Routes>
       </DefaultLayout>
 
-      {/* protected routes
+      {/* protected routes */}
       <Routes>
         <Route
           path="/user"
-          element={isAuthenticated ? <UsersPage /> : <Navigate to="/login" />}
+          element={!isAuthenticated ? <UsersPage /> : <Navigate to="/login" />}
         />
       </Routes>
 
@@ -66,15 +79,7 @@ const App: React.FC = () => {
       <Routes>
         <Route
           path="/admin"
-          element={isAuthenticated ? <Admin /> : <Navigate to="/login" />}
-        />
-      </Routes>
-
-      {/* super admin routes */}
-      <Routes>
-        <Route
-          path="/super-admin"
-          element={isAuthenticated ? <SuperAdmin /> : <Navigate to="/login" />}
+          element={!isAuthenticated ? <Admin /> : <Navigate to="/login" />}
         />
       </Routes>
     </Router>
