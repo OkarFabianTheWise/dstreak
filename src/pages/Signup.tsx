@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { FiMail, FiLock, FiUser, FiMapPin, FiChevronDown } from "react-icons/fi";
-import { FcGoogle } from "react-icons/fc";
-import { FaDiscord, FaTelegram, FaGithub, FaTwitter } from "react-icons/fa";
+import { FiChevronDown } from "react-icons/fi";
+// import { FcGoogle } from "react-icons/fc";
+// import { FaDiscord, FaTelegram, FaGithub, FaTwitter } from "react-icons/fa";
 import { bolt, s2 } from "@/assets/image";
 import { nigerianStates } from "@/constants/states";
 
@@ -169,11 +169,7 @@ const Signup: React.FC = () => {
                 type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-<<<<<<< HEAD
-                className="w-full pl-10 pr-4 py-2 rounded-lg border bg-white/20 focus:outline-none focus:ring-2 focus:ring-purple-500"
-=======
                 className="w-full pl-4 pr-4 py-4 rounded-full border bg-black/80 focus:outline-none focus:ring-2 focus:ring-primary text-center placeholder:text-center"
->>>>>>> c6cad403dc70d73e3278e437e452934f2677f324
                 placeholder="Full Name"
                 required
               />
