@@ -9,6 +9,8 @@ const GoogleCallback = () => {
       const urlParams = new URLSearchParams(window.location.search);
       const code = urlParams.get('code');
 
+      console.log("params", urlParams)
+
       if (code) {
         try {
           const response = await fetch(`${import.meta.env.VITE_DEV_URL}/auth/google/success`, {
@@ -32,7 +34,7 @@ const GoogleCallback = () => {
           }
 
           // Navigate to the desired page after successful login
-          navigate('/dashboard');
+          navigate('/');
         } catch (error) {
           console.error('Authentication error:', error);
           navigate('/login?error=authentication_failed');
