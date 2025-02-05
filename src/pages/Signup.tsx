@@ -83,25 +83,70 @@ const Signup: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    // try {
+    //   await mockSignupUser(
+    //     email,
+    //     password,
+    //     username,
+    //     walletAddress,
+    //     state,
+    //     {
+    //       discord,
+    //       telegram,
+    //       github,
+    //       twitter,
+    //     },
+    //     selectedSkills
+    //   );
+    //   navigate("/signup-success");
+    // } catch (error) {
+    //   console.error("Signup error:", error);
+    //   // Handle error appropriately
+    // } finally {
+    //   setIsLoading(false);
+    // }
+
     try {
-      await mockSignupUser(
-        email,
-        password,
-        username,
-        walletAddress,
-        state,
+      const response = await fetch(
+        "https://dev-streak-server-772acc1b2e9a.herokuapp.com/api/auth/register",
         {
-          discord,
-          telegram,
-          github,
-          twitter,
-        },
-        selectedSkills
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            username,
+            email,
+            password,
+            walletAddress,
+            state,
+            socials: {
+              discord,
+              telegram,
+              github,
+              twitter,
+            },
+            skills: selectedSkills,
+          }),
+        }
       );
-      navigate("/signup-success");
-    } catch (error) {
-      console.error("Signup error:", error);
-      // Handle error appropriately
+
+      const data = await response.json();
+      console.log("data:", data);
+
+      if (!data.success) {
+        throw new Error(data.message || "Signup failed");
+      }
+
+      // Store auth token
+      if (data.accessToken) {
+        localStorage.setItem("accessToken", data.accessToken);
+      }
+
+      navigate("/leaderboard");
+    } catch (error: any) {
+      console.log(error);
+      alert(error.message || "An error occurred. Please try again.");
     } finally {
       setIsLoading(false);
     }

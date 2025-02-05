@@ -51,25 +51,28 @@ const Login: React.FC = () => {
     setIsLoading(true);
 
     try {
-      const response = await fetch('YOUR_BACKEND_LOGIN_ENDPOINT', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      });
+      const response = await fetch(
+        "https://dev-streak-server-772acc1b2e9a.herokuapp.com/api/auth/login/email",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        }
+      );
 
       const data: AuthResponse = await response.json();
 
       if (!data.success) {
-        throw new Error(data.message || 'Login failed');
+        throw new Error(data.message || "Login failed");
       }
 
       // Store auth token
       if (data.accessToken) {
-        localStorage.setItem('accessToken', data.accessToken);
+        localStorage.setItem("accessToken", data.accessToken);
       }
-      
+
       navigate("/leaderboard");
     } catch (error: any) {
       alert(error.message || "An error occurred. Please try again.");
@@ -81,30 +84,35 @@ const Login: React.FC = () => {
   // Animation variants remain the same as your original code
   const containerVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       y: 0,
-      transition: { 
-        duration: 0.6, 
+      transition: {
+        duration: 0.6,
         ease: "easeOut",
-        staggerChildren: 0.1
-      }
-    }
+        staggerChildren: 0.1,
+      },
+    },
   };
 
   const inputVariants = {
     hidden: { opacity: 0, x: -20 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       x: 0,
-      transition: { duration: 0.3 }
-    }
+      transition: { duration: 0.3 },
+    },
   };
 
   return (
-    <div className={`h-[65vh] relative text-white flex items-center justify-center mt-20 relative px-4 sm:px-0`}>
+    <div
+      className={`h-[65vh] relative text-white flex items-center justify-center mt-20 relative px-4 sm:px-0`}
+    >
       <img src={s2} className="absolute z-[0]" alt="" />
-      <img src={bolt} className="absolute bottom-20 left-24 w-[100px] opacity-40 hidden sm:block"/>
+      <img
+        src={bolt}
+        className="absolute bottom-20 left-24 w-[100px] opacity-40 hidden sm:block"
+      />
       <motion.div
         className="w-full z-[1] max-w-md p-4 sm:p-8 rounded-xl shadow-lg bg-transparent border-2"
         variants={containerVariants}
@@ -114,7 +122,10 @@ const Login: React.FC = () => {
         <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
           <motion.div variants={inputVariants} className="space-y-2">
             <div className="relative bg-transparent">
-              <FiMail color="#8B5CF6" className="absolute left-3 top-1/2 transform -translate-y-1/2" />
+              <FiMail
+                color="#8B5CF6"
+                className="absolute left-3 top-1/2 transform -translate-y-1/2"
+              />
               <input
                 type="email"
                 value={email}
@@ -131,7 +142,10 @@ const Login: React.FC = () => {
 
           <motion.div variants={inputVariants} className="space-y-2">
             <div className="relative">
-              <FiLock color="#8B5CF6" className="absolute left-3 top-1/2 transform -translate-y-1/2" />
+              <FiLock
+                color="#8B5CF6"
+                className="absolute left-3 top-1/2 transform -translate-y-1/2"
+              />
               <input
                 type="password"
                 value={password}
@@ -148,7 +162,11 @@ const Login: React.FC = () => {
 
           <motion.button
             type="submit"
-            className={`${isClickable ? "bg-primary hover:bg-green-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2" : "bg-black/80 text-gray-600 cursor-not-allowed"} w-full py-2.5 sm:py-3 px-3 sm:px-4 border font-semibold rounded-lg font-medium text-sm sm:text-base`}
+            className={`${
+              isClickable
+                ? "bg-primary hover:bg-green-500 hover:text-white focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+                : "bg-black/80 text-gray-600 cursor-not-allowed"
+            } w-full py-2.5 sm:py-3 px-3 sm:px-4 border font-semibold rounded-lg font-medium text-sm sm:text-base`}
             whileHover={{ scale: isClickable ? 1.02 : 1 }}
             whileTap={{ scale: 0.98 }}
             disabled={isLoading || !isClickable}
@@ -159,12 +177,17 @@ const Login: React.FC = () => {
 
         <p className="mt-4 text-center text-sm sm:text-base">
           Don't have an account?{" "}
-          <Link to="/signup" className="text-primary hover:text-heading font-medium">
+          <Link
+            to="/signup"
+            className="text-primary hover:text-heading font-medium"
+          >
             Sign up
           </Link>
         </p>
 
-        <p className="mt-4 text-center text-primary font-press-start text-sm sm:text-base">OR</p>
+        <p className="mt-4 text-center text-primary font-press-start text-sm sm:text-base">
+          OR
+        </p>
         <motion.button
           onClick={() => {
             window.location.href = import.meta.env.VITE_OAUTH;

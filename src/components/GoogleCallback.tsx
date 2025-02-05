@@ -1,46 +1,97 @@
-import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const GoogleCallback = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // const handleGoogleCallback = async () => {
+    //   const urlParams = new URLSearchParams(window.location.search);
+    //   const code = urlParams.get("code");
+
+    //   console.log("params", urlParams);
+    //   //dev-streak-server-772acc1b2e9a.herokuapp.com/api
+    //   https: if (code) {
+    //     try {
+    //       const response = await fetch(
+    //         `https://dev-streak-server-772acc1b2e9a.herokuapp.com/api/auth/google/success`,
+    //         {
+    //           method: "POST",
+    //           credentials: "include",
+    //           headers: {
+    //             "Content-Type": "application/json",
+    //           },
+    //           body: JSON.stringify({ code }),
+    //         }
+    //       );
+
+    //       // if (!response.ok) {
+    //       //   throw new Error("Authentication failed");
+    //       // }
+
+    //       const data = await response.json();
+    //       console.log(response);
+
+    //       if (data.token) {
+    //         localStorage.setItem("token", data.token);
+    //       }
+
+    //       // Navigate to the desired page after successful login
+    //       navigate("/");
+    //     } catch (error) {
+    //       console.error("Authentication error:", error);
+    //       navigate("/login?error=authentication_failed");
+    //     }
+    //   } else {
+    //     navigate("/login?error=no_code");
+    //   }
+    // };
+
     const handleGoogleCallback = async () => {
       const urlParams = new URLSearchParams(window.location.search);
-      const code = urlParams.get('code');
+      const code = urlParams.get("code");
+      const scope = urlParams.get("scope");
+      const authuser = urlParams.get("authuser");
+      const prompt = urlParams.get("prompt");
 
-      console.log("params", urlParams)
+      console.log("authuser", authuser);
+      console.log("prompt", prompt);
 
       if (code) {
         try {
-          const response = await fetch(`${import.meta.env.VITE_DEV_URL}/auth/google/success`, {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ code }),
-          });
+          const response = await fetch(
+            `https://dev-streak-server-772acc1b2e9a.herokuapp.com/api/auth/google/callback?code=${encodeURIComponent(
+              code
+            )}&scope=${encodeURIComponent(
+              scope || ""
+            )}&authuser=${encodeURIComponent(
+              authuser || ""
+            )}&prompt=${encodeURIComponent(prompt || "")}`,
+            {
+              method: "GET",
+              credentials: "include",
+            }
+          );
 
-          if (!response.ok) {
-            throw new Error('Authentication failed');
-          }
+          // if (!response.ok) {
+          //   throw new Error("Authentication failed");
+          // }
 
           const data = await response.json();
-
+          console.log(response);
 
           if (data.token) {
-            localStorage.setItem('token', data.token);
+            localStorage.setItem("token", data.token);
           }
 
           // Navigate to the desired page after successful login
-          navigate('/');
+          navigate("/");
         } catch (error) {
-          console.error('Authentication error:', error);
-          navigate('/login?error=authentication_failed');
+          console.error("Authentication error:", error);
+          navigate("/login?error=authentication_failed");
         }
       } else {
-        navigate('/login?error=no_code');
+        navigate("/login?error=no_code");
       }
     };
 
