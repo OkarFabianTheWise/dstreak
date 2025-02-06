@@ -27,8 +27,10 @@ declare global {
 interface AuthResponse {
   success: boolean;
   message?: string;
-  user?: any;
-  accessToken?: string;
+  data?: {
+    user?: any;
+    token?: string;
+  };
 }
 
 const Login: React.FC = () => {
@@ -62,15 +64,18 @@ const Login: React.FC = () => {
         }
       );
 
-      const data: AuthResponse = await response.json();
+      const responseData: AuthResponse = await response.json();
 
-      if (!data.success) {
-        throw new Error(data.message || "Login failed");
+      if (!responseData.success) {
+        throw new Error(responseData.message || "Login failed");
       }
 
+      console.log("responseToken", responseData.data?.token);
+
       // Store auth token
-      if (data.accessToken) {
-        localStorage.setItem("accessToken", data.accessToken);
+      if (responseData.data?.token) {
+        localStorage.removeItem("accessToken");
+        localStorage.setItem("accessToken", responseData.data.token);
       }
 
       navigate("/leaderboard");

@@ -35,15 +35,15 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/auth/callback/google" element={<GoogleCallback />} />
           <Route path="/home" element={<Home />} />
-          <Route 
-            path="/" 
+          <Route
+            path="/"
             element={
               <LeaderboardLayout>
                 <Leaderboard />
               </LeaderboardLayout>
-            } 
+            }
           />
-          
+
           <Route
             path="/login"
             element={!isAuthenticated ? <Navigate to="/" /> : <Login />}

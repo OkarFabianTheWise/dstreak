@@ -1,37 +1,44 @@
-"use client"
+"use client";
 
-import type React from "react"
-import { useState, useEffect } from "react"
-import { PersonStanding } from "lucide-react"
-import { IoNotifications } from "react-icons/io5"
-import { useNavigate, useLocation } from "react-router-dom"
+import type React from "react";
+import { useState, useEffect } from "react";
+import { PersonStanding } from "lucide-react";
+import { IoNotifications } from "react-icons/io5";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const BoardNavbar: React.FC = () => {
-  const navigate = useNavigate()
-  const location = useLocation()
-  const [currentView, setCurrentView] = useState<"leaderboard" | "tasks-screen">("leaderboard")
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [currentView, setCurrentView] = useState<
+    "leaderboard" | "tasks-screen"
+  >("leaderboard");
 
   // Sync the currentView state with the actual route
   useEffect(() => {
     if (location.pathname === "/tasks-screen") {
-      setCurrentView("tasks-screen")
+      setCurrentView("tasks-screen");
     } else if (location.pathname === "/leaderboard") {
-      setCurrentView("leaderboard")
+      setCurrentView("leaderboard");
     }
-  }, [location.pathname])
+  }, [location.pathname]);
 
   const handleNavigation = (view: "leaderboard" | "tasks-screen") => {
-    setCurrentView(view)
-    navigate(view === "leaderboard" ? "/leaderboard" : "/tasks-screen")
-  }
+    setCurrentView(view);
+    navigate(view === "leaderboard" ? "/leaderboard" : "/tasks-screen");
+  };
+
+  const logout = () => {
+    localStorage.removeItem("accessToken");
+    navigate("/leaderboard");
+  };
 
   return (
     <div className="w-full flex flex-row justify-end items-center p-4 text-white">
@@ -69,7 +76,10 @@ const BoardNavbar: React.FC = () => {
               </Avatar>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56 bg-black">
-              <DropdownMenuItem className="cursor-pointer flex items-center" onClick={() => navigate("/profile")}>
+              <DropdownMenuItem
+                className="cursor-pointer flex items-center"
+                onClick={() => navigate("/profile")}
+              >
                 <PersonStanding className="mr-2 h-4 w-4" />
                 <span>Profile</span>
               </DropdownMenuItem>
@@ -95,7 +105,7 @@ const BoardNavbar: React.FC = () => {
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 className="cursor-pointer text-destructive flex items-center"
-                onClick={() => navigate("/logout")}
+                onClick={() => logout()}
               >
                 <svg
                   className="mr-2 h-4 w-4"
@@ -121,8 +131,7 @@ const BoardNavbar: React.FC = () => {
         </li>
       </ul>
     </div>
-  )
-}
+  );
+};
 
-export default BoardNavbar
-
+export default BoardNavbar;

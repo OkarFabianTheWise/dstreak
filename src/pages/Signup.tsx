@@ -5,41 +5,14 @@ import { motion } from "framer-motion";
 import { FcGoogle } from "react-icons/fc";
 // import { FaDiscord, FaTelegram, FaGithub, FaTwitter } from "react-icons/fa";
 import { bolt, s2 } from "@/assets/image";
-// import { nigerianStates } from "@/constants/states";
 import { StateSelect } from "../utils/stateSelector";
-
-// Mock signup function
-const mockSignupUser = async (
-  email: string,
-  password: string,
-  username: string,
-  walletAddress: string,
-  state: string,
-  socials: {
-    discord?: string;
-    telegram?: string;
-    github?: string;
-    twitter?: string;
-  },
-  skills: string[]
-) => {
-  await new Promise((resolve) => setTimeout(resolve, 1000));
-
-  if (!email || !password || !username || !walletAddress) {
-    throw new Error("Please fill in all required fields");
-  }
-
-  if (!state || !skills.length || !socials) {
-    console.log("whatebver");
-  }
-
-  return { success: true };
-};
+import { handleSignup } from "../utils/api/auth";
 
 const Signup: React.FC = () => {
+  const [full_name, setFullname] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [username, setUsername] = useState("");
   const [walletAddress, setWalletAddress] = useState("");
   const [state, setState] = useState("");
   const [discord, setDiscord] = useState("");
@@ -49,107 +22,73 @@ const Signup: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isClickable, setIsClickable] = useState(false);
   const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const navigate = useNavigate();
 
   // Validate form inputs and update isClickable
   const validateForm = (
+    full_name: string,
+    username: string,
     email: string,
     password: string,
-    username: string,
     walletAddress: string,
     state: string
   ) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\-=/\\|])[A-Za-z\d!@#$%^&*()_+{}\[\]:;<>,.?~\-=/\\|]{8,}$/;
+    const usernameRegex = /^[a-z]{3,}$/; // Only lowercase letters, at least 3 characters
     const isValidEmail = emailRegex.test(email);
-    const isValidPassword = password.length >= 6;
-    const isValidUsername = username.length >= 3;
+    const isValidPassword = passwordRegex.test(password);
+    const isValidUsername = usernameRegex.test(username);
+    const isValidfull_name = full_name.length >= 3;
     const isValidWallet = walletAddress.trim().length > 0;
     const isValidState = state.trim().length > 0;
 
     setIsClickable(
-      isValidEmail &&
-        isValidPassword &&
+      isValidfull_name &&
         isValidUsername &&
+        isValidEmail &&
+        isValidPassword &&
         isValidWallet &&
         isValidState
     );
+
+    if (!isValidPassword) {
+      setErrorMessage(
+        "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number and one special character"
+      );
+    } else {
+      setErrorMessage("");
+    }
   };
 
   // Add useEffect to validate form on input changes
   useEffect(() => {
-    validateForm(email, password, username, walletAddress, state);
-  }, [email, password, username, walletAddress, state]);
+    validateForm(full_name, username, email, password, walletAddress, state);
+  }, [full_name, username, email, password, , walletAddress, state]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
-    // try {
-    //   await mockSignupUser(
-    //     email,
-    //     password,
-    //     username,
-    //     walletAddress,
-    //     state,
-    //     {
-    //       discord,
-    //       telegram,
-    //       github,
-    //       twitter,
-    //     },
-    //     selectedSkills
-    //   );
-    //   navigate("/signup-success");
-    // } catch (error) {
-    //   console.error("Signup error:", error);
-    //   // Handle error appropriately
-    // } finally {
-    //   setIsLoading(false);
-    // }
 
-    try {
-      const response = await fetch(
-        "https://dev-streak-server-772acc1b2e9a.herokuapp.com/api/auth/register",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            username,
-            email,
-            password,
-            walletAddress,
-            state,
-            socials: {
-              discord,
-              telegram,
-              github,
-              twitter,
-            },
-            skills: selectedSkills,
-          }),
-        }
-      );
+    const signupData = {
+      full_name,
+      username,
+      email,
+      password,
+      walletAddress,
+      state,
+      socials: {
+        discord,
+        telegram,
+        github,
+        twitter,
+      },
+      skills: selectedSkills,
+    };
 
-      const data = await response.json();
-      console.log("data:", data);
-
-      if (!data.success) {
-        throw new Error(data.message || "Signup failed");
-      }
-
-      // Store auth token
-      if (data.accessToken) {
-        localStorage.setItem("accessToken", data.accessToken);
-      }
-
-      navigate("/leaderboard");
-    } catch (error: any) {
-      console.log(error);
-      alert(error.message || "An error occurred. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
+    await handleSignup(signupData, setIsLoading, setErrorMessage, navigate);
   };
 
   const containerVariants = {
@@ -173,13 +112,6 @@ const Signup: React.FC = () => {
       transition: { duration: 0.3 },
     },
   };
-
-  // const arrowVariants = {
-  //   initial: { rotate: 0 },
-  //   animate: { rotate: 180 },
-  // };
-
-  // const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const skills = [
     "Rust",
@@ -220,10 +152,23 @@ const Signup: React.FC = () => {
             <div className="relative bg-transparent">
               <input
                 type="text"
+                value={full_name}
+                onChange={(e) => setFullname(e.target.value)}
+                className="w-full pl-4 pr-4 py-4 rounded-full border bg-black/80 focus:outline-none focus:ring-2 focus:ring-primary text-center placeholder:text-center"
+                placeholder="Full Name"
+                required
+              />
+            </div>
+          </motion.div>
+
+          <motion.div variants={inputVariants} className="space-y-2">
+            <div className="relative bg-transparent">
+              <input
+                type="text"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 className="w-full pl-4 pr-4 py-4 rounded-full border bg-black/80 focus:outline-none focus:ring-2 focus:ring-primary text-center placeholder:text-center"
-                placeholder="Full Name"
+                placeholder="Enter username"
                 required
               />
             </div>
@@ -268,38 +213,6 @@ const Signup: React.FC = () => {
             </div>
           </motion.div>
 
-          {/* <motion.div variants={inputVariants} className="space-y-2">
-            <div className="relative bg-transparent">
-              <select
-                value={state}
-                onChange={(e) => setState(e.target.value)}
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                onBlur={() => setIsDropdownOpen(false)}
-                className="w-full pl-4 pr-4 py-4 rounded-full border border-green-500 bg-black/80 focus:outline-none focus:ring-2 focus:ring-primary appearance-none text-center"
-                required
-              >
-                <option value="">Select your state</option>
-                {nigerianStates.map((state) => (
-                  <option
-                    key={state}
-                    value={state}
-                    className="hover:bg-[#000000] focus:bg-green-300"
-                  >
-                    {state}
-                  </option>
-                ))}
-              </select>
-              <motion.div
-                className="absolute right-4 top-[40%] transform -translate-y-1/2 pointer-events-none"
-                initial="initial"
-                animate={isDropdownOpen ? "animate" : "initial"}
-                variants={arrowVariants}
-                transition={{ duration: 0.3 }}
-              >
-                <FiChevronDown color="green" size={20} />
-              </motion.div>
-            </div>
-          </motion.div> */}
           <div className="w-full max-w-md">
             <StateSelect value={state} onChange={setState} required />
           </div>
@@ -403,6 +316,11 @@ const Signup: React.FC = () => {
               </Link>
             </p>
           </div>
+          {errorMessage && (
+            <div className="text-red-500 text-sm text-center">
+              {errorMessage}
+            </div>
+          )}
         </form>
       </motion.div>
     </div>
