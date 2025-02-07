@@ -5,6 +5,9 @@ import { FiMail, FiLock } from "react-icons/fi";
 // import { FcGoogle } from "react-icons/fc";
 import { bolt, s2 } from "@/assets/image";
 import { FcGoogle } from "react-icons/fc";
+import { handleLogin } from "@/utils/api/auth";
+import AlertModal from "../components/ui/api-error-alert";
+
 // import GoogleCallback from "@/components/GoogleCallback";
 
 declare global {
@@ -21,25 +24,14 @@ declare global {
   }
 }
 
-// const GOOGLE_CLIENT_ID = "718296756098-99.apps.googleusercontent.com"; // Get this from Google Cloud Console
-
-// Types for auth response
-interface AuthResponse {
-  success: boolean;
-  message?: string;
-  data?: {
-    user?: any;
-    token?: string;
-  };
-}
-
 const Login: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isClickable, setIsClickable] = useState(false);
   const navigate = useNavigate();
-  // const [error, setError] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
 
   const validateForm = (email: string, password: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -50,40 +42,15 @@ const Login: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
 
-    try {
-      const response = await fetch(
-        "https://dev-streak-server-772acc1b2e9a.herokuapp.com/api/auth/login/email",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email, password }),
-        }
-      );
-
-      const responseData: AuthResponse = await response.json();
-
-      if (!responseData.success) {
-        throw new Error(responseData.message || "Login failed");
-      }
-
-      console.log("responseToken", responseData.data?.token);
-
-      // Store auth token
-      if (responseData.data?.token) {
-        localStorage.removeItem("accessToken");
-        localStorage.setItem("accessToken", responseData.data.token);
-      }
-
-      navigate("/leaderboard");
-    } catch (error: any) {
-      alert(error.message || "An error occurred. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
+    await handleLogin(
+      email,
+      password,
+      setIsLoading,
+      setErrorMessage,
+      setIsAlertOpen,
+      navigate
+    );
   };
 
   // Animation variants remain the same as your original code
@@ -205,6 +172,11 @@ const Login: React.FC = () => {
           Sign in with Google
         </motion.button>
       </motion.div>
+      <AlertModal
+        message={errorMessage}
+        isOpen={isAlertOpen}
+        onClose={() => setIsAlertOpen(false)}
+      />
     </div>
   );
 };
