@@ -46,6 +46,128 @@ Example usage:
 />
 ```
 
+## 🔌 API Authentication Endpoints
+
+The `utils/api/auth.ts` file contains authentication-related API calls:
+
+### Authentication Functions
+
+1. **handleSignup**
+```typescript
+handleSignup({
+  full_name: string,
+  username: string,
+  email: string,
+  password: string,
+  walletAddress: string,
+  state: string,
+  socials: {
+    discord: string,
+    telegram: string,
+    github: string,
+    twitter: string
+  },
+  skills: string[]
+}, setIsLoading, setErrorMessage, navigate)
+```
+
+2. **handleLogin**
+```typescript
+handleLogin(
+  email: string,
+  password: string,
+  setIsLoading,
+  setErrorMessage,
+  setIsAlertOpen,
+  navigate
+)
+```
+
+3. **handleProfileUpdate**
+```typescript
+handleProfileUpdate(
+  _label: string,
+  value: string,
+  setErrorMessage,
+  setIsAlertOpen,
+  setIsSuccess
+)
+```
+
+4. **handleDeleteAccount**
+```typescript
+handleDeleteAccount(
+  setErrorMessage,
+  setIsAlertOpen,
+  setIsSuccess
+)
+```
+
+### Example Usage
+
+```tsx
+// Login Example
+const YourLoginComponent = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    await handleLogin(
+      email,
+      password,
+      setIsLoading,
+      setErrorMessage,
+      setIsAlertOpen,
+      navigate
+    );
+  };
+};
+
+// Delete Account Example
+const YourDeleteComponent = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
+
+  const confirmDelete = async () => {
+    await handleDeleteAccount(
+      setErrorMessage,
+      setIsAlertOpen,
+      setIsSuccess
+    );
+  };
+
+  return (
+    <>
+      <button onClick={() => setIsModalOpen(true)}>Delete Account</button>
+      <ApiCallConfirmation
+        message="Are you sure you want to delete your account?"
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={confirmDelete}
+        isDestructive={true}
+      />
+    </>
+  );
+};
+```
+
+All endpoints return a response object with the following structure:
+```typescript
+interface AuthResponse {
+  success: boolean;
+  message?: string;
+  data?: {
+    user?: any;
+    token?: string;
+  };
+}
+```
+
 ## 🚀 Features
 
 - 🔒 Role-based authentication (Superadmin, Admin)
