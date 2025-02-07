@@ -26,11 +26,24 @@ Menu-Community List Dropdown
 .
 ```
 
-```plaintext
-INFORMATION:
+### API Feedback Modals
 
-api-call-confirmation, api-error-alert, api-success-alert:
-are components to show user action states when a request is sent to the backend.
+The application includes three modal components for handling API interactions
+(api-call-confirmation, api-error-alert, api-success-alert):
+
+- **ApiCallConfirmation**: A confirmation modal with "Continue" and "Cancel" buttons, designed for destructive actions like account deletion - use by passing `isOpen`, `onClose`, `onConfirm`, and `isDestructive` props.
+- **ApiErrorAlert**: A red-bordered modal that displays error messages from failed API calls - implement by providing `message`, `isOpen`, and `onClose` props, with automatic closure after 4 seconds.
+- **ApiSuccessAlert**: A green-bordered modal showing successful API responses - integrate using `message`, `isOpen`, `onClose` props, featuring auto-close functionality and optional confirmation callback.
+
+Example usage:
+```tsx
+<ApiCallConfirmation
+  message="Are you sure you want to delete your account?"
+  isOpen={isModalOpen}
+  onClose={() => setIsModalOpen(false)}
+  onConfirm={handleDeleteAccount}
+  isDestructive={true}
+/>
 ```
 
 ## 🚀 Features
