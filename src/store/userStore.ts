@@ -47,6 +47,7 @@ export const useUserStore = create<UserState>((set) => ({
     set({ loading: true, error: null });
     try {
       const token = localStorage.getItem('accessToken');
+      console.log("token from fetc profile: ", token);
       if (!token) throw new Error('No access token found');
 
       const response = await axios.get(`${apiURL}/auth/profile`, {

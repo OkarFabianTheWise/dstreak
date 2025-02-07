@@ -3,78 +3,38 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import AccountSidebar from "@/components/AccountSidebar";
 import { IoIosArrowForward } from "react-icons/io";
+import { handleProfileUpdate, handleDeleteAccount } from "../../utils/api/auth";
+import AlertModal from "@/components/ui/api-error-alert";
+import ApiCallConfirm from "@/components/ui/api-call-confirmation";
+import ApiSuccessAlert from "@/components/ui/api-success-alert";
 
 const EditProfile = () => {
   const [avatar] = useState<string | null>(null);
   const [fullName, setFullName] = useState("");
   const [username, setUsername] = useState("");
-
-  const sendUpdateRequest = async (label: string, value: string) => {
-    try {
-      // Retrieve the authentication token from wherever it's stored (e.g., localStorage)
-      const token = localStorage.getItem("accessToken");
-
-      const response = await fetch(
-        "https://dev-streak-server-772acc1b2e9a.herokuapp.com/api/users",
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({ label: value }),
-        }
-      );
-
-      const data = await response.json();
-      console.log(data);
-      if (!data.success) {
-        throw new Error(data.message || "Update failed");
-      }
-
-      console.log(`${label} updated successfully!`);
-    } catch (error: any) {
-      alert(error.message || "An error occurred. Please try again.");
-    }
-  };
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  // const [isWarningOpen, setIsWarningOpen] = useState(false);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
 
   const handleUpdate = (label: string, value: string) => {
-    confirm(value);
     if (value.trim() !== "") {
-      sendUpdateRequest(label, value);
+      handleProfileUpdate(
+        label,
+        value,
+        setErrorMessage,
+        setIsAlertOpen,
+        setIsSuccess
+      );
     } else {
-      alert("Please enter a value before updating.");
+      setErrorMessage("Please enter a value before updating.");
+      setIsAlertOpen(true);
     }
   };
 
-  const handleDeleteAccount = async () => {
-    console.log("delete account");
-    if (
-      confirm(
-        "Are you sure you want to delete your account? This action is irreversible."
-      )
-    ) {
-      try {
-        const response = await fetch(
-          "https://dev-streak-server-772acc1b2e9a.herokuapp.com/api/users/delete",
-          {
-            method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        const data = await response.json();
-        if (data.success) {
-          alert("Account deleted successfully.");
-        } else {
-          throw new Error(data.message || "Failed to delete account.");
-        }
-      } catch (error: any) {
-        alert(error.message);
-      }
-    }
+  const handleDelete = async () => {
+    await handleDeleteAccount(setErrorMessage, setIsAlertOpen, setIsSuccess);
   };
 
   return (
@@ -154,13 +114,14 @@ const EditProfile = () => {
             </div>
 
             <div className="relative">
-              <Button variant="destructive" className="p-0 text-[red]">
+              <Button
+                variant="destructive"
+                className="p-2 px-4 text-white bg-red-600 hover:bg-red-700"
+                onClick={() => setIsConfirmOpen(true)}
+              >
                 Delete my account
               </Button>
-              <p
-                onClick={handleDeleteAccount}
-                className="text-sm text-muted-foreground mt-2"
-              >
+              <p className="text-sm text-muted-foreground mt-2">
                 Permanently delete your account and remove all info.
               </p>
               <IoIosArrowForward
@@ -171,6 +132,25 @@ const EditProfile = () => {
           </div>
         </div>
       </div>
+      <AlertModal
+        message={errorMessage}
+        isOpen={isAlertOpen}
+        onClose={() => setIsAlertOpen(false)}
+      />
+      <ApiCallConfirm
+        message="are you sure you want to go on with this action?"
+        isOpen={isConfirmOpen}
+        onClose={() => {
+          setIsConfirmOpen(false);
+        }}
+        onConfirm={handleDelete}
+        isDestructive={true}
+      />
+      <ApiSuccessAlert
+        message="Your action was completed successfully!"
+        isOpen={isSuccess}
+        onClose={() => setIsSuccess(false)}
+      />
     </div>
   );
 };

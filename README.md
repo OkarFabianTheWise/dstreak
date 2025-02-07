@@ -26,6 +26,13 @@ Menu-Community List Dropdown
 .
 ```
 
+```plaintext
+INFORMATION:
+
+api-call-confirmation, api-error-alert, api-success-alert:
+are components to show user action states when a request is sent to the backend.
+```
+
 ## 🚀 Features
 
 - 🔒 Role-based authentication (Superadmin, Admin)
@@ -100,10 +107,12 @@ Menu-Community List Dropdown
 
 ## Milestones
 - [x] Home Page
-- [ ] Login Page
-- [ ] SignUp Page
-- [ ] Onboarding Page
-- [ ] Menu-Comm. List
+- [x] Login Page
+- [x] SignUp Page
+- [x] Onboarding Page
+- [x] Menu-Comm. List
+- [ ] Mobile view of Account Settings page
+- [ ] Backend api integration
 
 
 ## 🧩 Contributing

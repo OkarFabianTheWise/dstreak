@@ -28,6 +28,7 @@ interface AuthResponse {
   };
 }
 
+// route called when user signs up
 export const handleSignup = async (
   signupData: SignupData,
   setIsLoading: (isLoading: boolean) => void,
@@ -76,6 +77,7 @@ export const handleSignup = async (
   }
 };
 
+// route called when user logs in
 export const handleLogin = async (
   email: string,
   password: string,
@@ -89,7 +91,7 @@ export const handleLogin = async (
 
   try {
     const response = await fetch(
-      `${endpoint}/auth/login/email`,
+      `https://dev-streak-server-772acc1b2e9a.herokuapp.com/api/auth/login/email`,
       {
         method: "POST",
         headers: {
@@ -102,14 +104,15 @@ export const handleLogin = async (
     const responseData: AuthResponse = await response.json();
 
     if (!responseData.success) {
-      throw new Error(responseData.message || "Login failed");
+      setErrorMessage(responseData.message || "Login failed");
+      setIsAlertOpen(true);
     }
 
     // console.log("responseToken", responseData.data?.token);
 
     // Store auth token
     if (responseData.data?.token) {
-      localStorage.removeItem("accessToken");
+      console.log("token", responseData.data.token);
       localStorage.setItem("accessToken", responseData.data.token);
     }
 
@@ -119,5 +122,75 @@ export const handleLogin = async (
     setIsAlertOpen(true);
   } finally {
     setIsLoading(false);
+  }
+};
+
+export const handleProfileUpdate = async (
+  _label: string,
+  value: string,
+  setErrorMessage: (message: string) => void,
+  setIsAlertOpen: (isAlertOpen: boolean) => void,
+  setIsSuccess: (isSuccess: boolean) => void
+) => {
+  try {
+    // Retrieve the authentication token from wherever it's stored (e.g., localStorage)
+    const token = localStorage.getItem("accessToken");
+
+    const response = await fetch(
+      `${endpoint}/users`,
+      {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ _label: value }),
+      }
+    );
+
+    const data = await response.json();
+    console.log(data);
+    if (!data.success) {
+      setErrorMessage(data.message || "Update failed");
+      setIsAlertOpen(true);
+    }
+
+    setIsSuccess(true);
+  } catch (error: any) {
+    setErrorMessage(error.message || "An error occurred. Please try again.");
+    setIsAlertOpen(true);
+  }
+};
+
+// route called when user wants to delete account
+export const handleDeleteAccount = async (
+  setErrorMessage: (message: string) => void,
+  setIsAlertOpen: (isAlertOpen: boolean) => void,
+  setIsSuccess: (isSuccess: boolean) => void
+) => {
+ {
+    try {
+      const response = await fetch(
+        `${endpoint}/users/delete`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      const data = await response.json();
+      if (data.success) {
+        setIsSuccess(true);
+        setIsAlertOpen(true);
+      } else {
+        setErrorMessage(data.message || "Failed to delete account.");
+        setIsAlertOpen(true);
+      }
+    } catch (error: any) {
+      setErrorMessage(error.message);
+      setIsAlertOpen(true);
+    }
   }
 };
