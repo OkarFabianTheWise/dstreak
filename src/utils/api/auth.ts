@@ -69,8 +69,8 @@ export const handleSignup = async (
     navigate("/leaderboard");
     return true;
   } catch (error: any) {
-    console.error(error);
-    setErrorMessage(error.message || "An error occurred. Please try again.");
+    // setErrorMessage(error.message || "An error occurred. Please try again.");
+    setErrorMessage("Faiiled to signup. Please try again.");
     return false;
   } finally {
     setIsLoading(false);
@@ -91,7 +91,7 @@ export const handleLogin = async (
 
   try {
     const response = await fetch(
-      `https://dev-streak-server-772acc1b2e9a.herokuapp.com/api/auth/login/email`,
+      `${endpoint}/auth/login/email`,
       {
         method: "POST",
         headers: {
@@ -108,17 +108,14 @@ export const handleLogin = async (
       setIsAlertOpen(true);
     }
 
-    // console.log("responseToken", responseData.data?.token);
-
     // Store auth token
     if (responseData.data?.token) {
-      console.log("token", responseData.data.token);
       localStorage.setItem("accessToken", responseData.data.token);
     }
 
     navigate("/leaderboard");
   } catch (error: any) {
-    setErrorMessage(error.message || "An error occurred. Please try again.");
+    setErrorMessage("Failed to login. Please check internet connection.");
     setIsAlertOpen(true);
   } finally {
     setIsLoading(false);
@@ -149,7 +146,6 @@ export const handleProfileUpdate = async (
     );
 
     const data = await response.json();
-    console.log(data);
     if (!data.success) {
       setErrorMessage(data.message || "Update failed");
       setIsAlertOpen(true);
@@ -157,7 +153,8 @@ export const handleProfileUpdate = async (
 
     setIsSuccess(true);
   } catch (error: any) {
-    setErrorMessage(error.message || "An error occurred. Please try again.");
+    // setErrorMessage(error.message || "Failed to update profile. Please try again.");
+    setErrorMessage("Failed to update profile. Please try again.");
     setIsAlertOpen(true);
   }
 };
@@ -181,6 +178,7 @@ export const handleDeleteAccount = async (
       );
 
       const data = await response.json();
+
       if (data.success) {
         setIsSuccess(true);
         setIsAlertOpen(true);
@@ -189,7 +187,8 @@ export const handleDeleteAccount = async (
         setIsAlertOpen(true);
       }
     } catch (error: any) {
-      setErrorMessage(error.message);
+      // setErrorMessage(error.message);
+      setErrorMessage("An error occured while deleting your account.");
       setIsAlertOpen(true);
     }
   }
