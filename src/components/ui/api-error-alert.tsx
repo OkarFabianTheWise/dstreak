@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 
 interface AlertModalProps {
-  message: string;
+  message: string | null;
   isOpen: boolean;
   onClose: () => void;
 }

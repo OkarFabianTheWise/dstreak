@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import AlertModal from "../../components/ui/api-error-alert";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,7 +10,8 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { RecentActivity } from "./RecentActivity";
-import Cookies from "js-cookie";
+// import Cookies from "js-cookie";
+import { fetchLeaderboard } from "../../utils/api/leaderboard";
 
 // Define the type for leaderboard user data
 interface LeaderboardUser {
@@ -24,84 +26,38 @@ export function Leaderboard() {
   const [filter, setFilter] = useState<"weekly" | "monthly">("weekly");
   const [currentPage, setCurrentPage] = useState(1);
   const [leaderboardData, setLeaderboardData] = useState<LeaderboardUser[]>([]);
-  const [loggedInUser, setLoggedInUser] = useState<LeaderboardUser | null>(
+  const [loggedInUser, _setLoggedInUser] = useState<LeaderboardUser | null>(
     null
   );
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const itemsPerPage = 10;
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
 
-  const endpoint = import.meta.env.VITE_ENDPOINT_URL as string;
-
+  const loadLeaderboard = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetchLeaderboard(
+        {
+          duration: filter, // Use the filter state instead of hardcoded "weekly"
+          page: currentPage, // Use the current page
+          limit: itemsPerPage, // Use itemsPerPage instead of hardcoded 100
+        },
+        setErrorMessage
+      );
+      setLeaderboardData(response.data.data);
+    } catch (error: any) {
+      setErrorMessage(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const itemsPerPage = 100; // Use itemsPerPage instead of hardcoded 100
   // Fetch leaderboard data and logged-in user data
   useEffect(() => {
-    const fetchLeaderboard = async () => {
-      try {
-        const userId = localStorage.getItem("user_id"); // Assuming user_id is stored in localStorage
-        const url = `${endpoint}/leaderboard?page=${currentPage}&limit=${itemsPerPage}&duration=${filter}&user_id=${userId}`;
-        console.log("Fetching data from:", url);
-
-        const response = await fetch(url, {
-          headers: {
-            Authorization: `Bearer ${Cookies.get("accessToken")}`, // Use Cookies to get the token
-            "Content-Type": "application/json",
-          },
-        });
-
-        // Log the response status and headers
-        console.log("Response status:", response.status);
-        console.log("Response headers:", Object.fromEntries(response.headers.entries()));
-
-        // Handle non-OK responses (e.g., 404, 500)
-        if (!response.ok) {
-          const errorText = await response.json();
-          console.error("Server returned an error:", errorText);
-          throw new Error(`Server returned ${response.status}: ${errorText}`);
-        }
-
-        // Check if the response is JSON
-        const contentType = response.headers.get("content-type");
-        if (!contentType || !contentType.includes("application/json")) {
-          const responseText = await response.json();
-          console.error("Server did not return JSON. Response text:", responseText);
-          throw new Error("Server did not return JSON");
-        }
-
-        const data = await response.json();
-        console.log("API response data:", data); // Log the entire response
-
-        // Ensure the response contains the expected data structure
-        if (data.success && Array.isArray(data.data.data)) {
-          setLeaderboardData(data.data.data);
-
-          // Extract logged-in user data from the response
-          if (data.data.logged_in_user) {
-            setLoggedInUser(data.data.logged_in_user);
-          }
-
-          setError(null); // Clear any previous errors
-        } else {
-          console.error("Unexpected API response structure:", data);
-          setError("Failed to fetch leaderboard data: Unexpected response structure");
-        }
-      } catch (error) {
-        console.error("Failed to fetch leaderboard data:", error);
-        setError("An error occurred while fetching the leaderboard data.");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchLeaderboard();
-  }, [filter, currentPage]);
+    loadLeaderboard();
+  }, []);
 
   const totalPages = Math.ceil(leaderboardData.length / itemsPerPage);
-
-  // Get current page items
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = leaderboardData.slice(indexOfFirstItem, indexOfLastItem);
-  console.log("Leaderboard data:", leaderboardData);
 
   // Change page
   const nextPage = () => {
@@ -164,11 +120,6 @@ export function Leaderboard() {
           </div>
         )}
 
-        {/* Error Message */}
-        {error && (
-          <div className="text-red-500 text-center my-4">{error}</div>
-        )}
-
         {/* Rankings Section */}
         <div className="space-y-4">
           <div className="flex items-center gap-2">
@@ -213,7 +164,7 @@ export function Leaderboard() {
             {isLoading ? (
               <p>Loading...</p>
             ) : (
-              currentItems.map((user) => (
+              leaderboardData.map((user) => (
                 <div
                   key={user.id}
                   className="flex items-center justify-between rounded-full border border-[#1a1a1a] bg-[#0a0a0a] px-4 py-2 transition-colors hover:bg-[#1a1a1a]"
@@ -281,6 +232,11 @@ export function Leaderboard() {
         </div>
       </div>
       <RecentActivity />
+      <AlertModal
+        message={errorMessage}
+        isOpen={isAlertOpen}
+        onClose={() => setIsAlertOpen(false)}
+      />
     </div>
   );
 }

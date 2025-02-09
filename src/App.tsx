@@ -14,7 +14,7 @@ import SuperAdmin from "./pages/SuperAdmin";
 import Admin from "./pages/Admin";
 import Task from "./pages/Task";
 import DefaultLayout from "./layouts/defaultLayout";
-import { useAuthStore } from "./store/authStore";
+import { useAuthStore } from "./utils/api/auth";
 import EditProfile from "./pages/accounts-settings/EditProfile";
 import LinkedAccounts from "./pages/accounts-settings/LinkedAccounts";
 import LeaderboardLayout from "./pages/leaderboard/layouts";
@@ -58,32 +58,11 @@ const App: React.FC = () => {
             path="/tasks"
             element={isAuthenticated ? <Task /> : <Navigate to="/login" />}
           />
-          {/* <Route path='*' element={<Navigate to='/' />} /> */}
 
-          <Route
-            path="/profile"
-            element={
-              <ProfilePage /> //isAuthenticated ?  : <Navigate to="/login" />
-            }
-          />
-          <Route
-            path="/tasks-screen"
-            element={
-              <TasksPage /> //isAuthenticated ?  : <Navigate to="/login" />
-            }
-          />
-          <Route
-            path="/tasks-details"
-            element={
-              <TasksDetailsPage /> //isAuthenticated ?  : <Navigate to="/login" />
-            }
-          />
-          <Route
-            path="/account-settings"
-            element={
-              <ProfileSettingsPage /> //isAuthenticated ?  : <Navigate to="/login" />
-            }
-          />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/tasks-screen" element={<TasksPage />} />
+          <Route path="/tasks-details" element={<TasksDetailsPage />} />
+          <Route path="/account-settings" element={<ProfileSettingsPage />} />
           <Route
             path="/leaderboard"
             element={
@@ -97,10 +76,7 @@ const App: React.FC = () => {
         {/* protected routes */}
         <Routes>
           <Route path="/super-admin" element={<SuperAdmin />} />
-          <Route
-            path="/tasks"
-            element={!isAuthenticated ? <Task /> : <Navigate to="/login" />}
-          />
+          <Route path="/tasks" element={<Task />} />
           <Route
             path="/settings/profile"
             element={
@@ -121,7 +97,6 @@ const App: React.FC = () => {
               )
             }
           />
-          {/* <Route path="*" element={<Navigate to="/" />} /> */}
         </Routes>
 
         {/* protected routes */}

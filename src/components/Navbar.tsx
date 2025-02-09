@@ -21,11 +21,11 @@ import {
 import CommunityDropdown from "./CommunityDropdown";
 import { FaChevronDown } from "react-icons/fa6";
 import { useEffect } from "react";
-import { useAuthStore } from "../store/authStore";
+import { useAuthStore } from "../utils/api/auth";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const isLoggedIn = useAuthStore((state) => state.isLoggedIn); 
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn);
   const setLoggedIn = useAuthStore((state) => state.setLoggedIn);
 
   // Check if the user is logged in on component mount
@@ -77,8 +77,7 @@ const Navbar = () => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <BsTwitterX />
-                X
+                <BsTwitterX />X
               </a>
             </DropdownMenuItem>
 
@@ -134,10 +133,7 @@ const Navbar = () => {
                   </li>
                   <CommunityDropdown />
                   {isLoggedIn ? (
-                    <li
-                      onClick={handleLogout}
-                      className="text-primary"
-                    >
+                    <li onClick={handleLogout} className="text-primary">
                       Logout
                     </li>
                   ) : (

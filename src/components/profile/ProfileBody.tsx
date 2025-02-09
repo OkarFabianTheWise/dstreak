@@ -1,12 +1,13 @@
 import { demoProfilePics } from "@/assets/image";
-import { IoIosArrowBack, IoMdShareAlt } from "react-icons/io";
+import { IoIosArrowBack } from "react-icons/io";
 import { FaGithub, FaRegEdit } from "react-icons/fa";
 import SkillsItem from "./SkillsItem";
 import { FaTelegram, FaXTwitter } from "react-icons/fa6";
 import POWItemm from "./POWItem";
-import { useUserStore } from "@/store/userStore";
+import { useUserStore } from "../../utils/api/auth";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import ShareMenu from "@/components/profile/share-menu";
 
 const ProfileBody: React.FC = () => {
   const { userProfile, loading, error, fetchUserProfile } = useUserStore();
@@ -17,10 +18,17 @@ const ProfileBody: React.FC = () => {
     fetchUserProfile();
   }, [fetchUserProfile]);
 
-  // Handle navigation on error
+  // Handle navigation on error - modify this part
   useEffect(() => {
-    if (error) {
+    if (error === "No access token found") {
+      console.log("No auth token, redirecting to login");
       navigate("/login");
+    } else if (error) {
+      console.log("Error fetching profile:", error);
+      // Only navigate to login for authentication errors
+      if (error.includes("unauthorized") || error.includes("token")) {
+        navigate("/login");
+      }
     }
   }, [error, navigate]);
 
@@ -53,9 +61,9 @@ const ProfileBody: React.FC = () => {
               >
                 <FaRegEdit size={24} /> Edit Profile
               </button>
-              <button className="flex hover:opacity-50 justify-center items-center gap-2 p-3 bg-transparent border-2 border-secondary rounded-lg">
-                <IoMdShareAlt size={24} /> Share
-              </button>
+              <ShareMenu
+                title={`Check out ${userProfile?.full_name}'s profile on DevStreak!`}
+              />
             </div>
           </div>
         </div>
@@ -63,10 +71,14 @@ const ProfileBody: React.FC = () => {
 
         {/* Tech stack */}
         <div className="text-secondary mt-5">Tech stack</div>
-        <div className="flex gap-3 mt-8">
-          <SkillsItem text="Javascript" />
-          <SkillsItem text="Python" />
-          <SkillsItem text="Dart" />
+        <div className="flex flex-wrap gap-3 mt-8">
+          {userProfile?.skills && userProfile.skills.length > 0 ? (
+            userProfile.skills.map((skill, index) => (
+              <SkillsItem key={index} text={skill} />
+            ))
+          ) : (
+            <p className="text-[#5F6A63] text-sm">No skills added yet</p>
+          )}
         </div>
 
         <hr className="mt-14 mb-6" />
@@ -79,11 +91,11 @@ const ProfileBody: React.FC = () => {
           </div>
           <div className="flex gap-8 text-sm">
             <div>
-              <p>1k XP</p>
+              <p>0 XP</p>
               <p className="text-[#5F6A63]">Earned</p>
             </div>
             <div>
-              <p>10</p>
+              <p>0</p>
               <p className="text-[#5F6A63]">Task completed</p>
             </div>
           </div>
