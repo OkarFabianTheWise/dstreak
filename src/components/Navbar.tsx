@@ -1,4 +1,3 @@
-// import { useAuthStore } from '../store/authStore';
 import { useNavigate } from "react-router-dom";
 import { bolt, logo } from "../assets/image";
 import { IoMenu } from "react-icons/io5";
@@ -21,9 +20,30 @@ import {
 } from "./ui/sheet";
 import CommunityDropdown from "./CommunityDropdown";
 import { FaChevronDown } from "react-icons/fa6";
+import { useEffect } from "react";
+import { useAuthStore } from "../store/authStore";
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const isLoggedIn = useAuthStore((state) => state.isLoggedIn); 
+  const setLoggedIn = useAuthStore((state) => state.setLoggedIn);
+
+  // Check if the user is logged in on component mount
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    if (token) {
+      setLoggedIn(true);
+    } else {
+      setLoggedIn(false);
+    }
+  }, []);
+
+  // Handle logout
+  const handleLogout = () => {
+    localStorage.removeItem("accessToken");
+    setLoggedIn(false);
+    navigate("/login"); // Redirect to login page after logout
+  };
 
   return (
     <nav className="px-2 md:px-10 flex justify-between items-center sticky z-50 top-0 p-4 bg-secondary">
@@ -57,7 +77,8 @@ const Navbar = () => {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <BsTwitterX />X
+                <BsTwitterX />
+                X
               </a>
             </DropdownMenuItem>
 
@@ -74,14 +95,25 @@ const Navbar = () => {
           </DropdownMenuContent>
         </DropdownMenu>
       </ul>
-      <button
-        onClick={() => navigate("/login")}
-        className="hidden md:block text-sm rounded-md px-4 py-2 bg-primary uppercase text-secondary font-bold hover:bg-secondary hover:border hover:text-primary transition-all duration-300"
-      >
-        join
-      </button>
 
-      {/*  Mobile menu*/}
+      {/* Conditionally render Join or Logout button */}
+      {isLoggedIn ? (
+        <button
+          onClick={handleLogout}
+          className="hidden md:block text-sm rounded-md px-4 py-2 bg-primary uppercase text-secondary font-bold hover:bg-secondary hover:border hover:text-primary transition-all duration-300"
+        >
+          Logout
+        </button>
+      ) : (
+        <button
+          onClick={() => navigate("/login")}
+          className="hidden md:block text-sm rounded-md px-4 py-2 bg-primary uppercase text-secondary font-bold hover:bg-secondary hover:border hover:text-primary transition-all duration-300"
+        >
+          Join
+        </button>
+      )}
+
+      {/* Mobile menu */}
       <div className="md:hidden">
         <Sheet>
           <SheetTrigger>
@@ -101,12 +133,21 @@ const Navbar = () => {
                     Home
                   </li>
                   <CommunityDropdown />
-                  <li
-                    onClick={() => navigate("/login")}
-                    className="text-primary"
-                  >
-                    Join
-                  </li>
+                  {isLoggedIn ? (
+                    <li
+                      onClick={handleLogout}
+                      className="text-primary"
+                    >
+                      Logout
+                    </li>
+                  ) : (
+                    <li
+                      onClick={() => navigate("/login")}
+                      className="text-primary"
+                    >
+                      Join
+                    </li>
+                  )}
                   <img src={bolt} className="my-8 opacity-30" />
                 </ul>
               </SheetDescription>
