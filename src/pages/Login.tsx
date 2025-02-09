@@ -2,13 +2,11 @@ import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FiMail, FiLock } from "react-icons/fi";
-// import { FcGoogle } from "react-icons/fc";
-import { bolt, s2 } from "@/assets/image";
 import { FcGoogle } from "react-icons/fc";
+import { bolt, s2 } from "@/assets/image";
 import { handleLogin } from "@/utils/api/auth";
 import AlertModal from "../components/ui/api-error-alert";
-
-// import GoogleCallback from "@/components/GoogleCallback";
+import { useAuthStore } from "../store/authStore"; // Example of using Zustand for global state
 
 declare global {
   interface Window {
@@ -29,9 +27,12 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isClickable, setIsClickable] = useState(false);
-  const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
   const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const navigate = useNavigate();
+
+  // Example of using Zustand for global state
+  const setLoggedIn = useAuthStore((state) => state.setLoggedIn);
 
   const validateForm = (email: string, password: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -42,18 +43,32 @@ const Login: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    await handleLogin(
-      email,
-      password,
-      setIsLoading,
-      setErrorMessage,
-      setIsAlertOpen,
-      navigate
-    );
+  
+    try {
+      setIsLoading(true);
+      const success = await handleLogin(
+        email,
+        password,
+        setIsLoading,
+        setErrorMessage,
+        setIsAlertOpen,
+        navigate
+      );
+  
+      if (success) {
+        setLoggedIn(true); // Update global state
+        navigate("/"); // Redirect to leaderboard or home page
+      }
+    } catch (error) {
+      console.error("Login failed:", error);
+      setErrorMessage("Login failed. Please try again.");
+      setIsAlertOpen(true);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  // Animation variants remain the same as your original code
+  // Animation variants
   const containerVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: {

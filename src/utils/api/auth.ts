@@ -1,4 +1,5 @@
 import { NavigateFunction } from 'react-router-dom';
+
 const endpoint = import.meta.env.VITE_DEV_URL as string;
 // const endpoint = 'https://dev-streak-server-772acc1b2e9a.herokuapp.com/api';
 
@@ -7,7 +8,7 @@ interface SignupData {
   username: string;
   email: string;
   password: string;
-  walletAddress: string;
+  wallet_address: string;
   state: string;
   socials: {
     discord: string;
@@ -40,7 +41,7 @@ export const handleSignup = async (
 
   try {
     const response = await fetch(
-      `${endpoint}/api/auth/register`,
+      `${endpoint}/auth/register`,
       {
         method: "POST",
         headers: {
@@ -66,11 +67,10 @@ export const handleSignup = async (
       localStorage.setItem("accessToken", data.data.token);
     }
 
-    navigate("/leaderboard");
+    navigate("/");
     return true;
   } catch (error: any) {
-    // setErrorMessage(error.message || "An error occurred. Please try again.");
-    setErrorMessage("Faiiled to signup. Please try again.");
+    setErrorMessage("Failed to signup. Please try again.");
     return false;
   } finally {
     setIsLoading(false);
@@ -85,7 +85,7 @@ export const handleLogin = async (
   setErrorMessage: (message: string) => void,
   setIsAlertOpen: (isAlertOpen: boolean) => void,
   navigate: NavigateFunction
-) => {
+): Promise<boolean> => { // Return a boolean
   setIsLoading(true);
   setErrorMessage("");
 
@@ -106,6 +106,7 @@ export const handleLogin = async (
     if (!responseData.success) {
       setErrorMessage(responseData.message || "Login failed");
       setIsAlertOpen(true);
+      return false; // Return false if login fails
     }
 
     // Store auth token
@@ -113,10 +114,12 @@ export const handleLogin = async (
       localStorage.setItem("accessToken", responseData.data.token);
     }
 
-    navigate("/leaderboard");
+    navigate("/");
+    return true; // Return true if login succeeds
   } catch (error: any) {
     setErrorMessage("Failed to login. Please check internet connection.");
     setIsAlertOpen(true);
+    return false; // Return false if an error occurs
   } finally {
     setIsLoading(false);
   }
@@ -153,7 +156,6 @@ export const handleProfileUpdate = async (
 
     setIsSuccess(true);
   } catch (error: any) {
-    // setErrorMessage(error.message || "Failed to update profile. Please try again.");
     setErrorMessage("Failed to update profile. Please try again.");
     setIsAlertOpen(true);
   }
@@ -165,31 +167,28 @@ export const handleDeleteAccount = async (
   setIsAlertOpen: (isAlertOpen: boolean) => void,
   setIsSuccess: (isSuccess: boolean) => void
 ) => {
- {
-    try {
-      const response = await fetch(
-        `${endpoint}/users/delete`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      const data = await response.json();
-
-      if (data.success) {
-        setIsSuccess(true);
-        setIsAlertOpen(true);
-      } else {
-        setErrorMessage(data.message || "Failed to delete account.");
-        setIsAlertOpen(true);
+  try {
+    const response = await fetch(
+      `${endpoint}/users/delete`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
       }
-    } catch (error: any) {
-      // setErrorMessage(error.message);
-      setErrorMessage("An error occured while deleting your account.");
+    );
+
+    const data = await response.json();
+
+    if (data.success) {
+      setIsSuccess(true);
+      setIsAlertOpen(true);
+    } else {
+      setErrorMessage(data.message || "Failed to delete account.");
       setIsAlertOpen(true);
     }
+  } catch (error: any) {
+    setErrorMessage("An error occurred while deleting your account.");
+    setIsAlertOpen(true);
   }
 };

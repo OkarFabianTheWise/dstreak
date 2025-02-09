@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-// import { FiChevronDown } from "react-icons/fi";
 import { FcGoogle } from "react-icons/fc";
-// import { FaDiscord, FaTelegram, FaGithub, FaTwitter } from "react-icons/fa";
 import { bolt, s2 } from "@/assets/image";
 import { StateSelect } from "../utils/stateSelector";
 import { handleSignup } from "../utils/api/auth";
@@ -13,7 +11,7 @@ const Signup: React.FC = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [walletAddress, setWalletAddress] = useState("");
+  const [wallet_address, setWalletAddress] = useState("");
   const [state, setState] = useState("");
   const [discord, setDiscord] = useState("");
   const [telegram, setTelegram] = useState("");
@@ -21,7 +19,7 @@ const Signup: React.FC = () => {
   const [twitter, setTwitter] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isClickable, setIsClickable] = useState(false);
-  const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
+  const [skills, setSkills] = useState<string[]>([]);
   const [errorMessage, setErrorMessage] = useState("");
 
   const navigate = useNavigate();
@@ -57,7 +55,7 @@ const Signup: React.FC = () => {
 
     if (!isValidPassword) {
       setErrorMessage(
-        "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number and one special character"
+        "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character."
       );
     } else {
       setErrorMessage("");
@@ -66,29 +64,43 @@ const Signup: React.FC = () => {
 
   // Add useEffect to validate form on input changes
   useEffect(() => {
-    validateForm(full_name, username, email, password, walletAddress, state);
-  }, [full_name, username, email, password, , walletAddress, state]);
+    validateForm(full_name, username, email, password, wallet_address, state);
+  }, [full_name, username, email, password, wallet_address, state]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    const signupData = {
-      full_name,
+    // if (!isClickable) {
+    //   setErrorMessage("Please fill out all required fields correctly.");
+    //   return;
+    // }
+
+    const data = {
       username,
+      full_name,
       email,
       password,
-      walletAddress,
       state,
+      wallet_address,
       socials: {
         discord,
         telegram,
         github,
         twitter,
       },
-      skills: selectedSkills,
+      skills,
     };
 
-    await handleSignup(signupData, setIsLoading, setErrorMessage, navigate);
+    try {
+      setIsLoading(true);
+      const user = await handleSignup(data, setIsLoading, setErrorMessage, navigate);
+      console.log("User registered successfully:", user);
+    } catch (error) {
+      console.error("Registration failed:", error);
+      setErrorMessage("Registration failed. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const containerVariants = {
@@ -113,7 +125,7 @@ const Signup: React.FC = () => {
     },
   };
 
-  const skills = [
+  const devskills = [
     "Rust",
     "Go",
     "React",
@@ -127,27 +139,26 @@ const Signup: React.FC = () => {
   ];
 
   const toggleSkill = (skill: string) => {
-    setSelectedSkills((prev) =>
+    setSkills((prev) =>
       prev.includes(skill) ? prev.filter((s) => s !== skill) : [...prev, skill]
     );
   };
 
   return (
-    <div
-      className={`min-h-[65vh] relative text-white flex items-center justify-center mt-20 relative px-4 sm:px-0`}
-    >
+    <div className="min-h-[65vh] relative text-white flex items-center justify-center mt-20 px-4 sm:px-0">
       <img
         src={bolt}
         className="absolute bottom-20 left-24 w-[100px] opacity-40 hidden sm:block"
+        alt="Bolt"
       />
-      <img src={s2} className="absolute z-[0]" alt="" />
+      <img src={s2} className="absolute z-[0]" alt="Background" />
       <motion.div
         className="w-full z-[1] max-w-md rounded-xl shadow-lg bg-transparent"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
-        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+        <div className="space-y-4 sm:space-y-6">
           <motion.div variants={inputVariants} className="space-y-2">
             <div className="relative bg-transparent">
               <input
@@ -204,7 +215,7 @@ const Signup: React.FC = () => {
             <div className="relative bg-transparent">
               <input
                 type="text"
-                value={walletAddress}
+                value={wallet_address}
                 onChange={(e) => setWalletAddress(e.target.value)}
                 className="w-full pl-4 pr-4 py-4 rounded-full border bg-black/80 focus:outline-none focus:ring-2 focus:ring-primary text-center placeholder:text-center"
                 placeholder="Solana Wallet Address"
@@ -260,15 +271,15 @@ const Signup: React.FC = () => {
           </motion.div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-3">
-            {skills.map((skill) => (
+            {devskills.map((skill) => (
               <button
                 key={skill}
                 type="button"
                 onClick={() => toggleSkill(skill)}
                 className={`py-2 px-4 text-sm rounded-full border transition-colors duration-200 ${
-                  selectedSkills.includes(skill)
+                  skills.includes(skill)
                     ? "bg-green-500 border-green-500 text-white"
-                    : "bg-transparent  text-gray-300 hover:border-green-500"
+                    : "bg-transparent text-gray-300 hover:border-green-500"
                 } ${skill === "JavaScript" ? "col-span-2" : ""} ${
                   skill === "MongoDB" ? "col-span-2" : ""
                 }`}
@@ -282,9 +293,10 @@ const Signup: React.FC = () => {
           <motion.div variants={inputVariants}>
             <button
               type="submit"
-              disabled={!isClickable || isLoading}
+              // disabled={isLoading || !isClickable}
+              onClick={handleSubmit}
               className={`w-full py-3 sm:py-4 rounded-full ${
-                isClickable && !isLoading
+                 !isLoading
                   ? "bg-primary hover:bg-primary/90 text-white"
                   : "bg-transparent cursor-not-allowed text-gray-400"
               } border font-semibold transition-colors duration-200 text-sm sm:text-base`}
@@ -321,7 +333,7 @@ const Signup: React.FC = () => {
               {errorMessage}
             </div>
           )}
-        </form>
+        </div>
       </motion.div>
     </div>
   );
