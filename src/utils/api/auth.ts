@@ -160,13 +160,28 @@ export const handleLogin = async (
       }
     );
 
-    const responseData: AuthResponse = await response.json();
+    // Check response status
+    if (!response.ok) {
+      const errorResponse = await response.json();
+      if(errorResponse.statusCode === 400) {
+        setErrorMessage("Wrong password or email. Please try again.");
+        setIsAlertOpen(true);
+        return false
+      }
+      
 
-    if (!responseData.success) {
-      setErrorMessage(responseData.message || "Login failed");
+      setErrorMessage("Wrong password or email. Please try again.");
       setIsAlertOpen(true);
       return false;
     }
+
+    const responseData: AuthResponse = await response.json();
+
+    // if (!responseData.success) {
+    //   setErrorMessage(responseData.message || "Login failed");
+    //   setIsAlertOpen(true);
+    //   return false;
+    // }
 
     // Store auth token and update auth state
     if (responseData.data?.token) {
@@ -191,6 +206,7 @@ export const handleLogin = async (
     navigate("/");
     return true;
   } catch (error: any) {
+    console.error(error.message);
     setErrorMessage("Failed to login. Please check internet connection.");
     setIsAlertOpen(true);
     return false;
