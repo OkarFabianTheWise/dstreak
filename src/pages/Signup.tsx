@@ -18,7 +18,7 @@ const Signup: React.FC = () => {
   const [github, setGithub] = useState("");
   const [twitter, setTwitter] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [isClickable, setIsClickable] = useState(false);
+  const [_isClickable, setIsClickable] = useState(false);
   const [skills, setSkills] = useState<string[]>([]);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -93,7 +93,12 @@ const Signup: React.FC = () => {
 
     try {
       setIsLoading(true);
-      const user = await handleSignup(data, setIsLoading, setErrorMessage, navigate);
+      const user = await handleSignup(
+        data,
+        setIsLoading,
+        setErrorMessage,
+        navigate
+      );
       console.log("User registered successfully:", user);
     } catch (error) {
       console.error("Registration failed:", error);
@@ -296,7 +301,7 @@ const Signup: React.FC = () => {
               // disabled={isLoading || !isClickable}
               onClick={handleSubmit}
               className={`w-full py-3 sm:py-4 rounded-full ${
-                 !isLoading
+                !isLoading
                   ? "bg-primary hover:bg-primary/90 text-white"
                   : "bg-transparent cursor-not-allowed text-gray-400"
               } border font-semibold transition-colors duration-200 text-sm sm:text-base`}
