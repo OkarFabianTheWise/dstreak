@@ -105,51 +105,63 @@ export function Leaderboard() {
   };
 
   return (
-    <div className="min-h-screen bg-black p-6 text-white flex flex-col lg:flex-row gap-6 justify-end items-start">
-      {loggedInUser && <p>{loggedInUser.full_name}</p>}
-      <div className="w-full lg:px-6 md:border-r border-green-200 space-y-6">
+    <div className="min-h-screen bg-black p-4 sm:p-6 text-white flex flex-col lg:flex-row gap-4 sm:gap-6">
+      {/* Main content area */}
+      <div className="w-full lg:w-3/4 space-y-4 sm:space-y-6">
+        {/* Logged in user's name */}
+        {loggedInUser && (
+          <h2 className="text-lg sm:text-xl font-semibold text-[#00ff00] px-2">
+            Welcome, {loggedInUser.full_name || loggedInUser.username}
+          </h2>
+        )}
+
         {/* Your Rank Section (only show if user is logged in) */}
         {loggedInUser && (
-          <div className="rounded-lg border border-[#1a1a1a] bg-[#0a0a0a] p-4">
-            <p className="mb-2 text-xs text-[#666666]">#Your rank</p>
-            <div className="flex items-center justify-between rounded-full border border-[#1a1a1a] bg-[#0a0a0a] px-4 py-2">
-              <div className="flex items-center gap-3">
-                <span className="text-lg">{loggedInUser.rank}</span>
+          <div className="rounded-lg border border-[#1a1a1a] bg-[#0a0a0a] p-3 sm:p-4">
+            <p className="mb-2 text-xs sm:text-sm text-[#666666]">#Your rank</p>
+            <div className="flex items-center justify-between rounded-full border border-[#1a1a1a] bg-[#0a0a0a] px-3 sm:px-4 py-2">
+              <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+                <span className="text-base sm:text-lg shrink-0">
+                  {loggedInUser.rank}
+                </span>
                 <img
                   src="/placeholder.svg"
                   alt={loggedInUser.full_name || loggedInUser.username}
-                  className="h-8 w-8 rounded-full"
+                  className="h-6 w-6 sm:h-8 sm:w-8 rounded-full shrink-0"
                 />
-                <div>
-                  <p className="font-medium text-[12px]">
+                <div className="min-w-0">
+                  <p className="font-medium text-xs sm:text-sm truncate">
                     {loggedInUser.full_name || loggedInUser.username}
                   </p>
-                  <p className="text-sm text-[#00ff00] text-[10px]">
+                  <p className="text-[10px] sm:text-xs text-[#00ff00] truncate">
                     @{loggedInUser.username}
                   </p>
                 </div>
               </div>
-              <p className="text-[12px]">{loggedInUser.total_points || 0}xp</p>
+              <p className="text-xs sm:text-sm ml-2 shrink-0">
+                {loggedInUser.total_points || 0}xp
+              </p>
             </div>
           </div>
         )}
 
         {/* Rankings Section */}
-        <div className="space-y-4">
-          <div className="flex items-center gap-2">
+        <div className="space-y-3 sm:space-y-4">
+          {/* Filter dropdown */}
+          <div className="flex items-center gap-2 px-2">
             <img
               src="/placeholder.svg?height=24&width=24"
               alt=""
-              className="h-6 w-6"
+              className="h-5 w-5 sm:h-6 sm:w-6"
             />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="text-[#00ff00] hover:text-[#00ff00]/80"
+                  className="text-[#00ff00] hover:text-[#00ff00]/80 text-sm sm:text-base"
                 >
                   {filter === "weekly" ? "Weekly" : "Monthly"} Ranking
-                  <ChevronDown className="ml-2 h-4 w-4" />
+                  <ChevronDown className="ml-2 h-3 w-3 sm:h-4 sm:w-4" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="bg-[#0a0a0a] text-white">
@@ -176,47 +188,50 @@ export function Leaderboard() {
           {/* Ranking List */}
           <div className="space-y-2">
             {isLoading ? (
-              <p>Loading...</p>
+              <p className="text-center py-4">Loading...</p>
             ) : (
               leaderboardData.map((user) => (
                 <div
                   key={user.id}
-                  className="flex items-center justify-between rounded-full border border-[#1a1a1a] bg-[#0a0a0a] px-4 py-2 transition-colors hover:bg-[#1a1a1a]"
+                  className="flex items-center justify-between rounded-full border border-[#1a1a1a] bg-[#0a0a0a] px-3 sm:px-4 py-2 transition-colors hover:bg-[#1a1a1a]"
                 >
-                  <div className="flex items-center gap-3">
-                    <span className="w-6 text-sm">{user.rank}</span>
+                  <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+                    <span className="w-5 sm:w-6 text-xs sm:text-sm shrink-0">
+                      {user.rank}
+                    </span>
                     <img
                       src="/placeholder.svg"
                       alt={user.full_name || user.username}
-                      className="h-8 w-8 rounded-full"
+                      className="h-6 w-6 sm:h-8 sm:w-8 rounded-full shrink-0"
                     />
-                    <div>
-                      <p className="font-medium text-[12px]">
+                    <div className="min-w-0">
+                      <p className="font-medium text-xs sm:text-sm truncate">
                         {user.full_name || user.username}
                       </p>
-                      <p className="text-[10px] text-[#00ff00]">
+                      <p className="text-[10px] sm:text-xs text-[#00ff00] truncate">
                         @{user.username}
                       </p>
                     </div>
                   </div>
-                  <p className="text-[12px]">{user.total_points || 0}xp</p>
+                  <p className="text-xs sm:text-sm ml-2 shrink-0">
+                    {user.total_points || 0}xp
+                  </p>
                 </div>
               ))
             )}
           </div>
 
           {/* Pagination Controls */}
-          <div className="flex items-center justify-center gap-2 pt-4">
+          <div className="flex items-center justify-center gap-1 sm:gap-2 pt-4">
             <Button
               variant="outline"
               size="icon"
               onClick={prevPage}
               disabled={currentPage === 1}
-              className="h-8 w-8 bg-[#0a0a0a] text-[#00ff00]"
+              className="h-6 w-6 sm:h-8 sm:w-8 bg-[#0a0a0a] text-[#00ff00]"
             >
-              <ChevronLeft className="h-4 w-4" />
+              <ChevronLeft className="h-3 w-3 sm:h-4 sm:w-4" />
             </Button>
-
             {getPageNumbers().map((number) => (
               <Button
                 key={number}
@@ -245,7 +260,12 @@ export function Leaderboard() {
           </div>
         </div>
       </div>
-      <RecentActivity />
+
+      {/* Recent Activity Sidebar */}
+      <div className="w-full lg:w-1/4">
+        <RecentActivity />
+      </div>
+
       <AlertModal
         message={errorMessage}
         isOpen={isAlertOpen}
