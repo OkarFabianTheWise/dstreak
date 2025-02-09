@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   BrowserRouter as Router,
   Route,
@@ -9,12 +9,12 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import SignupSuccess from "./pages/SignupSuccess";
-import UsersPage from "./pages/UsersPage";
+// import UsersPage from "./pages/UsersPage";
 import SuperAdmin from "./pages/SuperAdmin";
 import Admin from "./pages/Admin";
 import Task from "./pages/Task";
 import DefaultLayout from "./layouts/defaultLayout";
-import { useAuthStore } from "./utils/api/auth";
+import { initializeAuth, useAuthStore } from "./utils/api/auth";
 import EditProfile from "./pages/accounts-settings/EditProfile";
 import LinkedAccounts from "./pages/accounts-settings/LinkedAccounts";
 import LeaderboardLayout from "./pages/leaderboard/layouts";
@@ -26,13 +26,17 @@ import ProfileSettingsPage from "./pages/ProfileSettingsPage";
 import GoogleCallback from "./components/GoogleCallback";
 
 const App: React.FC = () => {
+  useEffect(() => {
+    initializeAuth();
+  }, []);
+
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
   return (
     <Router>
-      {/* public routes */}
       <DefaultLayout>
         <Routes>
+          {/* Public Routes */}
           <Route path="/auth/callback/google" element={<GoogleCallback />} />
           <Route path="/home" element={<Home />} />
           <Route
@@ -43,26 +47,9 @@ const App: React.FC = () => {
               </LeaderboardLayout>
             }
           />
-
-          <Route
-            path="/login"
-            element={!isAuthenticated ? <Navigate to="/" /> : <Login />}
-          />
-          <Route
-            path="/signup"
-            element={!isAuthenticated ? <Navigate to="/" /> : <Signup />}
-          />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
           <Route path="/signup-success" element={<SignupSuccess />} />
-          <Route path="/super-admin" element={<SuperAdmin />} />
-          <Route
-            path="/tasks"
-            element={isAuthenticated ? <Task /> : <Navigate to="/login" />}
-          />
-
-          <Route path="/profile" element={<ProfilePage />} />
-          <Route path="/tasks-screen" element={<TasksPage />} />
-          <Route path="/tasks-details" element={<TasksDetailsPage />} />
-          <Route path="/account-settings" element={<ProfileSettingsPage />} />
           <Route
             path="/leaderboard"
             element={
@@ -71,19 +58,57 @@ const App: React.FC = () => {
               </LeaderboardLayout>
             }
           />
-        </Routes>
 
-        {/* protected routes */}
-        <Routes>
-          <Route path="/super-admin" element={<SuperAdmin />} />
-          <Route path="/tasks" element={<Task />} />
+          {/* Protected Routes */}
+          <Route
+            path="/profile"
+            element={
+              isAuthenticated ? (
+                <ProfilePage />
+              ) : (
+                <Navigate to="/login" replace state={{ from: "/profile" }} />
+              )
+            }
+          />
+          <Route
+            path="/tasks-screen"
+            element={
+              isAuthenticated ? (
+                <TasksPage />
+              ) : (
+                <Navigate
+                  to="/login"
+                  replace
+                  state={{ from: "/tasks-screen" }}
+                />
+              )
+            }
+          />
+          <Route
+            path="/tasks-details"
+            element={
+              isAuthenticated ? (
+                <TasksDetailsPage />
+              ) : (
+                <Navigate
+                  to="/login"
+                  replace
+                  state={{ from: "/tasks-details" }}
+                />
+              )
+            }
+          />
           <Route
             path="/settings/profile"
             element={
               isAuthenticated ? (
                 <EditProfile />
               ) : (
-                <Navigate to="/settings/profile" />
+                <Navigate
+                  to="/login"
+                  replace
+                  state={{ from: "/settings/profile" }}
+                />
               )
             }
           />
@@ -93,27 +118,65 @@ const App: React.FC = () => {
               isAuthenticated ? (
                 <LinkedAccounts />
               ) : (
-                <Navigate to="/settings/linked-accounts" />
+                <Navigate
+                  to="/login"
+                  replace
+                  state={{ from: "/settings/linked-accounts" }}
+                />
               )
             }
           />
-        </Routes>
 
-        {/* protected routes */}
-        <Routes>
+          {/* Admin Routes */}
           <Route
-            path="/user"
+            path="/super-admin"
             element={
-              !isAuthenticated ? <UsersPage /> : <Navigate to="/login" />
+              isAuthenticated ? (
+                <SuperAdmin />
+              ) : (
+                <Navigate
+                  to="/login"
+                  replace
+                  state={{ from: "/super-admin" }}
+                />
+              )
             }
           />
-        </Routes>
-
-        {/* admin routes */}
-        <Routes>
           <Route
             path="/admin"
-            element={!isAuthenticated ? <Admin /> : <Navigate to="/login" />}
+            element={
+              isAuthenticated ? (
+                <Admin />
+              ) : (
+                <Navigate to="/login" replace state={{ from: "/admin" }} />
+              )
+            }
+          />
+          <Route
+            path="/tasks"
+            element={
+              isAuthenticated ? (
+                <Task />
+              ) : (
+                <Navigate to="/login" replace state={{ from: "/tasks" }} />
+              )
+            }
+          />
+
+          {/* Account Settings */}
+          <Route
+            path="/account-settings"
+            element={
+              isAuthenticated ? (
+                <ProfileSettingsPage />
+              ) : (
+                <Navigate
+                  to="/login"
+                  replace
+                  state={{ from: "/account-settings" }}
+                />
+              )
+            }
           />
         </Routes>
       </DefaultLayout>

@@ -71,6 +71,8 @@ export interface UserProfile {
   created_at: string;
   updated_at: string;
   role: Role;
+  // xps: number;
+  // total_tasks: number;
 }
 
 export interface UserState {
@@ -118,6 +120,9 @@ export const handleSignup = async (
       localStorage.setItem("accessToken", data.data.token);
     }
 
+    // Set login state using useAuthStore
+    useAuthStore.getState().setLoggedIn(true);
+
     navigate("/");
     return true;
   } catch (error: any) {
@@ -136,7 +141,7 @@ export const handleLogin = async (
   setErrorMessage: (message: string) => void,
   setIsAlertOpen: (isAlertOpen: boolean) => void,
   navigate: NavigateFunction
-): Promise<boolean> => { // Return a boolean
+): Promise<boolean> => {
   setIsLoading(true);
   setErrorMessage("");
 
@@ -157,20 +162,33 @@ export const handleLogin = async (
     if (!responseData.success) {
       setErrorMessage(responseData.message || "Login failed");
       setIsAlertOpen(true);
-      return false; // Return false if login fails
+      return false;
     }
 
-    // Store auth token
+    // Store auth token and update auth state
     if (responseData.data?.token) {
       localStorage.setItem("accessToken", responseData.data.token);
+      
+      // Set login state using useAuthStore
+      useAuthStore.getState().setLoggedIn(true);
+      
+      // If user data is available, update the user state
+      if (responseData.data.user) {
+        useAuthStore.getState().login({
+          id: responseData.data.user.id,
+          name: responseData.data.user.full_name,
+          email: responseData.data.user.email,
+          profileImage: responseData.data.user.profile_image
+        });
+      }
     }
 
     navigate("/");
-    return true; // Return true if login succeeds
+    return true;
   } catch (error: any) {
     setErrorMessage("Failed to login. Please check internet connection.");
     setIsAlertOpen(true);
-    return false; // Return false if an error occurs
+    return false;
   } finally {
     setIsLoading(false);
   }
@@ -278,12 +296,36 @@ export const useUserStore = create<UserState>((set) => ({
   },
 }));
 
+export const initializeAuth = () => {
+  const token = localStorage.getItem('accessToken');
+  if (token) {
+    useAuthStore.getState().setLoggedIn(true);
+  } else {
+    useAuthStore.getState().setLoggedIn(false);
+  }
+};
 
 export const useAuthStore = create<AuthState>((set) => ({
   user: null,
-  isAuthenticated: true,
-  login: (user: User) => set({ user, isAuthenticated: true }),
-  logout: () => set({ user: null, isAuthenticated: false }),
+  isAuthenticated: false, // Initialize as false
+  login: (user: User) => {
+    set({ 
+      user,
+      isAuthenticated: true,
+      isLoggedIn: true 
+    });
+  },
+  logout: () => {
+    localStorage.removeItem('accessToken'); // Clear token on logout
+    set({ 
+      user: null,
+      isAuthenticated: false,
+      isLoggedIn: false
+    });
+  },
   isLoggedIn: false,
-  setLoggedIn: (loggedIn) => set({ isLoggedIn: loggedIn }),
+  setLoggedIn: (loggedIn: boolean) => set({ 
+    isLoggedIn: loggedIn,
+    isAuthenticated: loggedIn // Sync both states
+  }),
 }));
