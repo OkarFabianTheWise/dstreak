@@ -10,7 +10,6 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { RecentActivity } from "./RecentActivity";
-// import Cookies from "js-cookie";
 import { fetchLeaderboard } from "../../utils/api/leaderboard";
 
 // Define the type for leaderboard user data
@@ -26,7 +25,7 @@ export function Leaderboard() {
   const [filter, setFilter] = useState<"weekly" | "monthly">("weekly");
   const [currentPage, setCurrentPage] = useState(1);
   const [leaderboardData, setLeaderboardData] = useState<LeaderboardUser[]>([]);
-  const [loggedInUser, _setLoggedInUser] = useState<LeaderboardUser | null>(
+  const [loggedInUser, setLoggedInUser] = useState<LeaderboardUser | null>(
     null
   );
   const [isLoading, setIsLoading] = useState(true);
@@ -45,6 +44,21 @@ export function Leaderboard() {
         setErrorMessage
       );
       setLeaderboardData(response.data.data);
+      // console.log(response.data.data);
+
+      // Find logged in user's position
+      const userId = localStorage.getItem("userId");
+      if (userId) {
+        const loggedInUserData = response.data.data.find(
+          (user: LeaderboardUser) => user.id === userId
+        );
+        if (loggedInUserData) {
+          setLoggedInUser(loggedInUserData);
+        } else if (response.data.currentUser) {
+          // Fallback to currentUser if provided by API
+          setLoggedInUser(response.data.currentUser);
+        }
+      }
     } catch (error: any) {
       setErrorMessage(error.message);
     } finally {

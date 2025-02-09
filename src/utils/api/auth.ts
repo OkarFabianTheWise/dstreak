@@ -116,8 +116,11 @@ export const handleSignup = async (
     }
 
     if (data.data?.token) {
-      localStorage.removeItem("accessToken");
+      // localStorage.removeItem("accessToken");
       localStorage.setItem("accessToken", data.data.token);
+      // console.log(data.data.user.id);
+      localStorage.setItem("userId", data.data.user.id); // Add this line
+      
     }
 
     // Set login state using useAuthStore
@@ -168,6 +171,8 @@ export const handleLogin = async (
     // Store auth token and update auth state
     if (responseData.data?.token) {
       localStorage.setItem("accessToken", responseData.data.token);
+      // console.log(responseData.data.user.id);
+      localStorage.setItem("userId", responseData.data.user.id); // Add this line
       
       // Set login state using useAuthStore
       useAuthStore.getState().setLoggedIn(true);
