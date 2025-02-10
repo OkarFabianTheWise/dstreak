@@ -41,6 +41,7 @@ const Navbar = () => {
   // Handle logout
   const handleLogout = () => {
     localStorage.removeItem("accessToken");
+    localStorage.removeItem("userId");
     setLoggedIn(false);
     navigate("/login"); // Redirect to login page after logout
   };
