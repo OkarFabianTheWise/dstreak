@@ -246,8 +246,8 @@ interface AuthResponse {
 - [x] SignUp Page
 - [x] Onboarding Page
 - [x] Menu-Comm. List
-- [ ] Mobile view of Account Settings page
-- [ ] Backend api integration
+- [x] Mobile view of Account Settings page
+- [/] Backend api integration
 
 
 ## 🧩 Contributing

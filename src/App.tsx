@@ -47,6 +47,9 @@ const App: React.FC = () => {
               </LeaderboardLayout>
             }
           />
+          <Route path="/tasks" element={<Task />} />
+          <Route path="/tasks-details" element={<TasksDetailsPage />} />
+          <Route path="/tasks-screen" element={<TasksPage />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/signup-success" element={<SignupSuccess />} />
@@ -70,7 +73,7 @@ const App: React.FC = () => {
               )
             }
           />
-          <Route
+          {/* <Route
             path="/tasks-screen"
             element={
               isAuthenticated ? (
@@ -83,8 +86,8 @@ const App: React.FC = () => {
                 />
               )
             }
-          />
-          <Route
+          /> */}
+          {/* <Route
             path="/tasks-details"
             element={
               isAuthenticated ? (
@@ -97,7 +100,7 @@ const App: React.FC = () => {
                 />
               )
             }
-          />
+          /> */}
           <Route
             path="/settings/profile"
             element={
@@ -149,16 +152,6 @@ const App: React.FC = () => {
                 <Admin />
               ) : (
                 <Navigate to="/login" replace state={{ from: "/admin" }} />
-              )
-            }
-          />
-          <Route
-            path="/tasks"
-            element={
-              isAuthenticated ? (
-                <Task />
-              ) : (
-                <Navigate to="/login" replace state={{ from: "/tasks" }} />
               )
             }
           />
