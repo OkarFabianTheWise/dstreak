@@ -73,34 +73,7 @@ const App: React.FC = () => {
               )
             }
           />
-          {/* <Route
-            path="/tasks-screen"
-            element={
-              isAuthenticated ? (
-                <TasksPage />
-              ) : (
-                <Navigate
-                  to="/login"
-                  replace
-                  state={{ from: "/tasks-screen" }}
-                />
-              )
-            }
-          /> */}
-          {/* <Route
-            path="/tasks-details"
-            element={
-              isAuthenticated ? (
-                <TasksDetailsPage />
-              ) : (
-                <Navigate
-                  to="/login"
-                  replace
-                  state={{ from: "/tasks-details" }}
-                />
-              )
-            }
-          /> */}
+
           <Route
             path="/settings/profile"
             element={
