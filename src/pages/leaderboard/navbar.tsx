@@ -12,7 +12,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { demoProfilePics } from "@/assets/image";
 
 const BoardNavbar: React.FC = () => {
   const navigate = useNavigate();
@@ -88,7 +89,10 @@ const BoardNavbar: React.FC = () => {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Avatar className="h-7 w-7 sm:h-8 sm:w-8 cursor-pointer">
-                  <AvatarImage src="/placeholder.svg?height=32&width=32" />
+                  <img
+                    src={demoProfilePics}
+                    className="h-8 w-8 rounded-full mr-2"
+                  />
                   <AvatarFallback>
                     <PersonStanding className="h-3 w-3 sm:h-4 sm:w-4" />
                   </AvatarFallback>
@@ -102,7 +106,10 @@ const BoardNavbar: React.FC = () => {
                   className="cursor-pointer flex items-center"
                   onClick={() => navigate("/profile")}
                 >
-                  <PersonStanding className="mr-2 h-4 w-4" />
+                  <img
+                    src={demoProfilePics}
+                    className="h-8 w-8 rounded-full mr-2"
+                  />
                   <span>Profile</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem
