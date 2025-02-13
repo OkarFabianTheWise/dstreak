@@ -85,7 +85,7 @@ const App: React.FC = () => {
             }
           />
           <Route
-            path="/tasks-details"
+            path="/tasks-details/:id"
             element={
               isAuthenticated ? (
                 <TasksDetailsPage />
