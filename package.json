@@ -43,6 +43,7 @@
     "@radix-ui/react-tooltip": "^1.1.7",
     "@solana/spl-token": "^0.4.9",
     "@solana/web3.js": "^1.98.0",
+    "@tanstack/react-table": "^8.21.2",
     "axios": "^1.7.9",
     "bcryptjs": "^2.4.3",
     "buffer": "^6.0.3",

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap");
 
 @tailwind base;
 @tailwind components;
@@ -8,11 +8,11 @@
   :root {
     --background: #000;
     --primary: #093;
-    --secondary: #E0FFEA;
-    --accent: #CAFFDC;
-    --heading: #68FF9A;
-    --text: #CAFFDC;
-    --greytext: #5F6A63;
+    --secondary: #e0ffea;
+    --accent: #caffdc;
+    --heading: #68ff9a;
+    --text: #caffdc;
+    --greytext: #5f6a63;
     font-family: "Inter", sans-serif;
 
     box-sizing: border-box;
@@ -35,7 +35,7 @@
 
     --sidebar-border: 220 13% 91%;
 
-    --sidebar-ring: 217.2 91.2% 59.8%
+    --sidebar-ring: 217.2 91.2% 59.8%;
   }
   .dark {
     --sidebar-background: 240 5.9% 10%;
@@ -45,28 +45,38 @@
     --sidebar-accent: 240 3.7% 15.9%;
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%
+    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
-  .text-foreground{
+  .text-foreground {
     color: var(--text);
   }
 }
 @layer base {
   * {
-    @apply border-border
+    @apply border-border;
   }
 
   body {
     color: var(--text);
     background-color: var(--background);
-    font-family: 'Press Start 2P', cursive;
+    font-family: "Press Start 2P", cursive;
   }
 }
 
 @layer utilities {
   .font-press-start {
-    font-family: 'Press Start 2P', cursive;
+    font-family: "Press Start 2P", cursive;
+  }
+
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
   }
 }
 
@@ -84,7 +94,8 @@
     transform: translateY(-80px) translateX(calc(-5px + 10px * var(--drift)));
   }
   100% {
-    transform: translateY(calc(-400px * var(--speed))) translateX(calc(-20px + 40px * var(--drift)));
+    transform: translateY(calc(-400px * var(--speed)))
+      translateX(calc(-20px + 40px * var(--drift)));
     opacity: 0;
   }
 }
@@ -94,7 +105,8 @@
 }
 
 @keyframes bounce {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
   }
   50% {
@@ -108,19 +120,16 @@
 
 @keyframes surge-glow {
   0% {
-    box-shadow: 0 0 5px var(--primary),
-                0 0 10px var(--primary),
-                0 0 15px var(--primary);
+    box-shadow: 0 0 5px var(--primary), 0 0 10px var(--primary),
+      0 0 15px var(--primary);
   }
   50% {
-    box-shadow: 0 0 10px var(--primary),
-                0 0 20px var(--primary),
-                0 0 30px var(--primary);
+    box-shadow: 0 0 10px var(--primary), 0 0 20px var(--primary),
+      0 0 30px var(--primary);
   }
   100% {
-    box-shadow: 0 0 5px var(--primary),
-                0 0 10px var(--primary),
-                0 0 15px var(--primary);
+    box-shadow: 0 0 5px var(--primary), 0 0 10px var(--primary),
+      0 0 15px var(--primary);
   }
 }
 
@@ -136,5 +145,3 @@
     @apply bg-background text-foreground;
   }
 }
-
-
