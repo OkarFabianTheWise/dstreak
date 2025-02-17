@@ -1,8 +1,8 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
-import { weeklyRanking, monthlyRanking, type RankingUser } from "../../data";
 import { Button } from "@/components/ui/button";
+import AlertModal from "../../components/ui/api-error-alert";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -10,19 +10,71 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { RecentActivity } from "./RecentActivity";
+import { fetchLeaderboard } from "../../utils/api/leaderboard";
+import { demoProfilePics } from "@/assets/image";
+import mdl from "@/assets/image/mdl.png";
+
+
+// Define the type for leaderboard user data
+interface LeaderboardUser {
+  id: string;
+  full_name: string | null;
+  username: string;
+  total_points: number;
+  rank: number;
+}
 
 export function Leaderboard() {
   const [filter, setFilter] = useState<"weekly" | "monthly">("weekly");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  const [leaderboardData, setLeaderboardData] = useState<LeaderboardUser[]>([]);
+  const [loggedInUser, setLoggedInUser] = useState<LeaderboardUser | null>(
+    null
+  );
+  const [isLoading, setIsLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
 
-  const data = filter === "weekly" ? weeklyRanking : monthlyRanking;
-  const totalPages = Math.ceil(data.length / itemsPerPage);
+  const loadLeaderboard = async () => {
+    setIsLoading(true);
+    try {
+      const response = await fetchLeaderboard(
+        {
+          duration: filter, // Use the filter state instead of hardcoded "weekly"
+          page: currentPage, // Use the current page
+          limit: itemsPerPage, // Use itemsPerPage instead of hardcoded 100
+        },
+        setErrorMessage
+      );
+      setLeaderboardData(response.data.data);
+      // console.log(response.data.data);
 
-  // Get current page items
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
+      // Find logged in user's position
+      const userId = localStorage.getItem("userId");
+      if (userId) {
+        const loggedInUserData = response.data.data.find(
+          (user: LeaderboardUser) => user.id === userId
+        );
+        if (loggedInUserData) {
+          setLoggedInUser(loggedInUserData);
+        } else if (response.data.currentUser) {
+          // Fallback to currentUser if provided by API
+          setLoggedInUser(response.data.currentUser);
+        }
+      }
+    } catch (error: any) {
+      setErrorMessage(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const itemsPerPage = 100; // Use itemsPerPage instead of hardcoded 100
+  // Fetch leaderboard data and logged-in user data
+  useEffect(() => {
+    loadLeaderboard();
+  }, []);
+
+  const totalPages = Math.ceil(leaderboardData.length / itemsPerPage);
 
   // Change page
   const nextPage = () => {
@@ -56,44 +108,63 @@ export function Leaderboard() {
   };
 
   return (
-    <div className="min-h-screen bg-black p-6 text-white flex flex-col lg:flex-row gap-6 justify-end items-start">
-      <div className="w-full lg:px-6 md:border-r border-green-200 space-y-6">
-        {/* Your Rank Section */}
-        <div className="rounded-lg border border-[#1a1a1a] bg-[#0a0a0a] p-4">
-          <p className="mb-2 text-xs text-[#666666]">#Your rank</p>
-          <div className="flex items-center justify-between rounded-full border border-[#1a1a1a] bg-[#0a0a0a] px-4 py-2">
-            <div className="flex items-center gap-3">
-              <span className="text-lg">1</span>
-              <img
-                src={data[0].image || "/placeholder.svg"}
-                alt={data[0].name}
-                className="h-8 w-8 rounded-full"
-              />
-              <div>
-                <p className="font-medium text-[12px]">{data[0].name}</p>
-                <p className="text-sm text-[#00ff00] text-[10px]">@{data[0].username}</p>
+    <div className="min-h-screen bg-black p-4 sm:p-6 text-white flex flex-col lg:flex-row gap-4 sm:gap-6">
+      {/* Main content area */}
+      <div className="w-full lg:w-3/4 space-y-4 sm:space-y-6">
+        {/* Logged in user's name */}
+        {loggedInUser && (
+          <h2 className="text-lg sm:text-xl font-semibold text-[#00ff00] px-2">
+            Welcome, {loggedInUser.full_name || loggedInUser.username}
+          </h2>
+        )}
+
+        {/* Your Rank Section (only show if user is logged in) */}
+        {loggedInUser && (
+          <div className="rounded-lg border border-[#1a1a1a] bg-[#0a0a0a] p-3 sm:p-4">
+            <p className="mb-2 text-xs sm:text-sm text-[#666666]">#Your rank</p>
+            <div className="flex items-center justify-between rounded-full border border-[#1a1a1a] bg-[#0a0a0a] px-3 sm:px-4 py-2">
+              <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+                <span className="text-base sm:text-lg shrink-0">
+                  {loggedInUser.rank}
+                </span>
+                <img
+                  src={demoProfilePics} // Use a demo profile pic instead of placeholder
+                  alt={loggedInUser.full_name || loggedInUser.username}
+                  className="h-6 w-6 sm:h-8 sm:w-8 rounded-full shrink-0"
+                />
+                <div className="min-w-0">
+                  <p className="font-medium text-xs sm:text-sm truncate">
+                    {loggedInUser.full_name || loggedInUser.username}
+                  </p>
+                  <p className="text-[10px] sm:text-xs text-[#00ff00] truncate">
+                    @{loggedInUser.username}
+                  </p>
+                </div>
               </div>
+              <p className="text-xs sm:text-sm ml-2 shrink-0">
+                {loggedInUser.total_points || 0}xp
+              </p>
             </div>
-            <p className="text-[12px]">{data[0].xps}xp</p>
           </div>
-        </div>
+        )}
 
         {/* Rankings Section */}
-        <div className="space-y-4">
-          <div className="flex items-center gap-2">
+        <div className="space-y-3 sm:space-y-4">
+          {/* Filter dropdown */}
+          <div className="flex items-center gap-2 px-2">
             <img
-              src="/placeholder.svg?height=24&width=24"
+              src={mdl}
               alt=""
-              className="h-6 w-6"
+              className="h-5 w-5 sm:h-6 sm:w-6"
             />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
                   variant="ghost"
-                  className="text-[#00ff00] hover:text-[#00ff00]/80"
+                  className="text-[#00ff00] hover:text-[#00ff00]/80 text-sm sm:text-base"
                 >
                   {filter === "weekly" ? "Weekly" : "Monthly"} Ranking
-                  <ChevronDown className="ml-2 h-4 w-4" />
+                  <ChevronDown className="ml-2 h-3 w-3 sm:h-4 sm:w-4" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="bg-[#0a0a0a] text-white">
@@ -119,42 +190,51 @@ export function Leaderboard() {
 
           {/* Ranking List */}
           <div className="space-y-2">
-            {currentItems.map((user, index) => (
-              <div
-                key={index}
-                className="flex items-center justify-between rounded-full border border-[#1a1a1a] bg-[#0a0a0a] px-4 py-2 transition-colors hover:bg-[#1a1a1a]"
-              >
-                <div className="flex items-center gap-3">
-                  <span className="w-6 text-sm">
-                    {indexOfFirstItem + index + 1}
-                  </span>
-                  <img
-                    src={user.image || "/placeholder.svg"}
-                    alt={user.name}
-                    className="h-8 w-8 rounded-full"
-                  />
-                  <div>
-                    <p className="font-medium text-[12px]">{user.name}</p>
-                    <p className="text-[10px] text-[#00ff00]">@{user.username}</p>
+            {isLoading ? (
+              <p className="text-center py-4">Loading...</p>
+            ) : (
+              leaderboardData.map((user) => (
+                <div
+                  key={user.id}
+                  className="flex items-center justify-between rounded-full border border-[#1a1a1a] bg-[#0a0a0a] px-3 sm:px-4 py-2 transition-colors hover:bg-[#1a1a1a]"
+                >
+                  <div className="flex items-center gap-2 sm:gap-3 flex-1 min-w-0">
+                    <span className="w-5 sm:w-6 text-xs sm:text-sm shrink-0">
+                      {user.rank}
+                    </span>
+                    <img
+                      src={demoProfilePics}
+                      alt={user.full_name || user.username}
+                      className="h-6 w-6 sm:h-8 sm:w-8 rounded-full shrink-0"
+                    />
+                    <div className="min-w-0">
+                      <p className="font-medium text-xs sm:text-sm truncate">
+                        {user.full_name || user.username}
+                      </p>
+                      <p className="text-[10px] sm:text-xs text-[#00ff00] truncate">
+                        @{user.username}
+                      </p>
+                    </div>
                   </div>
+                  <p className="text-xs sm:text-sm ml-2 shrink-0">
+                    {user.total_points || 0}xp
+                  </p>
                 </div>
-                <p className="text-[12px]">{user.xps}xp</p>
-              </div>
-            ))}
+              ))
+            )}
           </div>
 
           {/* Pagination Controls */}
-          <div className="flex items-center justify-center gap-2 pt-4">
+          <div className="flex items-center justify-center gap-1 sm:gap-2 pt-4">
             <Button
               variant="outline"
               size="icon"
               onClick={prevPage}
               disabled={currentPage === 1}
-              className="h-8 w-8 bg-[#0a0a0a] text-[#00ff00]"
+              className="h-6 w-6 sm:h-8 sm:w-8 bg-[#0a0a0a] text-[#00ff00]"
             >
-              <ChevronLeft className="h-4 w-4" />
+              <ChevronLeft className="h-3 w-3 sm:h-4 sm:w-4" />
             </Button>
-
             {getPageNumbers().map((number) => (
               <Button
                 key={number}
@@ -183,7 +263,17 @@ export function Leaderboard() {
           </div>
         </div>
       </div>
-      <RecentActivity />
+
+      {/* Recent Activity Sidebar */}
+      <div className="w-full lg:w-1/4">
+        <RecentActivity />
+      </div>
+
+      <AlertModal
+        message={errorMessage}
+        isOpen={isAlertOpen}
+        onClose={() => setIsAlertOpen(false)}
+      />
     </div>
   );
 }

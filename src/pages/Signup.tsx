@@ -1,102 +1,108 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { FiMail, FiLock, FiUser, FiMapPin, FiChevronDown } from "react-icons/fi";
 import { FcGoogle } from "react-icons/fc";
-import { FaDiscord, FaTelegram, FaGithub, FaTwitter } from "react-icons/fa";
 import { bolt, s2 } from "@/assets/image";
-import { nigerianStates } from "@/constants/states";
-
-// Mock signup function
-const mockSignupUser = async (
-  email: string, 
-  password: string, 
-  username: string,
-  walletAddress: string,
-  state: string,
-  socials: {
-    discord?: string;
-    telegram?: string;
-    github?: string;
-    twitter?: string;
-  },
-  skills: string[]
-) => {
-  await new Promise(resolve => setTimeout(resolve, 1000));
-  
-  if (!email || !password || !username || !walletAddress) {
-    throw new Error("Please fill in all required fields");
-  }
-  
-  return { success: true };
-};
+import { StateSelect } from "../utils/stateSelector";
+import { handleSignup } from "../utils/api/auth";
 
 const Signup: React.FC = () => {
+  const [full_name, setFullname] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [username, setUsername] = useState("");
-  const [walletAddress, setWalletAddress] = useState("");
+  const [wallet_address, setWalletAddress] = useState("");
   const [state, setState] = useState("");
   const [discord, setDiscord] = useState("");
   const [telegram, setTelegram] = useState("");
   const [github, setGithub] = useState("");
   const [twitter, setTwitter] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [isClickable, setIsClickable] = useState(false);
-  const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
+  const [_isClickable, setIsClickable] = useState(false);
+  const [skills, setSkills] = useState<string[]>([]);
+  const [errorMessage, setErrorMessage] = useState("");
+
   const navigate = useNavigate();
 
   // Validate form inputs and update isClickable
   const validateForm = (
+    full_name: string,
+    username: string,
     email: string,
     password: string,
-    username: string,
     walletAddress: string,
     state: string
   ) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\-=/\\|])[A-Za-z\d!@#$%^&*()_+{}\[\]:;<>,.?~\-=/\\|]{8,}$/;
+    const usernameRegex = /^[a-z]{3,}$/; // Only lowercase letters, at least 3 characters
     const isValidEmail = emailRegex.test(email);
-    const isValidPassword = password.length >= 6;
-    const isValidUsername = username.length >= 3;
+    const isValidPassword = passwordRegex.test(password);
+    const isValidUsername = usernameRegex.test(username);
+    const isValidfull_name = full_name.length >= 3;
     const isValidWallet = walletAddress.trim().length > 0;
     const isValidState = state.trim().length > 0;
-    
+
     setIsClickable(
-      isValidEmail && 
-      isValidPassword && 
-      isValidUsername && 
-      isValidWallet && 
-      isValidState
+      isValidfull_name &&
+        isValidUsername &&
+        isValidEmail &&
+        isValidPassword &&
+        isValidWallet &&
+        isValidState
     );
+
+    if (!isValidPassword) {
+      setErrorMessage(
+        "Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number, and one special character."
+      );
+    } else {
+      setErrorMessage("");
+    }
   };
 
   // Add useEffect to validate form on input changes
   useEffect(() => {
-    validateForm(email, password, username, walletAddress, state);
-  }, [email, password, username, walletAddress, state]);
+    validateForm(full_name, username, email, password, wallet_address, state);
+  }, [full_name, username, email, password, wallet_address, state]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
+
+    // if (!isClickable) {
+    //   setErrorMessage("Please fill out all required fields correctly.");
+    //   return;
+    // }
+
+    const data = {
+      username,
+      full_name,
+      email,
+      password,
+      state,
+      wallet_address,
+      socials: {
+        discord,
+        telegram,
+        github,
+        twitter,
+      },
+      skills,
+    };
+
     try {
-      await mockSignupUser(
-        email,
-        password,
-        username,
-        walletAddress,
-        state,
-        {
-          discord,
-          telegram,
-          github,
-          twitter,
-        },
-        selectedSkills
+      setIsLoading(true);
+      const user = await handleSignup(
+        data,
+        setIsLoading,
+        setErrorMessage,
+        navigate
       );
-      navigate("/signup-success");
+      console.log("User registered successfully:", user);
     } catch (error) {
-      console.error("Signup error:", error);
-      // Handle error appropriately
+      console.error("Registration failed:", error);
+      setErrorMessage("Registration failed. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -104,34 +110,27 @@ const Signup: React.FC = () => {
 
   const containerVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       y: 0,
-      transition: { 
-        duration: 0.6, 
+      transition: {
+        duration: 0.6,
         ease: "easeOut",
-        staggerChildren: 0.1
-      }
-    }
+        staggerChildren: 0.1,
+      },
+    },
   };
 
   const inputVariants = {
     hidden: { opacity: 0, x: -20 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       x: 0,
-      transition: { duration: 0.3 }
-    }
+      transition: { duration: 0.3 },
+    },
   };
 
-  const arrowVariants = {
-    initial: { rotate: 0 },
-    animate: { rotate: 180 },
-  };
-
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
-  const skills = [
+  const devskills = [
     "Rust",
     "Go",
     "React",
@@ -145,24 +144,39 @@ const Signup: React.FC = () => {
   ];
 
   const toggleSkill = (skill: string) => {
-    setSelectedSkills(prev => 
-      prev.includes(skill) 
-        ? prev.filter(s => s !== skill)
-        : [...prev, skill]
+    setSkills((prev) =>
+      prev.includes(skill) ? prev.filter((s) => s !== skill) : [...prev, skill]
     );
   };
 
   return (
-    <div className={`min-h-[65vh] relative text-white flex items-center justify-center mt-20 relative px-4 sm:px-0`}>
-      <img src={bolt} className="absolute bottom-20 left-24 w-[100px] opacity-40 hidden sm:block"/>
-      <img src={s2} className="absolute z-[0]" alt="" />
+    <div className="min-h-[65vh] relative text-white flex items-center justify-center mt-20 px-4 sm:px-0">
+      <img
+        src={bolt}
+        className="absolute bottom-20 left-24 w-[100px] opacity-40 hidden sm:block"
+        alt="Bolt"
+      />
+      <img src={s2} className="absolute z-[0]" alt="Background" />
       <motion.div
         className="w-full z-[1] max-w-md rounded-xl shadow-lg bg-transparent"
         variants={containerVariants}
         initial="hidden"
         animate="visible"
       >
-        <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+        <div className="space-y-4 sm:space-y-6">
+          <motion.div variants={inputVariants} className="space-y-2">
+            <div className="relative bg-transparent">
+              <input
+                type="text"
+                value={full_name}
+                onChange={(e) => setFullname(e.target.value)}
+                className="w-full pl-4 pr-4 py-4 rounded-full border bg-black/80 focus:outline-none focus:ring-2 focus:ring-primary text-center placeholder:text-center"
+                placeholder="Full Name"
+                required
+              />
+            </div>
+          </motion.div>
+
           <motion.div variants={inputVariants} className="space-y-2">
             <div className="relative bg-transparent">
               <input
@@ -170,7 +184,7 @@ const Signup: React.FC = () => {
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
                 className="w-full pl-4 pr-4 py-4 rounded-full border bg-black/80 focus:outline-none focus:ring-2 focus:ring-primary text-center placeholder:text-center"
-                placeholder="Full Name"
+                placeholder="Enter username"
                 required
               />
             </div>
@@ -206,7 +220,7 @@ const Signup: React.FC = () => {
             <div className="relative bg-transparent">
               <input
                 type="text"
-                value={walletAddress}
+                value={wallet_address}
                 onChange={(e) => setWalletAddress(e.target.value)}
                 className="w-full pl-4 pr-4 py-4 rounded-full border bg-black/80 focus:outline-none focus:ring-2 focus:ring-primary text-center placeholder:text-center"
                 placeholder="Solana Wallet Address"
@@ -215,36 +229,14 @@ const Signup: React.FC = () => {
             </div>
           </motion.div>
 
-          <motion.div variants={inputVariants} className="space-y-2">
-            <div className="relative bg-transparent">
-              <select
-                value={state}
-                onChange={(e) => setState(e.target.value)}
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                onBlur={() => setIsDropdownOpen(false)}
-                className="w-full pl-4 pr-4 py-4 rounded-full border bg-black/80 focus:outline-none focus:ring-2 focus:ring-primary appearance-none text-center"
-                required
-              >
-                <option value="">Select your state</option>
-                {nigerianStates.map((state) => (
-                  <option key={state} value={state}>
-                    {state}
-                  </option>
-                ))}
-              </select>
-              <motion.div 
-                className="absolute right-4 top-[40%] transform -translate-y-1/2 pointer-events-none"
-                initial="initial"
-                animate={isDropdownOpen ? "animate" : "initial"}
-                variants={arrowVariants}
-                transition={{ duration: 0.3 }}
-              >
-                <FiChevronDown color="green" size={20} />
-              </motion.div>
-            </div>
-          </motion.div>
+          <div className="w-full max-w-md">
+            <StateSelect value={state} onChange={setState} required />
+          </div>
 
-          <motion.div variants={inputVariants} className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+          <motion.div
+            variants={inputVariants}
+            className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4"
+          >
             <div className="relative bg-transparent">
               <input
                 type="text"
@@ -284,16 +276,18 @@ const Signup: React.FC = () => {
           </motion.div>
 
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2 sm:gap-3">
-            {skills.map((skill) => (
+            {devskills.map((skill) => (
               <button
                 key={skill}
                 type="button"
                 onClick={() => toggleSkill(skill)}
                 className={`py-2 px-4 text-sm rounded-full border transition-colors duration-200 ${
-                  selectedSkills.includes(skill)
-                    ? 'bg-green-500 border-green-500 text-white'
-                    : 'bg-transparent  text-gray-300 hover:border-green-500'
-                } ${skill === 'JavaScript' ? 'col-span-2' : ''} ${skill === 'MongoDB' ? 'col-span-2' : ''}`}
+                  skills.includes(skill)
+                    ? "bg-green-500 border-green-500 text-white"
+                    : "bg-transparent text-gray-300 hover:border-green-500"
+                } ${skill === "JavaScript" ? "col-span-2" : ""} ${
+                  skill === "MongoDB" ? "col-span-2" : ""
+                }`}
                 title={skill}
               >
                 {skill.length > 10 ? `${skill.slice(0, 7)}...` : skill}
@@ -304,9 +298,10 @@ const Signup: React.FC = () => {
           <motion.div variants={inputVariants}>
             <button
               type="submit"
-              disabled={!isClickable || isLoading}
+              // disabled={isLoading || !isClickable}
+              onClick={handleSubmit}
               className={`w-full py-3 sm:py-4 rounded-full ${
-                isClickable && !isLoading
+                !isLoading
                   ? "bg-primary hover:bg-primary/90 text-white"
                   : "bg-transparent cursor-not-allowed text-gray-400"
               } border font-semibold transition-colors duration-200 text-sm sm:text-base`}
@@ -314,6 +309,21 @@ const Signup: React.FC = () => {
               {isLoading ? "Signing Up..." : "Sign Up"}
             </button>
           </motion.div>
+
+          <p className="mt-4 text-center text-primary font-press-start text-sm sm:text-base">
+            OR
+          </p>
+          <motion.button
+            onClick={() => {
+              window.location.href = import.meta.env.VITE_OAUTH;
+            }}
+            className="w-full mt-4 py-2.5 sm:py-4 px-3 sm:px-4 bg-white text-gray-700 rounded-full font-medium hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 flex items-center justify-center gap-2 transition-colors text-sm sm:text-base"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <FcGoogle className="text-xl" />
+            Sign up with Google
+          </motion.button>
 
           <div className="mt-4">
             <p className="text-sm text-center">
@@ -323,7 +333,12 @@ const Signup: React.FC = () => {
               </Link>
             </p>
           </div>
-        </form>
+          {errorMessage && (
+            <div className="text-red-500 text-sm text-center">
+              {errorMessage}
+            </div>
+          )}
+        </div>
       </motion.div>
     </div>
   );

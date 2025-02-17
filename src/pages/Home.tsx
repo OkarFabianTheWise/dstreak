@@ -4,8 +4,10 @@ import '../styles/theme.css';
 import { bolt, downwardArrow, s2, workshop } from '@/assets/image';
 import BenefitsItem from '@/components/BenefitsItem';
 import { IoArrowBackCircleSharp, IoArrowForwardCircleSharp } from 'react-icons/io5';
+import { useNavigate } from 'react-router-dom';
 
 const Home = () => {
+  const navigate = useNavigate();
   const isDarkTheme = useThemeStore((state: ThemeState) => state.isDarkTheme);
 
     return (
@@ -15,7 +17,9 @@ const Home = () => {
                 <div className='md:text-2xl  font-bold  my-2 text-heading'>Welcome to Devstreak</div>
                 <div className='md:text-3xl text-lg font-bold text-secondary'>Empowering your development experience</div>
                 <div>
-                  <Button className='bg-white text-primary rounded-3xl mt-8 font-bold md:text-lg md:px-8 md:py-2 shadow-md shadow-primary'>
+                  <Button 
+                  onClick={() => navigate('/login')}
+                  className='bg-white text-primary rounded-3xl mt-8 font-bold md:text-lg md:px-8 md:py-2 shadow-md shadow-primary'>
                     Start Now
                   </Button>
                 </div>

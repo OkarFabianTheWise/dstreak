@@ -1,136 +1,56 @@
-import React from "react";
+"use client";
+
+import type React from "react";
+import { useEffect } from "react";
 import {
   BrowserRouter as Router,
-  Route,
   Routes,
-  Navigate,
+  Route,
+  useLocation,
 } from "react-router-dom";
-import Home from "./pages/Home";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
-import SignupSuccess from "./pages/SignupSuccess";
-import UsersPage from "./pages/UsersPage";
-import SuperAdmin from "./pages/SuperAdmin";
-import Admin from "./pages/Admin";
-import Task from "./pages/Task";
 import DefaultLayout from "./layouts/defaultLayout";
-import { useAuthStore } from "./store/authStore";
-import EditProfile from "./pages/accounts-settings/EditProfile";
-import LinkedAccounts from "./pages/accounts-settings/LinkedAccounts";
-import LeaderboardLayout from "./pages/leaderboard/layouts";
-import { Leaderboard } from "./pages/leaderboard/Leaderboard";
-import ProfilePage from "./pages/ProfilePage";
-import TasksPage from "./pages/TasksPage";
-import TasksDetailsPage from "./pages/TaskDetailsPage";
-import ProfileSettingsPage from "./pages/ProfileSettingsPage";
+import { initializeAuth } from "./utils/api/auth";
+import { useRoutes } from "./routes";
+
+// Helper component to determine which layout to use
+const AppContent = () => {
+  const location = useLocation();
+  const routes = useRoutes();
+
+  // Check if current path is an admin route
+  const isAdminRoute =
+    location.pathname.startsWith("/admin") ||
+    location.pathname.startsWith("/super-admin");
+
+  if (isAdminRoute) {
+    return (
+      <Routes>
+        {routes.map((route, index) => (
+          <Route key={index} path={route.path} element={route.element} />
+        ))}
+      </Routes>
+    );
+  }
+
+  return (
+    <DefaultLayout>
+      <Routes>
+        {routes.map((route, index) => (
+          <Route key={index} path={route.path} element={route.element} />
+        ))}
+      </Routes>
+    </DefaultLayout>
+  );
+};
 
 const App: React.FC = () => {
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  useEffect(() => {
+    initializeAuth();
+  }, []);
 
   return (
     <Router>
-      {/* public routes */}
-      <DefaultLayout>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route
-            path="/login"
-            element={!isAuthenticated ? <Navigate to="/" /> : <Login />}
-          />
-          <Route
-            path="/signup"
-            element={!isAuthenticated ? <Navigate to="/" /> : <Signup />}
-          />
-          <Route path="/signup-success" element={<SignupSuccess />} />
-          <Route path="/super-admin" element={<SuperAdmin />} />
-          <Route
-            path="/tasks"
-            element={isAuthenticated ? <Task /> : <Navigate to="/login" />}
-          />
-          {/* <Route path='*' element={<Navigate to='/' />} /> */}
-
-          <Route
-            path="/profile"
-            element={
-              <ProfilePage /> //isAuthenticated ?  : <Navigate to="/login" />
-            }
-          />
-          <Route
-            path="/tasks-screen"
-            element={
-              <TasksPage /> //isAuthenticated ?  : <Navigate to="/login" />
-            }
-          />
-          <Route
-            path="/tasks-details"
-            element={
-              <TasksDetailsPage /> //isAuthenticated ?  : <Navigate to="/login" />
-            }
-          />
-          <Route
-            path="/account-settings"
-            element={
-              <ProfileSettingsPage /> //isAuthenticated ?  : <Navigate to="/login" />
-            }
-          />
-          <Route
-            path="/leaderboard"
-            element={
-              <LeaderboardLayout>
-                <Leaderboard />
-              </LeaderboardLayout>
-            }
-          />
-        </Routes>
-
-        {/* protected routes */}
-        <Routes>
-          <Route path="/super-admin" element={<SuperAdmin />} />
-          <Route
-            path="/tasks"
-            element={!isAuthenticated ? <Task /> : <Navigate to="/login" />}
-          />
-          <Route
-            path="/settings/profile"
-            element={
-              isAuthenticated ? (
-                <EditProfile />
-              ) : (
-                <Navigate to="/settings/profile" />
-              )
-            }
-          />
-          <Route
-            path="/settings/linked-accounts"
-            element={
-              isAuthenticated ? (
-                <LinkedAccounts />
-              ) : (
-                <Navigate to="/settings/linked-accounts" />
-              )
-            }
-          />
-          {/* <Route path="*" element={<Navigate to="/" />} /> */}
-        </Routes>
-
-        {/* protected routes */}
-        <Routes>
-          <Route
-            path="/user"
-            element={
-              !isAuthenticated ? <UsersPage /> : <Navigate to="/login" />
-            }
-          />
-        </Routes>
-
-        {/* admin routes */}
-        <Routes>
-          <Route
-            path="/admin"
-            element={!isAuthenticated ? <Admin /> : <Navigate to="/login" />}
-          />
-        </Routes>
-      </DefaultLayout>
+      <AppContent />
     </Router>
   );
 };
