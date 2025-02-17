@@ -7,19 +7,60 @@ import {
 } from "@/components/ui/dialog";
 import TaskDetailsTextfield from "@/components/tasks/TaskDetailsTextfield";
 import BoardNavbar from "./leaderboard/navbar";
+    import { useParams } from 'react-router-dom';
+import { useEffect, useState } from "react";
+import { useTasksStore } from "@/store/tasksStore";
+import { demoProfilePics } from "@/assets/image";
+import { TaskUser } from "@/utils/api/tasks";
+
+const calculateTimeLeft = (expiredAt: string) => {
+    const now = new Date();
+    const deadline = new Date(expiredAt);
+    const diff = deadline.getTime() - now.getTime();
+    
+    if (diff <= 0) {
+        return 'Expired';
+    }
+
+    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+    // const  seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+    return `${days}d : ${hours}h : ${minutes}m`;// : ${seconds}s`;
+};
 
 const TasksDetailsPage: React.FC = ()=>{
+    const { id } = useParams<{ id: string }>();
+    const { getTaskById, currentTask, fetchUser } = useTasksStore();
+    const [user, setUser] = useState<TaskUser | null>(null);
+
+    useEffect(() => {
+        console.log("The ID passed is "+ id);
+        getTaskById(id || "");
+
+        getUser();
+    },[])
+
+    const getUser = async ()=>{
+        const usr = await fetchUser(currentTask?.author_id || "");
+        if (usr) {
+            console.log("User is " + usr);
+            setUser(usr);
+        }
+    }
+    
     return (
         <div className="w-4/5 mx-auto text-sm text-accent">
             <BoardNavbar />
             <div>
                 <div className="flex gap-4 items-center">
                     <img
-                        src="https://s3-alpha-sig.figma.com/img/814a/832f/d9a74116f1026acaac092b23d8de1f50?Expires=1739145600&Key-Pair-Id=APKAQ4GOSFWCVNEHN3O4&Signature=cozsOzVr5hFrbblXoOCnaNyzny0sA6GrI8pUd02WVNqGmtGPQhCfagrGqt7PeR3HVH~fmQw1GTdrrm3zAZHPHciewaTtU6LhEJrxj853wC5tcZEgcTwutOvkFbGRWclOgRTWvl-HZeT30QLzk2I7tm4CgyOEe-vwBntRpWbPJ-ffcZ7zCrbwe74Rl9tgfmZXQaXIxq2cFOdTadWRLNZRcLhSpch4FPQhQeiUd7cGYpwIOI~rIvDNpI~NUDvzi1~zSqSwijo5PrKME4UJjCXy5rzsVPruAd-elu5sXi2i4MaSgGVjaQOrRxdkYvz6TtJwP8PKNuLvd2knfrJImnYz3g__"
+                        src={demoProfilePics}
                         className="w-20 h-20" />
                     <div className="flex flex-col gap-4 text-xs">
-                        <div>Create a functional ui for querying a wallet address</div>
-                        <div>by Alex </div>
+                        <div>{currentTask?.title}</div>
+                        <div>by {user?.username} </div>
                     </div>
                 </div>
             </div>
@@ -34,7 +75,7 @@ const TasksDetailsPage: React.FC = ()=>{
                         <div className="py-5 pr-5 text-xs">
                             <div className="flex gap-4 items-center mb-10">
                                 <IoDiamondOutline size={24} />
-                                <div>25 Total XP</div>
+                                <div>{currentTask?.points} Total XP</div>
                             </div>
                             <div className="flex justify-between ">
                                 <div>
@@ -47,7 +88,7 @@ const TasksDetailsPage: React.FC = ()=>{
                                 <div>
                                     <div className="flex items-center gap-3 mb-2">
                                         <IoMdStopwatch size={24} />
-                                        <div>2d: 10h: 20s</div>
+                                        <div>{currentTask && calculateTimeLeft(currentTask.expired_at)}</div>
                                     </div>
                                     <div className="text-greytext font-sans">Remaining</div>
                                 </div>
@@ -86,54 +127,14 @@ const TasksDetailsPage: React.FC = ()=>{
                     <div className="border-b border-t border-accent min-h-[60vh]">
                         {/* Right Panel Here */}
                         <div className="py-4 px-4">
-                            <div className="text-xs">Create A Functional UI For Quering A Wallet Address</div>
+                            <div className="text-xs">{currentTask?.title}</div>
                             <div className="text-[10px] text-greytext py-8 gap-4">
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-
-                                <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-
-                                <p>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                                <p>{currentTask?.description}</p>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            {/* <div className="mt-5 bg-black text-white grid grid-cols-5 border-t border-b border-accent">
-                <div className="col-span-2 p-6 border-r border-accent">
-                    <p className="text-sm text-gray-400 uppercase">XP to earn</p>
-                    <p className="text-lg flex items-center gap-2 mt-2">
-                        <span>💎</span> <span>25 Total XP</span>
-                    </p>
-
-                    <div className="mt-6">
-                        <p className="text-sm flex items-center gap-2">
-                            <span>📩</span> <span>20 Submissions</span>
-                        </p>
-                        <p className="text-sm flex items-center gap-2 mt-2">
-                            <span>⏳</span> <span>2d:10h:30s Remaining</span>
-                        </p>
-                    </div>
-
-                    <button className="mt-10 bg-green-600 hover:bg-green-700 text-black font-bold py-2 px-6 rounded-md">
-                        Submit
-                    </button>
-                </div>
-
-                <div className="col-span-3 p-6">
-                    <h2 className="text-lg font-bold text-green-400">
-                        Create A Functional UI For Querying A Wallet Address
-                    </h2>
-                    <p className="mt-4 text-gray-400">
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                    </p>
-                    <p className="mt-4 text-gray-400">
-                        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                    </p>
-                    <p className="mt-4 text-gray-400">
-                        Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-                    </p>
-                </div>
-            </div> */}
         </div>
     )
 }

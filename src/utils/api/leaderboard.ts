@@ -9,15 +9,15 @@ interface LeaderboardEntry {
   }
   
 interface LeaderboardResponse {
-success: boolean;
-message: string;
-data: {
-    data: LeaderboardEntry[];
-    page: number;
-    limit: number;
-    total: number;
-    total_pages: number;
-};
+  success: boolean;
+  message: string;
+  data: {
+      data: LeaderboardEntry[];
+      page: number;
+      limit: number;
+      total: number;
+      total_pages: number;
+  };
 }
 
 interface FetchLeaderboardParams {

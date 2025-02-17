@@ -81,7 +81,7 @@ export const adminRoutes: RouteConfig[] = [
     path: "/super-admin/task",
     element: (
       <AdminLayout>
-        <TaskPage />
+        <TaskPage params={{ userId: "someUserId" }} />
       </AdminLayout>
     ),
   },
