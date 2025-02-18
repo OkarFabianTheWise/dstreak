@@ -115,7 +115,7 @@ export function UsersTable() {
     },
     {
       id: "actions",
-      cell: ({ row }) => (
+      cell: ({ }) => (
         <div className="flex items-center gap-2">
           <Button
             variant="outline"

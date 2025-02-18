@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { Dot, PersonStanding, Search, X } from "lucide-react"
 import { IoNotifications } from "react-icons/io5"
-import { useNavigate, useLocation } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,7 +23,6 @@ interface SuperAdminNavProps {
 
 export function SuperAdminNav({ demoProfilePics }: SuperAdminNavProps) {
   const navigate = useNavigate()
-  const location = useLocation()
   const [isSearchOpen, setIsSearchOpen] = useState(false)
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 

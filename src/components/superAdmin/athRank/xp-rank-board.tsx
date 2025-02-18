@@ -28,7 +28,7 @@ export function XPRankBoard() {
         ATH XP RANK <span className="ml-2 text-base font-normal tracking-wider text-green-500/70">(Top 3)</span>
       </div>
       <div className="flex flex-col gap-4">
-        {rankings.map((ranking, index) => (
+        {rankings.map((ranking, _index) => (
           <XPRankCard key={ranking.username} {...ranking} />
         ))}
       </div>

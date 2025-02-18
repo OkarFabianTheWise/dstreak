@@ -14,7 +14,7 @@ export function DonutChart({ data }: DonutChartProps) {
     <ResponsiveContainer width="90%" height={200}>
       <PieChart>
         <Pie data={data} innerRadius={60} outerRadius={80} paddingAngle={5} dataKey="percentage">
-          {data.map((entry, index) => (
+          {data.map((_entry, index) => (
             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
           ))}
         </Pie>

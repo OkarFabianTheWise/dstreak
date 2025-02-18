@@ -18,9 +18,7 @@ import {
 } from "@/components/ui/popover";
 import { TaskList } from "./assign-task";
 
-export default function AssignTaskPage({
-  params,
-}: {
+export default function AssignTaskPage({}: {
   params: { userId: string };
 }) {
   const [startDate, setStartDate] = useState<Date>();
