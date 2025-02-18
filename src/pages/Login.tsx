@@ -8,8 +8,6 @@ import { FcGoogle } from "react-icons/fc";
 import { handleLogin } from "@/utils/api/auth";
 import AlertModal from "../components/ui/api-error-alert";
 
-// import GoogleCallback from "@/components/GoogleCallback";
-
 declare global {
   interface Window {
     google?: {

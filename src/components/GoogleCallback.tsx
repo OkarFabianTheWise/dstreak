@@ -1,109 +1,95 @@
-import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useAuthStore } from "@/utils/api/auth";
+import { endpoint } from "@/utils/api/auth"; // Fix import path
 
 const GoogleCallback = () => {
+  const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // const handleGoogleCallback = async () => {
-    //   const urlParams = new URLSearchParams(window.location.search);
-    //   const code = urlParams.get("code");
-
-    //   console.log("params", urlParams);
-    //   //dev-streak-server-772acc1b2e9a.herokuapp.com/api
-    //   https: if (code) {
-    //     try {
-    //       const response = await fetch(
-    //         `https://dev-streak-server-772acc1b2e9a.herokuapp.com/api/auth/google/success`,
-    //         {
-    //           method: "POST",
-    //           credentials: "include",
-    //           headers: {
-    //             "Content-Type": "application/json",
-    //           },
-    //           body: JSON.stringify({ code }),
-    //         }
-    //       );
-
-    //       // if (!response.ok) {
-    //       //   throw new Error("Authentication failed");
-    //       // }
-
-    //       const data = await response.json();
-    //       console.log(response);
-
-    //       if (data.token) {
-    //         localStorage.setItem("token", data.token);
-    //       }
-
-    //       // Navigate to the desired page after successful login
-    //       navigate("/");
-    //     } catch (error) {
-    //       console.error("Authentication error:", error);
-    //       navigate("/login?error=authentication_failed");
-    //     }
-    //   } else {
-    //     navigate("/login?error=no_code");
-    //   }
-    // };
-
     const handleGoogleCallback = async () => {
-      const urlParams = new URLSearchParams(window.location.search);
-      const code = urlParams.get("code");
-      const scope = urlParams.get("scope");
-      const authuser = urlParams.get("authuser");
-      const prompt = urlParams.get("prompt");
+      // Get all required parameters from the URL
+      const code = searchParams.get("code");
+      const scope = searchParams.get("scope");
+      const authuser = searchParams.get("authuser");
+      const prompt = searchParams.get("prompt");
 
-      console.log("authuser", authuser);
-      console.log("prompt", prompt);
+      if (!code) {
+        setError("No authorization code received");
+        return;
+      }
 
-      if (code) {
-        try {
-          const response = await fetch(
-            `https://dev-streak-server-772acc1b2e9a.herokuapp.com/api/auth/google/callback?code=${encodeURIComponent(
-              code
-            )}&scope=${encodeURIComponent(
-              scope || ""
-            )}&authuser=${encodeURIComponent(
-              authuser || ""
-            )}&prompt=${encodeURIComponent(prompt || "")}`,
-            {
-              method: "GET",
-              credentials: "include",
-            }
-          );
+      try {
+        // Construct URL with query parameters
+        const callbackUrl = new URL(`${endpoint}/auth/google/callback`);
+        callbackUrl.searchParams.append("code", code);
+        if (scope) callbackUrl.searchParams.append("scope", scope);
+        if (authuser) callbackUrl.searchParams.append("authuser", authuser);
+        if (prompt) callbackUrl.searchParams.append("prompt", prompt);
 
-          // if (!response.ok) {
-          //   throw new Error("Authentication failed");
-          // }
+        const response = await fetch(callbackUrl.toString(), {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include", // Add this line
+          mode: "cors", // Add this line
+        });
 
-          const data = await response.json();
-          console.log(response);
+        const data = await response.json();
 
-          if (data.token) {
-            localStorage.setItem("token", data.token);
-          }
+        if (data.success) {
+          // Store the token
+          localStorage.setItem("accessToken", data.data.token);
+          localStorage.setItem("userId", data.data.user.id);
 
-          // Navigate to the desired page after successful login
+          // Update auth state
+          useAuthStore.getState().setLoggedIn(true);
+          useAuthStore.getState().login({
+            id: data.data.user.id,
+            name: data.data.user.full_name,
+            email: data.data.user.email,
+            profileImage: data.data.user.profile_image,
+          });
+
+          // Redirect to home or previous page
           navigate("/");
-        } catch (error) {
-          console.error("Authentication error:", error);
-          navigate("/login?error=authentication_failed");
+        } else {
+          setError(data.message || "Failed to authenticate with Google");
         }
-      } else {
-        navigate("/login?error=no_code");
+      } catch (err) {
+        console.error("Google callback error:", err);
+        setError("Failed to process Google authentication");
       }
     };
 
     handleGoogleCallback();
-  }, [navigate]);
+  }, [searchParams, navigate]);
 
-  // Show a loading state while processing
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-black text-white">
+        <div className="bg-[#151515] p-6 rounded-lg shadow-xl">
+          <h2 className="text-xl text-red-500 mb-4">Authentication Error</h2>
+          <p className="text-gray-300">{error}</p>
+          <button
+            onClick={() => navigate("/login")}
+            className="mt-4 px-4 py-2 bg-primary text-white rounded hover:bg-primary/80"
+          >
+            Return to Login
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex items-center justify-center min-h-screen">
-      <div className="text-center">
-        <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
-        <p className="mt-4 text-gray-600">Completing sign in...</p>
+    <div className="min-h-screen flex items-center justify-center bg-black">
+      <div className="bg-[#151515] p-6 rounded-lg shadow-xl">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary mx-auto"></div>
+        <p className="text-white mt-4">Authenticating with Google...</p>
       </div>
     </div>
   );
