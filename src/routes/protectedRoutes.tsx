@@ -19,7 +19,7 @@ export const protectedRoutes: RouteConfig[] = [
     requiresAuth: true,
   },
   {
-    path: "/tasks-details",
+    path: "/tasks-details/:id",
     element: <TasksDetailsPage />,
     requiresAuth: true,
   },
