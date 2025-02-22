@@ -1,39 +1,56 @@
-import React, { useEffect } from "react";
+"use client";
+
+import type React from "react";
+import { useEffect } from "react";
 import {
   BrowserRouter as Router,
-  Route,
   Routes,
-  Navigate,
+  Route,
+  useLocation,
 } from "react-router-dom";
-import Home from "./pages/Home";
-import Login from "./pages/Login";
-import Signup from "./pages/Signup";
-import SignupSuccess from "./pages/SignupSuccess";
-// import UsersPage from "./pages/UsersPage";
-import SuperAdmin from "./pages/SuperAdmin";
-import Admin from "./pages/Admin";
-import Task from "./pages/Task";
 import DefaultLayout from "./layouts/defaultLayout";
-import { initializeAuth, useAuthStore } from "./utils/api/auth";
-import EditProfile from "./pages/accounts-settings/EditProfile";
-import LinkedAccounts from "./pages/accounts-settings/LinkedAccounts";
-import LeaderboardLayout from "./pages/leaderboard/layouts";
-import { Leaderboard } from "./pages/leaderboard/Leaderboard";
-import ProfilePage from "./pages/ProfilePage";
-import TasksPage from "./pages/TasksPage";
-import TasksDetailsPage from "./pages/TaskDetailsPage";
-import ProfileSettingsPage from "./pages/ProfileSettingsPage";
-import GoogleCallback from "./components/GoogleCallback";
+import { initializeAuth } from "./utils/api/auth";
+import { useRoutes } from "./routes";
+
+// Helper component to determine which layout to use
+const AppContent = () => {
+  const location = useLocation();
+  const routes = useRoutes();
+
+  // Check if current path is an admin route
+  const isAdminRoute =
+    location.pathname.startsWith("/admin") ||
+    location.pathname.startsWith("/super-admin");
+
+  if (isAdminRoute) {
+    return (
+      <Routes>
+        {routes.map((route, index) => (
+          <Route key={index} path={route.path} element={route.element} />
+        ))}
+      </Routes>
+    );
+  }
+
+  return (
+    <DefaultLayout>
+      <Routes>
+        {routes.map((route, index) => (
+          <Route key={index} path={route.path} element={route.element} />
+        ))}
+      </Routes>
+    </DefaultLayout>
+  );
+};
 
 const App: React.FC = () => {
   useEffect(() => {
     initializeAuth();
   }, []);
 
-  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
-
   return (
     <Router>
+<<<<<<< HEAD
       <DefaultLayout>
         <Routes>
           {/* Public Routes */}
@@ -146,6 +163,9 @@ const App: React.FC = () => {
           />
         </Routes>
       </DefaultLayout>
+=======
+      <AppContent />
+>>>>>>> 90500595df8c3ddd02d0c8d842ba236d4bc85a09
     </Router>
   );
 };

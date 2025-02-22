@@ -11,6 +11,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { RecentActivity } from "./RecentActivity";
 import { fetchLeaderboard } from "../../utils/api/leaderboard";
+import { demoProfilePics } from "@/assets/image";
+import mdl from "@/assets/image/mdl.png";
+
 
 // Define the type for leaderboard user data
 interface LeaderboardUser {
@@ -125,7 +128,7 @@ export function Leaderboard() {
                   {loggedInUser.rank}
                 </span>
                 <img
-                  src="/placeholder.svg"
+                  src={demoProfilePics} // Use a demo profile pic instead of placeholder
                   alt={loggedInUser.full_name || loggedInUser.username}
                   className="h-6 w-6 sm:h-8 sm:w-8 rounded-full shrink-0"
                 />
@@ -150,7 +153,7 @@ export function Leaderboard() {
           {/* Filter dropdown */}
           <div className="flex items-center gap-2 px-2">
             <img
-              src="/placeholder.svg?height=24&width=24"
+              src={mdl}
               alt=""
               className="h-5 w-5 sm:h-6 sm:w-6"
             />
@@ -200,7 +203,7 @@ export function Leaderboard() {
                       {user.rank}
                     </span>
                     <img
-                      src="/placeholder.svg"
+                      src={demoProfilePics}
                       alt={user.full_name || user.username}
                       className="h-6 w-6 sm:h-8 sm:w-8 rounded-full shrink-0"
                     />
