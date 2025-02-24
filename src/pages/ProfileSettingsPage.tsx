@@ -1,6 +1,7 @@
 import EditProfile from "../pages/accounts-settings/EditProfile";
-import LinkedAccount from "@/components/ProfileSettings/LinkedAccount";
-import ProfileSettingsTab from "@/components/ProfileSettings/ProfileSettingsTab";
+import LinkedAccount from "../pages/accounts-settings/LinkedAccounts";
+import ProfileSettingsTab from "../pages/accounts-settings/ProfileSettingsTab";
+// import LinkedAccount from "@/components/ProfileSettings/LinkedAccount";
 import { useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 

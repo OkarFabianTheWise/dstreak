@@ -2,7 +2,7 @@ import { NavigateFunction } from 'react-router-dom';
 import { create } from 'zustand';
 
 // const endpoint = import.meta.env.VITE_ENDPOINT_URL as string;
-export const endpoint = 'https://dev-streak-server-772acc1b2e9a.herokuapp.com/api';
+export const endpoint = 'https://devstreak.daovote.fun/api';
 
 interface SignupData {
   full_name: string;
@@ -105,6 +105,7 @@ export const handleSignup = async (
     );
 
     const data = await response.json();
+    console.log(data)
 
     if (!data.success) {
       if (data.errors && data.errors.length > 0) {
@@ -163,6 +164,7 @@ export const handleLogin = async (
     // Check response status
     if (!response.ok) {
       const errorResponse = await response.json();
+      console.log(errorResponse)
       if(errorResponse.statusCode === 400) {
         setErrorMessage("Wrong password or email. Please try again.");
         setIsAlertOpen(true);
@@ -223,6 +225,7 @@ export const handleProfileUpdate = async (
   setIsSuccess: (isSuccess: boolean) => void
 ) => {
   try {
+    console.log("label:", _label)
     // Retrieve the authentication token from wherever it's stored (e.g., localStorage)
     const token = localStorage.getItem("accessToken");
 
