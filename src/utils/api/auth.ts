@@ -2,7 +2,7 @@ import { NavigateFunction } from 'react-router-dom';
 import { create } from 'zustand';
 
 // const endpoint = import.meta.env.VITE_ENDPOINT_URL as string;
-const endpoint = 'https://dev-streak-server-772acc1b2e9a.herokuapp.com/api';
+const endpoint = 'https://api.devstreak.xyz/api';
 
 interface SignupData {
   full_name: string;

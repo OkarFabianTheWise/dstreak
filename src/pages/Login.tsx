@@ -7,6 +7,7 @@ import { bolt, s2 } from "@/assets/image";
 import { FcGoogle } from "react-icons/fc";
 import { handleLogin } from "@/utils/api/auth";
 import AlertModal from "../components/ui/api-error-alert";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 // import GoogleCallback from "@/components/GoogleCallback";
 
@@ -32,6 +33,7 @@ const Login: React.FC = () => {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
   const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const validateForm = (email: string, password: string) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -76,6 +78,10 @@ const Login: React.FC = () => {
     },
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
+  };
+
   return (
     <div
       className={`h-[65vh] relative text-white flex items-center justify-center mt-20 relative px-4 sm:px-0`}
@@ -106,7 +112,7 @@ const Login: React.FC = () => {
                   validateForm(e.target.value, password);
                 }}
                 className="w-full pl-10 pr-3 sm:pr-4 py-2.5 sm:py-3 rounded-lg border bg-black/80 focus:outline-none focus:ring-2 focus:ring-primary text-sm sm:text-base"
-                placeholder="Enter your email"
+                placeholder="Your email"
                 required
               />
             </div>
@@ -119,16 +125,23 @@ const Login: React.FC = () => {
                 className="absolute left-3 top-1/2 transform -translate-y-1/2"
               />
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => {
                   setPassword(e.target.value);
                   validateForm(email, e.target.value);
                 }}
                 className="w-full pl-10 pr-3 sm:pr-4 py-2.5 sm:py-3 rounded-lg border bg-black/80 focus:outline-none focus:ring-2 focus:ring-primary text-sm sm:text-base"
-                placeholder="Enter your password"
+                placeholder="Your password"
                 required
               />
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="absolute right-4 top-1/2 transform -translate-y-1/2 text-primary"
+              >
+                {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+              </button>
             </div>
           </motion.div>
 

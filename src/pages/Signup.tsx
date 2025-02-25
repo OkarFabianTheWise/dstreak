@@ -5,6 +5,7 @@ import { FcGoogle } from "react-icons/fc";
 import { bolt, s2 } from "@/assets/image";
 import { StateSelect } from "../utils/stateSelector";
 import { handleSignup } from "../utils/api/auth";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const Signup: React.FC = () => {
   const [full_name, setFullname] = useState("");
@@ -21,6 +22,7 @@ const Signup: React.FC = () => {
   const [_isClickable, setIsClickable] = useState(false);
   const [skills, setSkills] = useState<string[]>([]);
   const [errorMessage, setErrorMessage] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
 
@@ -149,6 +151,10 @@ const Signup: React.FC = () => {
     );
   };
 
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => !prev);
+  };
+
   return (
     <div className="min-h-[65vh] relative text-white flex items-center justify-center mt-20 px-4 sm:px-0">
       <img
@@ -206,13 +212,20 @@ const Signup: React.FC = () => {
           <motion.div variants={inputVariants} className="space-y-2">
             <div className="relative bg-transparent">
               <input
-                type="password"
+                type={showPassword ? "text" : "password"}
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full pl-4 pr-4 py-4 rounded-full border bg-black/80 focus:outline-none focus:ring-2 focus:ring-primary text-center placeholder:text-center"
                 placeholder="Choose a password"
                 required
               />
+              <button
+                type="button"
+                onClick={togglePasswordVisibility}
+                className="absolute right-4 top-1/2 transform -translate-y-1/2 text-primary"
+              >
+                {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+              </button>
             </div>
           </motion.div>
 
