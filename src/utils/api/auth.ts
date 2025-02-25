@@ -1,8 +1,9 @@
 import { NavigateFunction } from 'react-router-dom';
 import { create } from 'zustand';
 
-// const endpoint = import.meta.env.VITE_ENDPOINT_URL as string;
-export const endpoint = 'https://devstreak.daovote.fun/api';
+export const endpoint = import.meta.env.VITE_ENDPOINT_URL as string;
+// export const endpoint = 'https://joint-quetzal-relieved.ngrok-free.app';
+
 
 interface SignupData {
   full_name: string;

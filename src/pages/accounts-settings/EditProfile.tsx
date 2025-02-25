@@ -124,27 +124,6 @@ const EditProfile = () => {
                   </button>
                 </div>
               </div>
-
-              <div>
-                <label className="text-foreground block mb-2 text-sm sm:text-base">
-                  Username
-                </label>
-                <Input
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  type="text"
-                  placeholder="Enter your username"
-                  className="max-w-md border-primary rounded-full text-sm sm:text-base"
-                />
-              </div>
-              <div className="max-w-md">
-                <button
-                  onClick={() => handleUpdate("username", username)}
-                  className="bg-primary float-right p-1.5 sm:p-2 px-3 hover:opacity-55 sm:px-4 rounded-full mt-3 sm:mt-4 text-xs sm:text-sm"
-                >
-                  update
-                </button>
-              </div>
             </div>
 
             {/* Delete Account Section */}
