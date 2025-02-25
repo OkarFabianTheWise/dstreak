@@ -9,8 +9,6 @@ import { handleLogin } from "@/utils/api/auth";
 import AlertModal from "../components/ui/api-error-alert";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
-// import GoogleCallback from "@/components/GoogleCallback";
-
 declare global {
   interface Window {
     google?: {
