@@ -3,11 +3,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import AccountSidebar from "@/components/AccountSidebar";
 import { IoIosArrowForward } from "react-icons/io";
-import {
-  handleProfileUpdate,
-  handleDeleteAccount,
-  useUserStore,
-} from "../../utils/api/auth";
+import { handleProfileUpdate, handleDeleteAccount, useUserStore } from "../../utils/api/auth";
 import AlertModal from "@/components/ui/api-error-alert";
 import ApiCallConfirm from "@/components/ui/api-call-confirmation";
 import ApiSuccessAlert from "@/components/ui/api-success-alert";
@@ -54,13 +50,38 @@ const EditProfile = () => {
   useEffect(() => {
     setFullName(userProfile?.full_name || "");
     setUsername(userProfile?.username || "");
+
   }, [userProfile]);
-  
 
-  // if (loading) {
-  //   return <div>Loading...</div>;
-  // }
+  const handleUpload = () => {
+    (fileInputRef.current! as any).click(); // Triggers the file input
+  };
 
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+
+    if (!file) return;
+
+    // Validate file type
+    const validTypes = ['image/jpeg', 'image/png', 'image/gif'];
+    if (!validTypes.includes(file.type)) {
+      setErrorMessage("Please select an image file (JPG, PNG, GIF)");
+      setIsAlertOpen(true);
+      return;
+    }
+
+    // Validate size (2MB)
+    if (file.size > 2 * 1024 * 1024) {
+      setErrorMessage("Image must be smaller than 2MB");
+      setIsAlertOpen(true);
+      return;
+    }
+
+    // Create preview URL
+    const previewUrl = URL.createObjectURL(file);
+    setAvatar(previewUrl);
+    setUploadedAvatar(file);
+  };
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen m-2 sm:m-4 mt-4 sm:mt-8 gap-3 sm:gap-5 relative">
@@ -80,42 +101,39 @@ const EditProfile = () => {
             <div>
               <h2 className="text-foreground mb-3 sm:mb-4">Avatar</h2>
               <div className="flex flex-col items-start gap-3 sm:gap-2">
-                <div className="w-[80px] h-[80px] sm:w-[100px] sm:h-[100px] rounded-xl flex items-center justify-center">
+                <div className="w-[80px] h-[80px] sm:w-[100px] sm:h-[100px] rounded-xl flex items-center justify-center cursor-pointer hover:opacity-50" onClick={() => handleUpload()}>
                   {avatar ? (
                     <img
                       src={avatar}
                       alt="Avatar"
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover rounded-full"
+                      
                     />
                   ) : (
-                    // <span className="text-muted-foreground text-xs sm:text-sm pl-2">
-                    //   No image
-                    // </span>
-                      <img
-                        src={demoProfilePics}
-                        alt="Avatar"
-                        className="w-full h-full p-2 object-cover"
-                      />
+                    <img
+                      src={demoProfilePics}
+                      alt="Avatar"
+                      className="w-full h-full p-2 object-cover rounded-full"
+                    />
                   )}
                 </div>
 
 
                 <div>
-                  {/* hi */}
                   <input
                     type="file"
                     ref={fileInputRef}
                     onChange={handleFileChange}
                     className="hidden"
                   />
-                  <div className="max-w-md">
+                  {/* <div className="max-w-md">
                     <button
                       onClick={() => handleUpload()}
                       className="bg-primary mb-2 p-1.5 sm:p-2 px-3 hover:opacity-55 sm:px-4 rounded-full mt-3 sm:mt-4 text-xs sm:text-sm"
                     >
                       update
                     </button>
-                  </div>
+                  </div> */}
                   <div className="text-xs sm:text-sm text-muted-foreground">
                     Recommended size is 256×256px
                   </div>
@@ -146,7 +164,7 @@ const EditProfile = () => {
                 </div>
               </div>
 
-              <div>
+              <div className="mb-6">
                 <label className="text-foreground block mb-2 text-sm sm:text-base">
                   Username
                 </label>
@@ -154,17 +172,10 @@ const EditProfile = () => {
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                   type="text"
+                  readOnly
                   placeholder="Enter your username"
                   className="max-w-md border-primary rounded-full text-sm sm:text-base"
                 />
-              </div>
-              <div className="max-w-md">
-                <button
-                  onClick={() => handleUpdate("username", username)}
-                  className="bg-primary float-right p-1.5 sm:p-2 px-3 hover:opacity-55 sm:px-4 rounded-full mt-3 sm:mt-4 text-xs sm:text-sm"
-                >
-                  update
-                </button>
               </div>
             </div>
 

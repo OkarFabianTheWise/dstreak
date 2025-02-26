@@ -2,7 +2,7 @@ import { demoProfilePics } from "@/assets/image"
 import { useTasksStore } from "@/store/tasksStore"
 import { Task, TaskUser } from "@/utils/api/tasks"
 import { FC, useEffect, useState } from "react"
-import { FaCircleNotch } from "react-icons/fa"
+// import { FaCircleNotch } from "react-icons/fa"
 import { Link } from "react-router-dom"
 
 interface TasksItemProps{
@@ -57,13 +57,13 @@ const TasksItem: FC<TasksItemProps> = ({task}: TasksItemProps)=>{
                         </div>
                     )
                 }
-                {
+                {/* {
                     user == null && (
                         <div>
                             <FaCircleNotch className="animate-spin text-xl mx-auto"/>
                         </div>
                     )
-                }
+                } */}
             </div>
         </Link>
     )

@@ -11,37 +11,37 @@ export const protectedRoutes: RouteConfig[] = [
   {
     path: "/profile",
     element: <ProfilePage />,
-    requiresAuth: true,
+    requiresAuth: false,
   },
   {
     path: "/tasks-screen",
     element: <TasksPage />,
-    requiresAuth: true,
+    requiresAuth: false,
   },
   {
     path: "/tasks-details/:id",
     element: <TasksDetailsPage />,
-    requiresAuth: true,
+    requiresAuth: false,
   },
   {
     path: "/settings/profile",
     element: <EditProfile />,
-    requiresAuth: true,
+    requiresAuth: false,
   },
   {
     path: "/settings/linked-accounts",
     element: <LinkedAccounts />,
-    requiresAuth: true,
+    requiresAuth: false,
   },
   {
     path: "/account-settings",
     element: <ProfileSettingsPage />,
-    requiresAuth: true,
+    requiresAuth: false,
   },
   {
     path: "/tasks",
     element: <Task />,
-    requiresAuth: true,
+    requiresAuth: false,
   },
 ]
 
