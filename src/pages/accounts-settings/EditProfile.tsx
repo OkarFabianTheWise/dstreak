@@ -16,7 +16,6 @@ import { demoProfilePics } from "@/assets/image";
 const EditProfile = () => {
   const [avatar, setAvatar] = useState<string | null>(null);
   const [_, setUploadedAvatar] = useState<File | null>(null);
-
   const [fullName, setFullName] = useState("");
   const [username, setUsername] = useState("");
   const [isSuccess, setIsSuccess] = useState(false);
