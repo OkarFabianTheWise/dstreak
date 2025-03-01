@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useAuthStore } from "@/utils/api/auth";
-import { endpoint } from "@/utils/api/auth"; // Fix import path
+// import { endpoint } from "@/utils/api/auth"; // Fix import path
 
 const GoogleCallback = () => {
   const [searchParams] = useSearchParams();
@@ -22,23 +22,24 @@ const GoogleCallback = () => {
       }
 
       try {
-        // Construct URL with query parameters
-        const callbackUrl = new URL(`${endpoint}/auth/google/callback`);
-        callbackUrl.searchParams.append("code", code);
-        if (scope) callbackUrl.searchParams.append("scope", scope);
-        if (authuser) callbackUrl.searchParams.append("authuser", authuser);
-        if (prompt) callbackUrl.searchParams.append("prompt", prompt);
-
-        const response = await fetch(callbackUrl.toString(), {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include", // Add this line
-          mode: "cors", // Add this line
-        });
+        const response = await fetch(
+          `/api/auth/google/callback?code=${code}${
+            scope ? `&scope=${scope}` : ""
+          }${authuser ? `&authuser=${authuser}` : ""}${
+            prompt ? `&prompt=${prompt}` : ""
+          }`,
+          {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+            // mode: "cors" is not needed when using a proxy
+          }
+        );
 
         const data = await response.json();
+        console.log("Google callback data:", data);
 
         if (data.success) {
           // Store the token

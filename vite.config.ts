@@ -26,6 +26,15 @@ export default defineConfig({
     alias: {
       "@": path.resolve(__dirname, "./src"),
     },
-  }
+  },
+  server: {
+    proxy: {
+      '/api/auth/google': {
+        target: 'https://api.devstreak.xyz',
+        changeOrigin: true,
+        secure: false,
+      }
+    }
+  },
 })
 

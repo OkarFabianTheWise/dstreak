@@ -56,110 +56,118 @@ const LinkedAccounts = () => {
   };
 
   return (
-    <div className="flex min-h-screen m-4 mt-8 gap-5 relative">
+    <div className="flex flex-col md:flex-row min-h-screen m-2 md:m-4 mt-4 md:mt-8 gap-3 md:gap-5 relative">
       <AccountSidebar />
 
       <div className="flex-1">
-        <div className="h-screen bg-[#151515] py-10 px-20 rounded-3xl overflow-auto scrollbar-thin scrollbar-thumb-gray-500/40 scrollbar-track-[#202020] hover:scrollbar-thumb-gray-500/60 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full">
-          <h1 className="text-primary text-2xl font-medium mb-2">
+        <div className="h-screen bg-[#151515] py-5 md:py-10 px-4 md:px-20 rounded-xl md:rounded-3xl overflow-auto scrollbar-thin scrollbar-thumb-gray-500/40 scrollbar-track-[#202020] hover:scrollbar-thumb-gray-500/60 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:rounded-full">
+          <h1 className="text-primary text-xl md:text-2xl font-medium mb-2">
             Linked account
           </h1>
-          <p className="text-muted-foreground mb-8">
+          <p className="text-muted-foreground text-sm md:text-base mb-6 md:mb-8">
             Manage your Dev-streak profile
           </p>
 
-          <div className="space-y-6 mt-10 pt-5 border-t border-[gray]">
-            <div className="flex items-center justify-between p-4 rounded-full border border-primary">
-              <div className="flex items-center gap-3 ">
-                <IoMdMail className="text-xl" />
+          <div className="space-y-4 md:space-y-6 mt-6 md:mt-10 pt-5 border-t border-[gray]">
+            {/* Email Input */}
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 md:p-4 rounded-2xl md:rounded-full border border-primary gap-3 sm:gap-0">
+              <div className="flex items-center gap-3 w-full sm:w-auto">
+                <IoMdMail className="text-lg md:text-xl" />
                 <Input
                   type="email"
                   value={email}
                   onChange={handleEmailChange}
                   placeholder="Email address"
-                  className="border-none bg-transparent focus-visible:ring-0 p-0"
+                  className="border-none bg-transparent focus-visible:ring-0 p-0 text-sm md:text-base"
                 />
               </div>
-              <Button variant="outline" className="rounded-full">
+              <Button
+                variant="outline"
+                className="rounded-full w-full sm:w-auto"
+              >
                 Update
               </Button>
             </div>
 
-            <div className="space-y-4">
-              <div className="flex items-center justify-between p-4 border border-primary rounded-full">
-                <div className="flex items-center gap-3">
-                  <FaDiscord className="text-xl" />
+            <div className="space-y-3 md:space-y-4">
+              {/* Discord Input */}
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 md:p-4 rounded-2xl md:rounded-full border border-primary gap-3 sm:gap-0">
+                <div className="flex items-center gap-3 w-full sm:w-auto">
+                  <FaDiscord className="text-lg md:text-xl" />
                   <Input
                     type="text"
                     value={discord}
                     onChange={handleDiscordChange}
                     placeholder="Discord username"
-                    className="border-none bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 px-0"
+                    className="border-none bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 px-0 text-sm md:text-base"
                   />
                 </div>
                 <Button
                   variant="outline"
                   onClick={() => handleUpdate("discord", discord)}
-                  className="rounded-full"
+                  className="rounded-full w-full sm:w-auto"
                 >
                   Update
                 </Button>
               </div>
 
-              <div className="flex items-center justify-between p-4 border border-primary rounded-full">
-                <div className="flex items-center gap-3">
-                  <FaXTwitter className="text-xl" />
+              {/* Twitter Input */}
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 md:p-4 rounded-2xl md:rounded-full border border-primary gap-3 sm:gap-0">
+                <div className="flex items-center gap-3 w-full sm:w-auto">
+                  <FaXTwitter className="text-lg md:text-xl" />
                   <Input
                     type="text"
                     value={twitter}
                     onChange={handleTwitterChange}
                     placeholder="X profile URL"
-                    className="border-none bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 px-0"
+                    className="border-none bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 px-0 text-sm md:text-base"
                   />
                 </div>
                 <Button
                   variant="outline"
                   onClick={() => handleUpdate("twitter", twitter)}
-                  className="rounded-full"
+                  className="rounded-full w-full sm:w-auto"
                 >
                   Update
                 </Button>
               </div>
 
-              <div className="flex items-center justify-between p-4 border border-primary rounded-full">
-                <div className="flex items-center gap-3">
-                  <FaTelegram className="text-xl" />
+              {/* Telegram Input */}
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 md:p-4 rounded-2xl md:rounded-full border border-primary gap-3 sm:gap-0">
+                <div className="flex items-center gap-3 w-full sm:w-auto">
+                  <FaTelegram className="text-lg md:text-xl" />
                   <Input
                     type="text"
                     value={telegram}
                     onChange={handleTelegramChange}
                     placeholder="Telegram username"
-                    className="border-none bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 px-0"
+                    className="border-none bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 px-0 text-sm md:text-base"
                   />
                 </div>
                 <Button
                   variant="outline"
                   onClick={() => handleUpdate("telegram", telegram)}
-                  className="rounded-full"
+                  className="rounded-full w-full sm:w-auto"
                 >
                   Update
                 </Button>
               </div>
 
-              <div className="flex items-center justify-between p-4 border border-primary rounded-full">
-                <div className="flex items-center gap-3">
-                  <FaGithub className="text-xl" />
+              {/* GitHub Input */}
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between p-3 md:p-4 rounded-2xl md:rounded-full border border-primary gap-3 sm:gap-0">
+                <div className="flex items-center gap-3 w-full sm:w-auto">
+                  <FaGithub className="text-lg md:text-xl" />
                   <Input
                     value={github}
                     onChange={handleGithubChange}
                     placeholder="GitHub username"
-                    className="border-none bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 px-0"
+                    className="border-none bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 px-0 text-sm md:text-base"
                   />
                 </div>
                 <Button
                   onClick={() => handleUpdate("github", github)}
                   variant="outline"
-                  className="rounded-full"
+                  className="rounded-full w-full sm:w-auto"
                 >
                   Update
                 </Button>
@@ -168,6 +176,7 @@ const LinkedAccounts = () => {
           </div>
         </div>
       </div>
+
       <AlertModal
         message={errorMessage}
         isOpen={isAlertOpen}
