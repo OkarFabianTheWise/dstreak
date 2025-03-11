@@ -13,6 +13,7 @@ const GoogleCallback = () => {
       // Get all required parameters from the URL
       const code = searchParams.get("code");
       const scope = searchParams.get("scope");
+      console.log("scope", scope);
       const authuser = searchParams.get("authuser");
       const prompt = searchParams.get("prompt");
 
@@ -23,17 +24,15 @@ const GoogleCallback = () => {
 
       try {
         const response = await fetch(
-          `/api/auth/google/callback?code=${code}${
-            scope ? `&scope=${scope}` : ""
-          }${authuser ? `&authuser=${authuser}` : ""}${
-            prompt ? `&prompt=${prompt}` : ""
-          }`,
+          `https://api.devstreak.xyz/api/auth/google/callback?code=${code}&scope=${encodeURIComponent(
+            scope || ""
+          )}&authuser=${authuser || "0"}&prompt=${prompt || "consent"}`,
           {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
             },
-            credentials: "include",
+            // credentials: "include",
             // mode: "cors" is not needed when using a proxy
           }
         );

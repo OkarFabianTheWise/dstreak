@@ -1,15 +1,15 @@
-import type { RouteConfig } from "@/types/routes"
-import Home from "@/pages/Home"
-import Login from "@/pages/Login"
-import Signup from "@/pages/Signup"
-import SignupSuccess from "@/pages/SignupSuccess"
-import { Leaderboard } from "@/pages/leaderboard/Leaderboard"
-import LeaderboardLayout from "@/pages/leaderboard/layouts"
-import GoogleCallback from "@/components/GoogleCallback"
+import type { RouteConfig } from "@/types/routes";
+import Home from "@/pages/Home";
+import Login from "@/pages/Login";
+import Signup from "@/pages/Signup";
+import SignupSuccess from "@/pages/SignupSuccess";
+import { Leaderboard } from "@/pages/leaderboard/Leaderboard";
+import LeaderboardLayout from "@/pages/leaderboard/layouts";
+import GoogleCallback from "@/components/GoogleCallback";
 
 export const publicRoutes: RouteConfig[] = [
   {
-    path: "/auth/callback/google",
+    path: "/auth/google/callback",
     element: <GoogleCallback />,
   },
   {
@@ -44,5 +44,4 @@ export const publicRoutes: RouteConfig[] = [
       </LeaderboardLayout>
     ),
   },
-]
-
+];
