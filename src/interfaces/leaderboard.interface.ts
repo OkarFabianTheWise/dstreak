@@ -17,9 +17,3 @@ export interface LeaderboardResponse {
     total_pages: number
   }
 }
-
-export interface FetchLeaderboardParams {
-  page?: number
-  limit?: number
-  duration: 'daily' | 'weekly' | 'monthly' | 'all-time'
-}

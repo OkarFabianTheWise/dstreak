@@ -1,30 +1,35 @@
 import { useEffect, useState } from "react";
-// import { recentActivities } from "../../data";
+import { activityRequests } from "@/utils/api/activity.request";
 
 export function RecentActivity() {
   const [activities, setActivities] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const fetchActivities = async () => {
+    try {
+      const { success, message, data } = await activityRequests.getActivities(
+        setIsLoading
+      );
+
+      if (!success) {
+        setError(message);
+        return;
+      }
+
+      setActivities(data);
+    } catch (error: any) {
+      setError(error.message || "Failed to fetch activities");
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchActivities = async () => {
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_DEV_URL}/activities?page=1&limit=20`
-        );
-        const data = await response.json();
-        setActivities(data);
-        console.log("Activities fetched:", data.activities);
-      } catch (error) {
-        console.error("Error fetching activities:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchActivities();
   }, []);
 
-  if (loading) {
+  if (isLoading) {
     return <div>Loading activities...</div>;
   }
 
@@ -42,14 +47,10 @@ export function RecentActivity() {
               />
               <div className="flex flex-col justify-between py-1">
                 <div className="space-y-1">
-                  <p className="font-mono text-[#00ff00]">
-                    @{activity}
-                  </p>
+                  <p className="font-mono text-[#00ff00]">@{activity}</p>
                   <p className="font-mono text-white">{activity}</p>
                 </div>
-                <p className="font-mono text-sm text-[#666666]">
-                  .{activity}
-                </p>
+                <p className="font-mono text-sm text-[#666666]">.{activity}</p>
               </div>
             </div>
           ))
