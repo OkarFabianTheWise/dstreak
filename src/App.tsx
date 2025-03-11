@@ -1,46 +1,45 @@
-'use client'
+"use client";
 
-import type React from 'react'
+import type React from "react";
 import {
   Route,
   BrowserRouter as Router,
   Routes,
   useLocation,
-} from 'react-router-dom'
-import Providers from './contexts/Providers'
-import DefaultLayout from './layouts/defaultLayout'
-import { useRoutes } from './routes'
+} from "react-router-dom";
+import Providers from "./contexts/Providers";
+import DefaultLayout from "./layouts/defaultLayout";
+import { useRoutes } from "./routes";
+import { UserProvider } from "@/contexts/UserContext";
 
-// Helper component to determine which layout to use
 const AppContent = () => {
-  const location = useLocation()
-  const routes = useRoutes()
+  const location = useLocation();
+  const routes = useRoutes();
 
-  // Check if current path is an admin route
   const isAdminRoute =
-    location.pathname.startsWith('/admin') ||
-    location.pathname.startsWith('/super-admin')
-
-  if (isAdminRoute) {
-    return (
-      <Routes>
-        {routes.map((route, index) => (
-          <Route key={index} path={route.path} element={route.element} />
-        ))}
-      </Routes>
-    )
-  }
+    location.pathname.startsWith("/admin") ||
+    location.pathname.startsWith("/super-admin");
 
   return (
-    <DefaultLayout>
-      <Routes>
-        {routes.map((route, index) => (
-          <Route key={index} path={route.path} element={route.element} />
-        ))}
-      </Routes>
-    </DefaultLayout>
-  )
-}
+    <UserProvider>
+      {isAdminRoute ? (
+        <Routes>
+          {routes.map((route, index) => (
+            <Route key={index} path={route.path} element={route.element} />
+          ))}
+        </Routes>
+      ) : (
+        <DefaultLayout>
+          <Routes>
+            {routes.map((route, index) => (
+              <Route key={index} path={route.path} element={route.element} />
+            ))}
+          </Routes>
+        </DefaultLayout>
+      )}
+    </UserProvider>
+  );
+};
 
 const App: React.FC = () => {
   return (
@@ -49,7 +48,7 @@ const App: React.FC = () => {
         <AppContent />
       </Providers>
     </Router>
-  )
-}
+  );
+};
 
-export default App
+export default App;
