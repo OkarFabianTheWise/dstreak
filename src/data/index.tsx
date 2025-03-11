@@ -1,58 +1,58 @@
-import type { User, Member } from "@/types/superadminboard"
+import type { Member, User } from '@/types/superadminboard'
 
 // Nigerian states array
 export const nigerianStates = [
-  "Abia",
-  "Adamawa",
-  "Akwa Ibom",
-  "Anambra",
-  "Bauchi",
-  "Bayelsa",
-  "Benue",
-  "Borno",
-  "Cross River",
-  "Delta",
-  "Ebonyi",
-  "Edo",
-  "Ekiti",
-  "Enugu",
-  "FCT - Abuja",
-  "Gombe",
-  "Imo",
-  "Jigawa",
-  "Kaduna",
-  "Kano",
-  "Katsina",
-  "Kebbi",
-  "Kogi",
-  "Kwara",
-  "Lagos",
-  "Nasarawa",
-  "Niger",
-  "Ogun",
-  "Ondo",
-  "Osun",
-  "Oyo",
-  "Plateau",
-  "Rivers",
-  "Sokoto",
-  "Taraba",
-  "Yobe",
-  "Zamfara",
+  'Abia',
+  'Adamawa',
+  'Akwa Ibom',
+  'Anambra',
+  'Bauchi',
+  'Bayelsa',
+  'Benue',
+  'Borno',
+  'Cross River',
+  'Delta',
+  'Ebonyi',
+  'Edo',
+  'Ekiti',
+  'Enugu',
+  'FCT - Abuja',
+  'Gombe',
+  'Imo',
+  'Jigawa',
+  'Kaduna',
+  'Kano',
+  'Katsina',
+  'Kebbi',
+  'Kogi',
+  'Kwara',
+  'Lagos',
+  'Nasarawa',
+  'Niger',
+  'Ogun',
+  'Ondo',
+  'Osun',
+  'Oyo',
+  'Plateau',
+  'Rivers',
+  'Sokoto',
+  'Taraba',
+  'Yobe',
+  'Zamfara',
 ]
 
 // Users data
 export const usersData: User[] = [
   {
-    id: "1",
-    name: "Simon Peter",
-    username: "simpet",
-    avatar: "/placeholder.svg",
-    role: "OTHER",
-    task: "S2",
+    id: '1',
+    name: 'Simon Peter',
+    username: 'simpet',
+    avatar: '/placeholder.svg',
+    role: 'OTHER',
+    task: 'S2',
     xp: 8230,
     rank: 21,
-    state: "Lagos",
+    state: 'Lagos',
   },
   // ... (rest of the users data)
 ]
@@ -94,18 +94,18 @@ export function getRoleCounts() {
 }
 
 export function getUsersByState(state: string) {
-  if (state === "All") return usersData
+  if (state === 'All') return usersData
   return usersData.filter((user) => user.state === state)
 }
 
 export function getMembersByState(state: string) {
-  if (state === "All") return membersData
+  if (state === 'All') return membersData
   return membersData.filter((member) => member.state === state)
 }
 
 export function getActiveStates() {
   const states = new Set(usersData.map((user) => user.state))
-  return ["All", ...Array.from(states)].sort()
+  return ['All', ...Array.from(states)].sort()
 }
 
 // Task-related utility functions
@@ -122,4 +122,3 @@ export function releaseTask(memberId: string) {
     membersData[memberIndex].isAssigned = false
   }
 }
-

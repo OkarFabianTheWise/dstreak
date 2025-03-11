@@ -1,20 +1,20 @@
-import type { RouteConfig } from "@/types/routes";
-import Admin from "@/pages/Admin";
-import SuperAdminDashboard from "@/pages/superadmin/superadmin";
-import AdminLayout from "@/layouts/AdminLayout";
-import AssignPage from "@/pages/superadmin/assign/page";
-import BanPage from "@/pages/superadmin/ban/page";
-import EmailPage from "@/pages/superadmin/email/page";
-import EventPage from "@/pages/superadmin/event/page";
-import MembersPage from "@/pages/superadmin/members/page";
-import TaskPage from "@/pages/superadmin/task/[userId]/page";
-import TicketsPage from "@/pages/superadmin/ticket/page";
-import WalletsPage from "@/pages/superadmin/wallet/page";
-import { ProfilePage } from "@/pages/superadmin/profile/page";
+import type { RouteConfig } from '@/interfaces/routes'
+import AdminLayout from '@/layouts/AdminLayout'
+import Admin from '@/pages/Admin'
+import AssignPage from '@/pages/superadmin/assign/page'
+import BanPage from '@/pages/superadmin/ban/page'
+import EmailPage from '@/pages/superadmin/email/page'
+import EventPage from '@/pages/superadmin/event/page'
+import MembersPage from '@/pages/superadmin/members/page'
+import { ProfilePage } from '@/pages/superadmin/profile/page'
+import SuperAdminDashboard from '@/pages/superadmin/superadmin'
+import TaskPage from '@/pages/superadmin/task/[userId]/page'
+import TicketsPage from '@/pages/superadmin/ticket/page'
+import WalletsPage from '@/pages/superadmin/wallet/page'
 
 export const adminRoutes: RouteConfig[] = [
   {
-    path: "/admin",
+    path: '/admin',
     element: (
       <AdminLayout>
         <Admin />
@@ -22,7 +22,7 @@ export const adminRoutes: RouteConfig[] = [
     ),
   },
   {
-    path: "/super-admin",
+    path: '/super-admin',
     element: (
       <AdminLayout>
         <SuperAdminDashboard />
@@ -30,7 +30,7 @@ export const adminRoutes: RouteConfig[] = [
     ),
   },
   {
-    path: "/super-admin/assign",
+    path: '/super-admin/assign',
     element: (
       <AdminLayout>
         <AssignPage />
@@ -38,7 +38,7 @@ export const adminRoutes: RouteConfig[] = [
     ),
   },
   {
-    path: "/super-admin/ban",
+    path: '/super-admin/ban',
     element: (
       <AdminLayout>
         <BanPage />
@@ -46,7 +46,7 @@ export const adminRoutes: RouteConfig[] = [
     ),
   },
   {
-    path: "/super-admin/email",
+    path: '/super-admin/email',
     element: (
       <AdminLayout>
         <EmailPage />
@@ -54,7 +54,7 @@ export const adminRoutes: RouteConfig[] = [
     ),
   },
   {
-    path: "/super-admin/event",
+    path: '/super-admin/event',
     element: (
       <AdminLayout>
         <EventPage />
@@ -62,7 +62,7 @@ export const adminRoutes: RouteConfig[] = [
     ),
   },
   {
-    path: "/super-admin/members",
+    path: '/super-admin/members',
     element: (
       <AdminLayout>
         <MembersPage />
@@ -70,7 +70,7 @@ export const adminRoutes: RouteConfig[] = [
     ),
   },
   {
-    path: "/super-admin/profile",
+    path: '/super-admin/profile',
     element: (
       <AdminLayout>
         <ProfilePage />
@@ -78,15 +78,15 @@ export const adminRoutes: RouteConfig[] = [
     ),
   },
   {
-    path: "/super-admin/task",
+    path: '/super-admin/task',
     element: (
       <AdminLayout>
-        <TaskPage params={{ userId: "someUserId" }} />
+        <TaskPage params={{ userId: 'someUserId' }} />
       </AdminLayout>
     ),
   },
   {
-    path: "/super-admin/tickets",
+    path: '/super-admin/tickets',
     element: (
       <AdminLayout>
         <TicketsPage />
@@ -94,11 +94,11 @@ export const adminRoutes: RouteConfig[] = [
     ),
   },
   {
-    path: "/super-admin/wallets",
+    path: '/super-admin/wallets',
     element: (
       <AdminLayout>
         <WalletsPage />
       </AdminLayout>
     ),
   },
-];
+]

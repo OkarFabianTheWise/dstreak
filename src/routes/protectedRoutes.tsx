@@ -1,47 +1,46 @@
-import type { RouteConfig } from "@/types/routes"
-import ProfilePage from "@/pages/ProfilePage"
-import TasksPage from "@/pages/TasksPage"
-import TasksDetailsPage from "@/pages/TaskDetailsPage"
-import EditProfile from "@/pages/accounts-settings/EditProfile"
-import LinkedAccounts from "@/pages/accounts-settings/LinkedAccounts"
-import ProfileSettingsPage from "@/pages/ProfileSettingsPage"
-import Task from "@/pages/Task"
+import type { RouteConfig } from '@/interfaces/routes'
+import EditProfile from '@/pages/accounts-settings/EditProfile'
+import LinkedAccounts from '@/pages/accounts-settings/LinkedAccounts'
+import ProfilePage from '@/pages/ProfilePage'
+import ProfileSettingsPage from '@/pages/ProfileSettingsPage'
+import Task from '@/pages/Task'
+import TasksDetailsPage from '@/pages/TaskDetailsPage'
+import TasksPage from '@/pages/TasksPage'
 
 export const protectedRoutes: RouteConfig[] = [
   {
-    path: "/profile",
+    path: '/profile',
     element: <ProfilePage />,
     requiresAuth: true,
   },
   {
-    path: "/tasks-screen",
+    path: '/tasks-screen',
     element: <TasksPage />,
     requiresAuth: true,
   },
   {
-    path: "/tasks-details/:id",
+    path: '/tasks-details/:id',
     element: <TasksDetailsPage />,
     requiresAuth: true,
   },
   {
-    path: "/settings/profile",
+    path: '/settings/profile',
     element: <EditProfile />,
     requiresAuth: true,
   },
   {
-    path: "/settings/linked-accounts",
+    path: '/settings/linked-accounts',
     element: <LinkedAccounts />,
     requiresAuth: true,
   },
   {
-    path: "/account-settings",
+    path: '/account-settings',
     element: <ProfileSettingsPage />,
     requiresAuth: true,
   },
   {
-    path: "/tasks",
+    path: '/tasks',
     element: <Task />,
     requiresAuth: true,
   },
 ]
-
